@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{ &lt;/&gt; } UI.build() — Programmer Edition</title>
+<title>{ &lt;/&gt; } UI Snippet Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -16,112 +16,113 @@
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:var(--font);background:var(--bg-deep);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative;}
-
-  /* พื้นหลังกริด + สแกนไลน์ */
   body::before{content:'';position:fixed;inset:0;
-    background-image:linear-gradient(rgba(0,255,136,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.025) 1px,transparent 1px);
+    background-image:linear-gradient(rgba(0,255,136,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,0.022) 1px,transparent 1px);
     background-size:24px 24px;pointer-events:none;z-index:0;}
   body::after{content:'';position:fixed;inset:0;
-    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.015) 3px,rgba(0,0,0,0.015) 4px);
+    background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.012) 3px,rgba(0,0,0,0.012) 4px);
     pointer-events:none;z-index:9998;}
 
-  /* กลอนแสงเรือง */
-  .glow{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;}
-  .glow-1{width:400px;height:400px;background:rgba(0,255,136,0.07);top:-100px;left:-100px;animation:gfloat 25s ease-in-out infinite;}
-  .glow-2{width:350px;height:350px;background:rgba(88,212,255,0.06);bottom:-80px;right:-80px;animation:gfloat 30s ease-in-out infinite reverse;}
-  .glow-3{width:250px;height:250px;background:rgba(210,168,255,0.05);top:40%;left:50%;animation:gfloat 20s ease-in-out infinite 5s;}
-  @keyframes gfloat{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-20px)}50%{transform:translate(-20px,30px)}75%{transform:translate(20px,20px)}}
+  .glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+  .glow-1{width:380px;height:380px;background:rgba(0,255,136,0.06);top:-120px;left:-80px;animation:gf 28s ease-in-out infinite;}
+  .glow-2{width:320px;height:320px;background:rgba(88,212,255,0.05);bottom:-60px;right:-60px;animation:gf 32s ease-in-out infinite reverse;}
+  .glow-3{width:200px;height:200px;background:rgba(210,168,255,0.04);top:45%;left:45%;animation:gf 22s ease-in-out infinite 4s;}
+  @keyframes gf{0%,100%{transform:translate(0,0)}25%{transform:translate(25px,-18px)}50%{transform:translate(-18px,25px)}75%{transform:translate(18px,18px)}}
 
-  /* โทป์บาร์แบบเทอร์มินัล */
+  /* โทป์บาร์ */
   .topbar{display:flex;justify-content:space-between;align-items:center;padding:10px 20px;
     background:var(--bg-surface);border-bottom:1px solid var(--border);position:relative;z-index:10;flex-wrap:wrap;gap:8px;}
-  .term-dots{display:flex;gap:7px;align-items:center;}
-  .term-dots span{width:12px;height:12px;border-radius:50%;display:inline-block;}
-  .term-dots .d-r{background:#ff5f57;}.term-dots .d-y{background:#febc2e;}.term-dots .d-g{background:#28c840;}
-  .term-path{color:var(--text-dim);font-size:0.8rem;margin-left:12px;}
+  .term-left{display:flex;align-items:center;gap:10px;}
+  .term-dots{display:flex;gap:6px;}
+  .term-dots span{width:11px;height:11px;border-radius:50%;}
+  .d-r{background:#ff5f57;}.d-y{background:#febc2e;}.d-g{background:#28c840;}
+  .term-path{color:var(--text-dim);font-size:0.78rem;}
   .term-path b{color:var(--green);}
-  .topbar-title{font-size:1rem;color:var(--green);font-weight:600;letter-spacing:-0.5px;}
-  .topbar-title .cursor{animation:blink 1s step-end infinite;color:var(--green);}
-  @keyframes blink{50%{opacity:0}}
-  .stats{display:flex;gap:10px;font-size:0.8rem;}
-  .stats span{background:var(--bg-elevated);padding:5px 12px;border-radius:6px;border:1px solid var(--border);}
-  .stats .score{color:var(--green);}.stats .level{color:var(--cyan);}
+  .topbar-title{font-size:0.95rem;color:var(--green);font-weight:600;letter-spacing:-0.5px;}
+  .cursor-blink{animation:bk 1s step-end infinite;color:var(--green);}
+  @keyframes bk{50%{opacity:0}}
+  .topbar-right{display:flex;gap:8px;align-items:center;}
+  .tb-btn{background:var(--bg-elevated);border:1px solid var(--border);color:var(--text-dim);padding:5px 12px;
+    border-radius:5px;cursor:pointer;font-size:0.72rem;font-family:var(--font);transition:0.15s;}
+  .tb-btn:hover{background:var(--bg-hover);color:var(--text-bright);border-color:var(--border-bright);}
+  .tb-btn.danger:hover{color:var(--red);border-color:var(--red);}
 
-  /* เลย์เอาต์หลัก */
-  .layout{display:grid;grid-template-columns:240px 1fr 360px;gap:12px;padding:14px;align-items:start;position:relative;z-index:1;}
-  @media(max-width:1020px){.layout{grid-template-columns:1fr;}}
+  /* เลย์เอาต์ */
+  .layout{display:grid;grid-template-columns:235px 1fr 370px;gap:12px;padding:14px;align-items:start;position:relative;z-index:1;height:calc(100vh - 52px);}
+  @media(max-width:1040px){.layout{grid-template-columns:1fr;height:auto;}}
 
-  /* แผงกรอบ */
-  .panel{background:var(--bg-surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
-  .panel-tab{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg-elevated);border-bottom:1px solid var(--border);font-size:0.78rem;font-weight:600;}
-  .panel-tab .tab-file{color:var(--text-dim);}
-  .panel-tab .tab-icon{font-size:0.9rem;}
-  .panel-tab .tab-title{color:var(--text-bright);}
-  .panel-body{padding:12px;}
+  /* แผง */
+  .panel{background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;}
+  .panel-tab{display:flex;align-items:center;gap:7px;padding:7px 12px;background:var(--bg-elevated);border-bottom:1px solid var(--border);font-size:0.74rem;flex-shrink:0;}
+  .tab-file{color:var(--text-dim);}
+  .tab-icon{font-size:0.85rem;}
+  .tab-title{color:var(--text-bright);font-weight:500;}
+  .panel-body{padding:10px;overflow-y:auto;flex:1;}
+  .left-panel .panel-body{max-height:calc(100vh - 100px);}
 
-  .group-label{font-size:0.7rem;color:var(--text-dim);margin:12px 0 6px;text-transform:uppercase;letter-spacing:1px;
+  .group-label{font-size:0.68rem;color:var(--text-dim);margin:11px 0 5px;text-transform:uppercase;letter-spacing:0.8px;
     display:flex;align-items:center;gap:6px;}
   .group-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
-  /* พาเลทไอเทม */
-  .palette-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:7px 10px;margin-bottom:5px;
-    cursor:grab;font-size:0.8rem;display:flex;align-items:center;gap:7px;transition:all 0.15s;user-select:none;}
+  /* พาเลท */
+  .palette-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:5px;padding:6px 9px;margin-bottom:4px;
+    cursor:grab;font-size:0.76rem;display:flex;align-items:center;gap:6px;transition:all 0.12s;user-select:none;}
   .palette-item:hover{background:var(--bg-hover);transform:translateX(3px);border-color:var(--border-bright);}
   .palette-item:active{cursor:grabbing;transform:scale(0.97);}
-  .palette-item .ico{font-size:1rem;width:22px;text-align:center;}
+  .palette-item .ico{font-size:0.95rem;width:20px;text-align:center;flex-shrink:0;}
   .palette-item.layout-type{border-left:3px solid var(--green);}
   .palette-item.content-type{border-left:3px solid var(--cyan);}
   .pal-label{color:var(--text-bright);font-weight:500;}
-  .pal-tag{color:var(--text-dim);font-size:0.68rem;margin-left:auto;opacity:0.7;}
+  .pal-tag{color:var(--text-dim);font-size:0.64rem;margin-left:auto;opacity:0.6;white-space:nowrap;}
 
   /* แคนวาส */
-  .canvas-hint{font-size:0.72rem;color:var(--text-dim);margin-bottom:8px;line-height:1.6;padding:8px;
-    background:var(--green-bg);border:1px solid var(--green-border);border-radius:6px;}
+  .canvas-hint{font-size:0.7rem;color:var(--text-dim);margin-bottom:7px;line-height:1.55;padding:7px 9px;
+    background:var(--green-bg);border:1px solid var(--green-border);border-radius:5px;}
   .canvas-hint b{color:var(--green);}
-  .canvas-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .clear-btn{background:none;border:1px solid var(--border);color:var(--red);padding:4px 10px;border-radius:5px;
-    cursor:pointer;font-size:0.72rem;font-family:var(--font);transition:0.15s;}
-  .clear-btn:hover{background:rgba(255,107,107,0.1);border-color:var(--red);}
-  #canvas{background:#ffffff;color:#111;border-radius:6px;min-height:440px;padding:12px;display:flex;flex-direction:column;gap:8px;
-    border:2px dashed var(--border-bright);transition:border-color 0.2s,background 0.2s;}
-  #canvas.dropzone-hover{border-color:var(--green);background:rgba(0,255,136,0.02);}
-  .placeholder{color:#94a3b8;text-align:center;margin:160px 0;font-size:0.85rem;font-family:var(--font);}
-  .empty-hint{color:#94a3b8;text-align:center;font-size:0.75rem;border:1px dashed #cbd5e1;border-radius:5px;padding:12px;min-height:28px;}
+  .canvas-toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+  .canvas-toolbar .info{font-size:0.68rem;color:var(--text-dim);}
+  .clear-btn{background:none;border:1px solid var(--border);color:var(--red);padding:3px 9px;border-radius:4px;
+    cursor:pointer;font-size:0.68rem;font-family:var(--font);transition:0.15s;}
+  .clear-btn:hover{background:rgba(255,107,107,0.08);border-color:var(--red);}
+  #canvas{background:#ffffff;color:#111;border-radius:5px;min-height:300px;padding:10px;display:flex;flex-direction:column;gap:7px;
+    border:2px dashed var(--border-bright);transition:border-color 0.2s,background 0.2s;flex:1;}
+  #canvas.dropzone-hover{border-color:var(--green);background:rgba(0,255,136,0.015);}
+  .placeholder{color:#94a3b8;text-align:center;margin:auto;font-size:0.82rem;font-family:var(--font);}
+  .empty-hint{color:#94a3b8;text-align:center;font-size:0.72rem;border:1px dashed #cbd5e1;border-radius:4px;padding:10px;min-height:24px;}
 
-  /* คอมโพเนนต์ในแคนวาส */
+  /* คอมโพเนนต์ */
   .comp-node{position:relative;}
-  .comp-node.dragging{opacity:0.3;}
-  .comp-node.leaf{border:1px dashed #d1d5db;border-radius:5px;padding:8px 28px 8px 8px;cursor:grab;background:#f9fafb;transition:box-shadow 0.15s;}
-  .comp-node.leaf:hover{box-shadow:0 0 0 2px rgba(0,255,136,0.3);}
+  .comp-node.dragging{opacity:0.25;}
+  .comp-node.leaf{border:1px dashed #d1d5db;border-radius:4px;padding:7px 26px 7px 7px;cursor:grab;background:#f9fafb;transition:box-shadow 0.12s;}
+  .comp-node.leaf:hover{box-shadow:0 0 0 2px rgba(0,255,136,0.25);}
 
-  .comp-header{background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;padding:12px;border-radius:5px;font-weight:bold;font-size:0.9rem;}
-  .comp-nav{background:#111827;color:#e5e7eb;padding:8px 12px;border-radius:5px;display:flex;gap:12px;flex-wrap:wrap;font-size:0.85rem;}
-  .comp-nav span{padding:2px 6px;border-radius:3px;transition:background 0.15s;}
-  .comp-hero{background:linear-gradient(135deg,#059669,#0d9488);color:#fff;padding:18px;border-radius:5px;text-align:center;}
-  .comp-hero h2{margin-bottom:4px;font-size:1rem;}
-  .comp-button button{background:var(--orange);color:#111;border:none;padding:7px 16px;border-radius:5px;font-weight:bold;cursor:default;font-size:0.85rem;}
-  .comp-image img{width:100%;border-radius:5px;display:block;}
-  .comp-card{background:#fff;border:1px solid #e5e7eb;border-radius:6px;padding:10px;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
-  .comp-card h3{font-size:0.88rem;color:#111;margin-bottom:3px;}
-  .comp-card p{font-size:0.78rem;color:#6b7280;}
-  .comp-input input{width:100%;padding:7px 10px;border-radius:5px;border:1px solid #d1d5db;font-size:0.85rem;font-family:sans-serif;}
-  .comp-text p{color:#374151;font-size:0.88rem;line-height:1.5;}
-  .comp-footer{background:#111827;color:#9ca3af;text-align:center;padding:8px;border-radius:5px;font-size:0.8rem;}
-  .comp-link a{color:#2563eb;text-decoration:underline;font-weight:600;font-size:0.88rem;}
+  .comp-header{background:linear-gradient(135deg,#1e1b4b,#312e81);color:#fff;padding:11px;border-radius:4px;font-weight:bold;font-size:0.88rem;}
+  .comp-nav{background:#111827;color:#e5e7eb;padding:7px 10px;border-radius:4px;display:flex;gap:10px;flex-wrap:wrap;font-size:0.82rem;}
+  .comp-hero{background:linear-gradient(135deg,#059669,#0d9488);color:#fff;padding:16px;border-radius:4px;text-align:center;}
+  .comp-hero h2{margin-bottom:3px;font-size:0.95rem;}
+  .comp-button button{background:var(--orange);color:#111;border:none;padding:6px 14px;border-radius:4px;font-weight:bold;cursor:default;font-size:0.82rem;}
+  .comp-image img{width:100%;border-radius:4px;display:block;}
+  .comp-card{background:#fff;border:1px solid #e5e7eb;border-radius:5px;padding:9px;box-shadow:0 1px 3px rgba(0,0,0,0.05);}
+  .comp-card h3{font-size:0.84rem;color:#111;margin-bottom:2px;}
+  .comp-card p{font-size:0.76rem;color:#6b7280;}
+  .comp-input input{width:100%;padding:6px 9px;border-radius:4px;border:1px solid #d1d5db;font-size:0.82rem;font-family:sans-serif;}
+  .comp-textarea textarea{width:100%;padding:6px 9px;border-radius:4px;border:1px solid #d1d5db;font-family:sans-serif;font-size:0.82rem;resize:vertical;}
+  .comp-text p{color:#374151;font-size:0.85rem;line-height:1.5;}
+  .comp-link a{color:#2563eb;text-decoration:underline;font-weight:600;font-size:0.85rem;}
   .comp-table{overflow-x:auto;}
-  .comp-table table{width:100%;border-collapse:collapse;font-size:0.8rem;}
-  .comp-table th{background:#f1f5f9;padding:7px 10px;border:1px solid #e2e8f0;text-align:left;font-weight:600;color:#374151;}
-  .comp-table td{padding:7px 10px;border:1px solid #e2e8f0;color:#4b5563;}
-  .comp-video{background:#1e293b;border-radius:5px;padding:24px;text-align:center;color:#94a3b8;font-size:0.82rem;border:1px solid #334155;}
-  .comp-video .play-icon{font-size:2rem;display:block;margin-bottom:6px;}
-  .comp-ul ul{padding-left:20px;color:#374151;font-size:0.88rem;line-height:1.9;}
-  .comp-ol ol{padding-left:20px;color:#374151;font-size:0.88rem;line-height:1.9;}
-  .comp-textarea textarea{width:100%;padding:7px 10px;border-radius:5px;border:1px solid #d1d5db;font-family:sans-serif;font-size:0.85rem;resize:vertical;}
+  .comp-table table{width:100%;border-collapse:collapse;font-size:0.76rem;}
+  .comp-table th{background:#f1f5f9;padding:6px 8px;border:1px solid #e2e8f0;text-align:left;font-weight:600;color:#374151;}
+  .comp-table td{padding:6px 8px;border:1px solid #e2e8f0;color:#4b5563;}
+  .comp-video{background:#1e293b;border-radius:4px;padding:20px;text-align:center;color:#94a3b8;font-size:0.78rem;border:1px solid #334155;}
+  .comp-video .play-icon{font-size:1.8rem;display:block;margin-bottom:4px;}
+  .comp-ul ul{padding-left:18px;color:#374151;font-size:0.84rem;line-height:1.85;}
+  .comp-ol ol{padding-left:18px;color:#374151;font-size:0.84rem;line-height:1.85;}
+  .comp-footer{background:#111827;color:#9ca3af;text-align:center;padding:7px;border-radius:4px;font-size:0.78rem;}
 
-  /* คอนเทนเนอร์ Layout */
-  .comp-node.container{border-radius:7px;padding:6px;margin-bottom:2px;}
-  .node-label{display:flex;align-items:center;justify-content:space-between;font-size:0.7rem;font-weight:600;
-    padding:3px 8px;border-radius:4px;margin-bottom:6px;color:#fff;letter-spacing:0.3px;}
+  /* คอนเทนเนอร์ */
+  .comp-node.container{border-radius:6px;padding:5px;margin-bottom:1px;}
+  .node-label{display:flex;align-items:center;justify-content:space-between;font-size:0.67rem;font-weight:600;
+    padding:2px 7px;border-radius:3px;margin-bottom:5px;color:#fff;letter-spacing:0.2px;}
   .node-section{border:2px dashed #94a3b8;background:#f1f5f9;}
   .node-section .node-label{background:#64748b;}
   .node-row{border:2px dashed #38bdf8;background:#f0f9ff;}
@@ -133,84 +134,74 @@
   .node-grid3{border:2px dashed #34d399;background:#ecfdf5;}
   .node-grid3 .node-label{background:#059669;}
 
-  .dropzone{min-height:28px;transition:outline 0.15s;}
-  .dropzone.dropzone-hover{outline:2px solid var(--green);outline-offset:2px;border-radius:5px;}
-  .node-row>.dropzone,.node-grid2>.dropzone,.node-grid3>.dropzone{display:flex;flex-wrap:wrap;gap:8px;}
-  .node-row>.dropzone>.comp-node{flex:1;min-width:100px;}
-  .node-grid2>.dropzone{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .node-grid3>.dropzone{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
-  .node-col>.dropzone,.node-section>.dropzone{display:flex;flex-direction:column;gap:8px;}
+  .dropzone{min-height:24px;transition:outline 0.12s;}
+  .dropzone.dropzone-hover{outline:2px solid var(--green);outline-offset:2px;border-radius:4px;}
+  .node-row>.dropzone,.node-grid2>.dropzone,.node-grid3>.dropzone{display:flex;flex-wrap:wrap;gap:7px;}
+  .node-row>.dropzone>.comp-node{flex:1;min-width:90px;}
+  .node-grid2>.dropzone{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+  .node-grid3>.dropzone{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;}
+  .node-col>.dropzone,.node-section>.dropzone{display:flex;flex-direction:column;gap:7px;}
 
-  .del-btn{position:absolute;top:3px;right:3px;background:var(--red);color:#fff;border:none;width:18px;height:18px;
-    border-radius:50%;cursor:pointer;font-size:0.65rem;line-height:1;z-index:5;transition:transform 0.15s;font-family:var(--font);}
-  .del-btn:hover{transform:scale(1.2);}
-  .node-label .del-btn{position:static;}
+  .del-btn{position:absolute;top:2px;right:2px;background:var(--red);color:#fff;border:none;width:16px;height:16px;
+    border-radius:50%;cursor:pointer;font-size:0.6rem;line-height:1;z-index:5;transition:transform 0.12s;font-family:var(--font);display:flex;align-items:center;justify-content:center;}
+  .del-btn:hover{transform:scale(1.25);}
+  .node-label .del-btn{position:static;width:auto;height:auto;padding:0 4px;border-radius:3px;font-size:0.6rem;}
 
-  /* ภารกิจ */
-  .mission-box{background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px;}
-  .mission-box h3{color:var(--yellow);font-size:0.88rem;margin-bottom:4px;font-weight:600;}
-  .mission-box .desc{font-size:0.78rem;color:var(--text);line-height:1.5;margin-bottom:6px;}
-  .req-list{list-style:none;font-size:0.78rem;}
-  .req-list li{margin:3px 0;padding:2px 0;}
-  .req-list li.done{color:var(--green);text-decoration:line-through;}
-  .req-list li.pending{color:var(--red);}
-  .btn-primary{margin-top:8px;width:100%;background:var(--green);color:#052e16;border:none;padding:9px;border-radius:7px;
-    font-weight:700;cursor:pointer;font-family:var(--font);font-size:0.82rem;transition:all 0.15s;letter-spacing:0.3px;}
-  .btn-primary:hover:not(:disabled){box-shadow:0 0 16px rgba(0,255,136,0.3);transform:translateY(-1px);}
-  .btn-primary:disabled{background:var(--bg-hover);color:var(--text-dim);cursor:not-allowed;box-shadow:none;transform:none;}
+  /* ขวา: ข้อมูล + โค้ด */
+  .right-panel .panel-body{max-height:calc(100vh - 100px);display:flex;flex-direction:column;gap:10px;}
+  .tip-box{background:var(--bg-deep);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:5px;
+    padding:9px;font-size:0.72rem;line-height:1.55;overflow:auto;max-height:180px;flex-shrink:0;}
+  .tip-box code{color:var(--cyan);background:rgba(88,212,255,0.08);padding:1px 4px;border-radius:3px;font-size:0.68rem;}
+  .tip-box pre{margin-top:5px;background:var(--bg-deep);color:var(--green);padding:5px 7px;border-radius:3px;
+    font-size:0.66rem;white-space:pre-wrap;word-break:break-all;border:1px solid var(--border);}
+  .tip-empty{color:var(--text-dim);font-style:italic;}
 
-  .guide-btn{margin-bottom:10px;width:100%;background:var(--bg-elevated);color:var(--cyan);border:1px solid var(--border);
-    padding:8px;border-radius:7px;cursor:pointer;font-weight:600;font-size:0.78rem;font-family:var(--font);transition:0.15s;}
-  .guide-btn:hover{background:var(--bg-hover);border-color:var(--cyan);}
-
-  .tip-box{background:var(--bg-deep);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:6px;
-    padding:10px;font-size:0.75rem;margin-bottom:10px;min-height:48px;line-height:1.6;overflow:auto;max-height:200px;}
-  .tip-box code{color:var(--cyan);background:rgba(88,212,255,0.08);padding:1px 5px;border-radius:3px;font-size:0.72rem;}
-  .tip-box pre{margin-top:6px;background:var(--bg-deep);color:var(--green);padding:6px 8px;border-radius:4px;
-    font-size:0.68rem;white-space:pre-wrap;word-break:break-all;border:1px solid var(--border);}
-
-  /* โค้ดเอาท์พุต */
-  .code-header{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--bg-deep);
-    border:1px solid var(--border);border-bottom:none;border-radius:6px 6px 0 0;font-size:0.7rem;color:var(--text-dim);}
+  .code-section{flex:1;display:flex;flex-direction:column;min-height:0;}
+  .code-header{display:flex;justify-content:space-between;align-items:center;padding:5px 9px;background:var(--bg-deep);
+    border:1px solid var(--border);border-bottom:none;border-radius:5px 5px 0 0;font-size:0.68rem;color:var(--text-dim);flex-shrink:0;}
   .code-header .lang-badge{color:var(--orange);font-weight:600;}
-  pre#codeOut{background:var(--bg-deep);color:var(--text);font-size:0.68rem;padding:10px 12px;border-radius:0 0 6px 6px;
-    max-height:220px;overflow:auto;white-space:pre-wrap;word-break:break-all;border:1px solid var(--border);line-height:1.7;
-    tab-size:2;}
+  .code-header .line-count{color:var(--text-dim);}
+  pre#codeOut{background:var(--bg-deep);color:var(--text);font-size:0.66rem;padding:9px 10px;border-radius:0 0 5px 5px;
+    overflow:auto;white-space:pre-wrap;word-break:break-all;border:1px solid var(--border);line-height:1.7;
+    tab-size:2;flex:1;min-height:120px;}
   pre#codeOut .hl-tag{color:var(--purple);}pre#codeOut .hl-attr{color:var(--cyan);}
   pre#codeOut .hl-val{color:var(--orange);}pre#codeOut .hl-cmt{color:var(--text-dim);font-style:italic;}
   pre#codeOut .hl-sel{color:var(--green);}
-  .copy-btn{margin-top:6px;width:100%;background:var(--bg-elevated);color:var(--text-bright);border:1px solid var(--border);
-    padding:7px;border-radius:7px;cursor:pointer;font-weight:600;font-size:0.78rem;font-family:var(--font);transition:0.15s;}
+  .code-actions{display:flex;gap:6px;margin-top:6px;flex-shrink:0;}
+  .copy-btn{flex:1;background:var(--bg-elevated);color:var(--text-bright);border:1px solid var(--border);
+    padding:7px;border-radius:5px;cursor:pointer;font-weight:600;font-size:0.74rem;font-family:var(--font);transition:0.15s;}
   .copy-btn:hover{background:var(--bg-hover);border-color:var(--green);color:var(--green);}
-  .copy-btn.copied{background:rgba(0,255,136,0.1);border-color:var(--green);color:var(--green);}
+  .copy-btn.copied{background:rgba(0,255,136,0.08);border-color:var(--green);color:var(--green);}
+  .guide-btn{flex:1;background:var(--bg-elevated);color:var(--cyan);border:1px solid var(--border);
+    padding:7px;border-radius:5px;cursor:pointer;font-weight:600;font-size:0.74rem;font-family:var(--font);transition:0.15s;}
+  .guide-btn:hover{background:var(--bg-hover);border-color:var(--cyan);}
 
   /* โมดัล */
   .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:9990;padding:20px;backdrop-filter:blur(4px);}
   .modal-overlay.show{display:flex;}
-  .modal-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:10px;padding:18px;max-width:740px;max-height:80vh;overflow:auto;width:100%;}
-  .modal-box h2{color:var(--yellow);margin-bottom:12px;font-size:1rem;}
-  .guide-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;padding:10px 12px;margin-bottom:8px;font-size:0.78rem;line-height:1.6;}
+  .modal-box{background:var(--bg-surface);border:1px solid var(--border);border-radius:8px;padding:16px;max-width:720px;max-height:80vh;overflow:auto;width:100%;}
+  .modal-box h2{color:var(--yellow);margin-bottom:10px;font-size:0.95rem;}
+  .guide-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  @media(max-width:600px){.guide-grid{grid-template-columns:1fr;}}
+  .guide-item{background:var(--bg-elevated);border:1px solid var(--border);border-radius:5px;padding:8px 10px;font-size:0.72rem;line-height:1.55;}
   .guide-item b{color:var(--yellow);}
-  .guide-item code{color:var(--cyan);background:rgba(88,212,255,0.08);padding:1px 5px;border-radius:3px;font-size:0.72rem;}
-  .guide-item pre{background:var(--bg-deep);color:var(--green);padding:7px 9px;border-radius:5px;margin-top:5px;font-size:0.68rem;
+  .guide-item code{color:var(--cyan);background:rgba(88,212,255,0.08);padding:1px 4px;border-radius:3px;font-size:0.66rem;}
+  .guide-item pre{background:var(--bg-deep);color:var(--green);padding:5px 7px;border-radius:4px;margin-top:4px;font-size:0.64rem;
     white-space:pre-wrap;word-break:break-all;border:1px solid var(--border);}
-  .modal-close{margin-top:8px;width:100%;background:var(--red);color:#fff;border:none;padding:9px;border-radius:7px;
-    cursor:pointer;font-weight:700;font-family:var(--font);font-size:0.82rem;transition:0.15s;}
+  .modal-close{margin-top:8px;width:100%;background:var(--red);color:#fff;border:none;padding:8px;border-radius:6px;
+    cursor:pointer;font-weight:700;font-family:var(--font);font-size:0.8rem;transition:0.15s;}
   .modal-close:hover{filter:brightness(1.15);}
 
-  /* โทสต์ */
-  .toast{position:fixed;top:16px;right:16px;background:var(--bg-elevated);color:var(--green);padding:10px 18px;border-radius:7px;
-    font-weight:600;font-size:0.8rem;opacity:0;transform:translateY(-10px);transition:0.3s;z-index:9999;
+  .toast{position:fixed;top:14px;right:14px;background:var(--bg-elevated);color:var(--green);padding:9px 16px;border-radius:6px;
+    font-weight:600;font-size:0.76rem;opacity:0;transform:translateY(-8px);transition:0.25s;z-index:9999;
     border:1px solid var(--green-border);font-family:var(--font);box-shadow:0 4px 20px rgba(0,0,0,0.4);}
   .toast.show{opacity:1;transform:translateY(0);}
   .toast::before{content:'> ';color:var(--text-dim);}
 
-  /* สครอลล์บาร์ */
-  ::-webkit-scrollbar{width:6px;height:6px;}
+  ::-webkit-scrollbar{width:5px;height:5px;}
   ::-webkit-scrollbar-track{background:var(--bg-deep);}
   ::-webkit-scrollbar-thumb{background:var(--border-bright);border-radius:3px;}
   ::-webkit-scrollbar-thumb:hover{background:var(--text-dim);}
-
   @media(prefers-reduced-motion:reduce){*{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}
 </style>
 </head>
@@ -221,25 +212,24 @@
 <div class="glow glow-3"></div>
 
 <div class="topbar">
-  <div style="display:flex;align-items:center;gap:6px;">
+  <div class="term-left">
     <div class="term-dots"><span class="d-r"></span><span class="d-y"></span><span class="d-g"></span></div>
-    <span class="term-path">~/projects/<b>ui-builder</b> — zsh</span>
+    <span class="term-path">~/projects/<b>ui-builder</b></span>
+    <span class="topbar-title">UI.build()<span class="cursor-blink">_</span></span>
   </div>
-  <div class="topbar-title">UI.build()<span class="cursor">_</span></div>
-  <div class="stats">
-    <span class="score">score: <span id="scoreVal">0</span>;</span>
-    <span class="level">level: <span id="levelVal">1</span>;</span>
+  <div class="topbar-right">
+    <button class="tb-btn" id="guideBtn">$ man elements</button>
+    <button class="tb-btn danger" id="clearBtn">rm -rf *</button>
   </div>
 </div>
 
 <div class="layout">
 
-  <!-- ซ้าย: คลังองค์ประกอบ -->
-  <div class="panel">
+  <div class="panel left-panel">
     <div class="panel-tab">
       <span class="tab-file">components.tsx</span>
       <span class="tab-icon">🧩</span>
-      <span class="tab-title">คลังองค์ประกอบ</span>
+      <span class="tab-title">Elements</span>
     </div>
     <div class="panel-body">
       <div class="group-label">// layout containers</div>
@@ -249,73 +239,72 @@
       <div class="palette-item layout-type" draggable="true" data-type="grid2"><span class="ico">▦</span><span class="pal-label">Grid 2col</span><span class="pal-tag">grid-2</span></div>
       <div class="palette-item layout-type" draggable="true" data-type="grid3"><span class="ico">▦</span><span class="pal-label">Grid 3col</span><span class="pal-tag">grid-3</span></div>
 
-      <div class="group-label">// content elements</div>
+      <div class="group-label">// semantic</div>
       <div class="palette-item content-type" draggable="true" data-type="header"><span class="ico">🟪</span><span class="pal-label">Header</span><span class="pal-tag">&lt;header&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="nav"><span class="ico">📑</span><span class="pal-label">Navbar</span><span class="pal-tag">&lt;nav&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="hero"><span class="ico">🌈</span><span class="pal-label">Hero</span><span class="pal-tag">&lt;section&gt;</span></div>
+      <div class="palette-item content-type" draggable="true" data-type="footer"><span class="ico">⬛</span><span class="pal-label">Footer</span><span class="pal-tag">&lt;footer&gt;</span></div>
+
+      <div class="group-label">// interactive</div>
       <div class="palette-item content-type" draggable="true" data-type="button"><span class="ico">🔘</span><span class="pal-label">Button</span><span class="pal-tag">&lt;button&gt;</span></div>
-      <div class="palette-item content-type" draggable="true" data-type="image"><span class="ico">🖼️</span><span class="pal-label">Image</span><span class="pal-tag">&lt;img&gt;</span></div>
-      <div class="palette-item content-type" draggable="true" data-type="card"><span class="ico">🃏</span><span class="pal-label">Card</span><span class="pal-tag">&lt;div.card&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="input"><span class="ico">⌨️</span><span class="pal-label">Input</span><span class="pal-tag">&lt;input&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="textarea"><span class="ico">📄</span><span class="pal-label">Textarea</span><span class="pal-tag">&lt;textarea&gt;</span></div>
-      <div class="palette-item content-type" draggable="true" data-type="text"><span class="ico">📝</span><span class="pal-label">Text</span><span class="pal-tag">&lt;p&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="link"><span class="ico">🔗</span><span class="pal-label">Link</span><span class="pal-tag">&lt;a&gt;</span></div>
+
+      <div class="group-label">// media</div>
+      <div class="palette-item content-type" draggable="true" data-type="image"><span class="ico">🖼️</span><span class="pal-label">Image</span><span class="pal-tag">&lt;img&gt;</span></div>
+      <div class="palette-item content-type" draggable="true" data-type="video"><span class="ico">🎬</span><span class="pal-label">Video</span><span class="pal-tag">&lt;video&gt;</span></div>
+
+      <div class="group-label">// content</div>
+      <div class="palette-item content-type" draggable="true" data-type="text"><span class="ico">📝</span><span class="pal-label">Text</span><span class="pal-tag">&lt;p&gt;</span></div>
+      <div class="palette-item content-type" draggable="true" data-type="card"><span class="ico">🃏</span><span class="pal-label">Card</span><span class="pal-tag">&lt;div.card&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="ul"><span class="ico">📋</span><span class="pal-label">UL List</span><span class="pal-tag">&lt;ul&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="ol"><span class="ico">🔢</span><span class="pal-label">OL List</span><span class="pal-tag">&lt;ol&gt;</span></div>
       <div class="palette-item content-type" draggable="true" data-type="table"><span class="ico">📊</span><span class="pal-label">Table</span><span class="pal-tag">&lt;table&gt;</span></div>
-      <div class="palette-item content-type" draggable="true" data-type="video"><span class="ico">🎬</span><span class="pal-label">Video</span><span class="pal-tag">&lt;video&gt;</span></div>
-      <div class="palette-item content-type" draggable="true" data-type="footer"><span class="ico">⬛</span><span class="pal-label">Footer</span><span class="pal-tag">&lt;footer&gt;</span></div>
     </div>
   </div>
 
-  <!-- กลาง: พื้นที่ออกแบบ -->
   <div class="panel">
     <div class="panel-tab">
       <span class="tab-file">preview.html</span>
       <span class="tab-icon">🖥️</span>
-      <span class="tab-title">พื้นที่ออกแบบ</span>
+      <span class="tab-title">Canvas</span>
     </div>
-    <div class="panel-body">
+    <div class="panel-body" style="display:flex;flex-direction:column;">
       <div class="canvas-hint">
-        <b>ลาก Layout</b> (Row / Column / Grid) มาวางก่อน → ลาก Content เข้าไปวาง <b>ข้างใน</b> → ซ้อน Layout เข้าไปใน Layout อื่นได้
+        <b>ลาก Layout</b> มาวางก่อน → ลาก Content เข้า <b>ข้างใน</b> → ซ้อน Layout ใน Layout ได้
       </div>
       <div class="canvas-toolbar">
-        <span style="font-size:0.7rem;color:var(--text-dim);">drop_zone.children</span>
-        <button class="clear-btn" id="clearBtn">rm -rf * (ล้างทั้งหมด)</button>
+        <span class="info" id="nodeCount">// 0 elements</span>
+        <button class="clear-btn" id="clearBtn2">clear</button>
       </div>
       <div id="canvas" class="dropzone" data-parent-id="root">
-        <div class="placeholder">// drag elements here_</div>
+        <div class="placeholder">// drag elements here_<span class="cursor-blink"></span></div>
       </div>
     </div>
   </div>
 
-  <!-- ขวา: ภารกิจ + โค้ด -->
-  <div class="panel">
+  <div class="panel right-panel">
     <div class="panel-tab">
-      <span class="tab-file">mission.json</span>
-      <span class="tab-icon">📋</span>
-      <span class="tab-title">ภารกิจ + โค้ด</span>
+      <span class="tab-file">output</span>
+      <span class="tab-icon">💻</span>
+      <span class="tab-title">Info + Code</span>
     </div>
     <div class="panel-body">
-      <div class="mission-box">
-        <h3 id="missionTitle">mission[0]</h3>
-        <div id="missionDesc" class="desc"></div>
-        <ul class="req-list" id="reqList"></ul>
-        <button class="btn-primary" id="submitMission">submit()</button>
-      </div>
-
-      <button class="guide-btn" id="guideBtn">$ man elements --all</button>
-
       <div class="tip-box" id="tipBox">
-        // คลิกองค์ประกอบในพื้นที่ออกแบบ<br>// เพื่อดูคำอธิบายแท็ก &amp; วิธีใช้งาน
+        <span class="tip-empty">// คลิกองค์ประกอบบน Canvas เพื่อดูรายละเอียด</span>
       </div>
-
-      <div class="code-header">
-        <span>output.html</span>
-        <span class="lang-badge">HTML + CSS</span>
+      <div class="code-section">
+        <div class="code-header">
+          <span>output.html</span>
+          <span style="display:flex;gap:10px;"><span class="lang-badge">HTML + CSS</span><span class="line-count" id="lineCount">0 lines</span></span>
+        </div>
+        <pre id="codeOut"><span class="hl-cmt">// ลากองค์ประกอบมาวางเพื่อสร้างโค้ด</span></pre>
       </div>
-      <pre id="codeOut"><span class="hl-cmt">// ยังไม่มีองค์ประกอบ</span></pre>
-      <button class="copy-btn" id="copyBtn">cp output.html → clipboard</button>
+      <div class="code-actions">
+        <button class="copy-btn" id="copyBtn">cp → clipboard</button>
+        <button class="guide-btn" id="guideBtn2">$ man elements</button>
+      </div>
     </div>
   </div>
 
@@ -323,212 +312,147 @@
 
 <div class="modal-overlay" id="guideModal">
   <div class="modal-box">
-    <h2>$ man elements --all</h2>
-    <div id="guideList"></div>
-    <button class="modal-close" id="closeGuide">exit(0)</button>
+    <h2>$ man elements</h2>
+    <div class="guide-grid" id="guideList"></div>
+    <button class="modal-close" id="closeGuide">close</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ========== นิยามองค์ประกอบเนื้อหา (leaf) ==========
+// ========== นิยามองค์ประกอบเนื้อหา ==========
 const contentTemplates = {
   header: { label:"Header", icon:"🟪", tag:"<header>",
-    when:"ใช้เพียง 1 ครั้งต่อหน้า วางบนสุดของหน้าเว็บเสมอ ไม่ควรซ้อนไว้ในองค์ประกอบอื่น",
-    render: () => `<div class="comp-header">โลโก้ / ชื่อเว็บไซต์ของคุณ</div>`,
+    when:"ใช้ 1 ครั้งต่อหน้า วางบนสุดเสมอ สำหรับโลโก้และชื่อเว็บไซต์",
+    render: () => `<div class="comp-header">โลโก้ / ชื่อเว็บไซต์</div>`,
     html: () => `<header class="site-header">\n  <h1>โลโก้ / ชื่อเว็บไซต์</h1>\n</header>`,
-    tip: "Header ควรอยู่บนสุดของหน้าเสมอ ช่วยสร้าง Visual Hierarchy บอกผู้ใช้ว่ากำลังอยู่เว็บไซต์ไหน" },
+    tip: "ควรอยู่บนสุดของหน้าเสมอ ช่วยสร้าง Visual Hierarchy" },
   nav: { label:"Navbar", icon:"📑", tag:"<nav>",
-    when:"ใช้เมื่อมีลิงก์เมนูสำหรับเดินทางไปหน้าอื่น ๆ มากกว่า 1 ลิงก์ มักวางไว้ในหรือใกล้ Header",
+    when:"มีลิงก์เมนูมากกว่า 1 ลิงก์ มักวางในหรือใกล้ Header",
     render: () => `<div class="comp-nav"><span>หน้าแรก</span><span>เกี่ยวกับ</span><span>ติดต่อ</span></div>`,
     html: () => `<nav class="site-nav">\n  <a href="#">หน้าแรก</a>\n  <a href="#">เกี่ยวกับ</a>\n  <a href="#">ติดต่อ</a>\n</nav>`,
-    tip: "Navbar ช่วยให้ผู้ใช้เดินทางในเว็บไซต์ได้ง่าย ควรมีความสม่ำเสมอ (Consistency) ทุกหน้า" },
+    tip: "ควรมีความสม่ำเสมอทุกหน้า (Consistency)" },
   hero: { label:"Hero Section", icon:"🌈", tag:"<section class=\"hero\">",
-    when:"ใช้เป็นพื้นที่นำเสนอข้อความหรือข้อเสนอหลักของหน้า มักวางไว้ถัดจาก Header ทันที",
-    render: () => `<div class="comp-hero"><h2>ข้อความหลักที่ดึงดูดใจ</h2><p>คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่คุณนำเสนอ</p></div>`,
-    html: () => `<section class="hero">\n  <h2>ข้อความหลักที่ดึงดูดใจ</h2>\n  <p>คำอธิบายสั้น ๆ</p>\n</section>`,
-    tip: "Hero Section คือจุดแรกที่ดึงดูดความสนใจ ควรใช้ตัวอักษรใหญ่ ชัดเจน และ Contrast สูง" },
+    when:"พื้นที่นำเสนอข้อความหลัก มักวางถัดจาก Header",
+    render: () => `<div class="comp-hero"><h2>ข้อความหลักที่ดึงดูดใจ</h2><p>คำอธิบายสั้น ๆ</p></div>`,
+    html: () => `<section class="hero">\n  <h2>ข้อความหลัก</h2>\n  <p>คำอธิบายสั้น ๆ</p>\n</section>`,
+    tip: "ใช้ตัวอักษรใหญ่ ชัดเจน Contrast สูง" },
   button: { label:"Button", icon:"🔘", tag:"<button>",
-    when:"ใช้เมื่อต้องการให้ผู้ใช้กดเพื่อทำ action เช่น ส่งฟอร์ม ยืนยัน หรือไปยังหน้าอื่น",
+    when:"ให้ผู้ใช้กดเพื่อทำ action ส่งฟอร์ม ยืนยัน นำทาง",
     render: () => `<div class="comp-button"><button>คลิกที่นี่</button></div>`,
     html: () => `<button class="btn">คลิกที่นี่</button>`,
-    tip: "ปุ่ม Call-to-Action ควรมีสีตัดกับพื้นหลัง (Contrast) เพื่อให้สายตาจับได้ทันที" },
+    tip: "ปุ่ม CTA ควรมีสีตัดกับพื้นหลัง" },
   image: { label:"Image", icon:"🖼️", tag:"<img>",
-    when:"ใช้แสดงรูปภาพ ต้องมี attribute alt เสมอ เพื่อการเข้าถึง (Accessibility) และ SEO",
-    render: () => `<div class="comp-image"><img src="https://picsum.photos/seed/uiquest/400/180" alt="รูปภาพตัวอย่าง"></div>`,
+    when:"แสดงรูปภาพ ต้องมี alt เสมอ",
+    render: () => `<div class="comp-image"><img src="https://picsum.photos/seed/uibld/400/180" alt="รูปภาพตัวอย่าง"></div>`,
     html: () => `<img src="photo.jpg" alt="คำอธิบายรูปภาพ">`,
-    tip: "รูปภาพช่วยสื่อสารเร็วกว่าข้อความ แต่ต้องมี alt text เพื่อ Accessibility เสมอ" },
+    tip: "ต้องมี alt text เพื่อ Accessibility" },
   card: { label:"Card", icon:"🃏", tag:"<div class=\"card\">",
-    when:"ใช้จัดกลุ่มเนื้อหาที่เกี่ยวข้องกันไว้ในกรอบเดียว เช่น การ์ดสินค้า การ์ดโปรไฟล์ นิยมวางหลายใบใน Grid",
-    render: () => `<div class="comp-card"><h3>หัวข้อการ์ด</h3><p>รายละเอียดสั้น ๆ ของการ์ดนี้</p></div>`,
+    when:"จัดกลุ่มเนื้อหาที่เกี่ยวข้อง นิยมวางหลายใบใน Grid",
+    render: () => `<div class="comp-card"><h3>หัวข้อการ์ด</h3><p>รายละเอียดสั้น ๆ</p></div>`,
     html: () => `<div class="card">\n  <h3>หัวข้อการ์ด</h3>\n  <p>รายละเอียดสั้น ๆ</p>\n</div>`,
-    tip: "Card ใช้จัดกลุ่มข้อมูลที่เกี่ยวข้องกัน ช่วยให้ผู้ใช้สแกนเนื้อหาได้ง่าย (Chunking)" },
+    tip: "ใช้จัดกลุ่มข้อมูล (Chunking) ให้อ่านง่าย" },
   input: { label:"Input Field", icon:"⌨️", tag:"<input>",
-    when:"ใช้รับข้อมูลจากผู้ใช้ เช่น ชื่อ อีเมล รหัสผ่าน ควรระบุ type ให้ตรงกับข้อมูล",
+    when:"รับข้อมูลจากผู้ใช้ ควรระบุ type ให้ตรง",
     render: () => `<div class="comp-input"><input type="text" placeholder="กรอกข้อมูล..." disabled></div>`,
     html: () => `<input type="text" placeholder="กรอกข้อมูล">`,
-    tip: "ช่องกรอกข้อมูลควรมี placeholder หรือ label ที่ชัดเจน บอกผู้ใช้ว่าต้องพิมพ์อะไร" },
+    tip: "ควรมี placeholder หรือ label ที่ชัดเจน" },
   textarea: { label:"Textarea", icon:"📄", tag:"<textarea>",
-    when:"ใช้รับข้อความยาวหลายบรรทัด เช่น ช่องข้อความติดต่อ รีวิว คอมเมนต์ ต่างจาก input ตรงที่รองรับหลายบรรทัด",
-    render: () => `<div class="comp-textarea"><textarea placeholder="กรอกข้อความหลายบรรทัด..." rows="3" disabled></textarea></div>`,
+    when:"รับข้อความหลายบรรทัด เช่น รีวิว คอมเมนต์ ข้อความติดต่อ",
+    render: () => `<div class="comp-textarea"><textarea placeholder="กรอกข้อความ..." rows="3" disabled></textarea></div>`,
     html: () => `<textarea placeholder="กรอกข้อความ..." rows="4"></textarea>`,
-    tip: "Textarea เหมาะสำหรับข้อความยาว เช่น ฟอร์มติดต่อ รีวิว คอมเมนต์ ควรตั้งค่า rows หรือใช้ CSS ควบคุมขนาด" },
+    tip: "เหมาะกับข้อความยาว ตั้งค่า rows หรือ CSS ควบคุมขนาด" },
   text: { label:"Text", icon:"📝", tag:"<p>",
-    when:"ใช้แสดงข้อความบรรยายทั่วไปที่ไม่ใช่หัวข้อหลัก เช่น คำอธิบาย เนื้อหาย่อหน้า",
-    render: () => `<div class="comp-text"><p>ข้อความอธิบายทั่วไปที่สามารถแก้ไขได้</p></div>`,
+    when:"ข้อความบรรยายทั่วไป ย่อหน้า",
+    render: () => `<div class="comp-text"><p>ข้อความอธิบายทั่วไป</p></div>`,
     html: () => `<p>ข้อความอธิบายทั่วไป</p>`,
-    tip: "ข้อความควรมี Line Height และขนาดตัวอักษรที่อ่านง่าย ไม่ต่ำกว่า 16px บนเว็บ" },
+    tip: "ขนาดไม่ต่ำกว่า 16px Line Height ประมาณ 1.5-1.8" },
   link: { label:"Link", icon:"🔗", tag:"<a>",
-    when:"ใช้สร้างลิงก์ไปยังหน้าอื่นหรือ URL ภายนอก ควรมีข้อความที่บอกชัดเจนว่าลิงก์ไปที่ไหน หลีกเลี่ยงคำว่า 'คลิกที่นี่'",
-    render: () => `<div class="comp-link"><a href="#">🔗 คลิกเพื่อไปยังลิงก์</a></div>`,
-    html: () => `<a href="https://example.com" target="_blank">คลิกเพื่อไปยังลิงก์</a>`,
-    tip: "ลิงก์ควรมีข้อความที่อธิบายได้ชัดเจน สีต่างจากข้อความปกติ และพิจารณาเปิด external link ใน tab ใหม่" },
+    when:"ลิงก์ไปหน้าอื่นหรือ URL ภายนอก หลีกเลี่ยงคำว่า 'คลิกที่นี่'",
+    render: () => `<div class="comp-link"><a href="#">🔗 ลิงก์ตัวอย่าง</a></div>`,
+    html: () => `<a href="https://example.com" target="_blank">ข้อความลิงก์</a>`,
+    tip: "ควรมีข้อความบอกชัดเจน สีต่างจากข้อความปกติ" },
   ul: { label:"Unordered List", icon:"📋", tag:"<ul>",
-    when:"ใช้แสดงรายการที่ไม่มีลำดับ เช่น รายการฟีเจอร์ รายการเมนู สิ่งที่นำไป ใช้ li ครอบแต่ละรายการ",
+    when:"รายการไม่มีลำดับ เช่น ฟีเจอร์ สิ่งที่ต้องนำไป",
     render: () => `<div class="comp-ul"><ul><li>รายการที่ 1</li><li>รายการที่ 2</li><li>รายการที่ 3</li></ul></div>`,
     html: () => `<ul>\n  <li>รายการที่ 1</li>\n  <li>รายการที่ 2</li>\n  <li>รายการที่ 3</li>\n</ul>`,
-    tip: "Unordered List เหมาะกับรายการที่ไม่มีลำดับ เช่น ฟีเจอร์ สิ่งที่ต้องนำไป ใช้ li ครอบทุกรายการ" },
+    tip: "ใช้ li ครอบทุกรายการ" },
   ol: { label:"Ordered List", icon:"🔢", tag:"<ol>",
-    when:"ใช้แสดงรายการที่มีลำดับ เช่น ขั้นตอนการสมัคร ลำดับการทำงาน วิธีการใช้งาน ตัวเลขจะจัดให้อัตโนมัติ",
+    when:"รายการมีลำดับ เช่น ขั้นตอน วิธีการ สูตร",
     render: () => `<div class="comp-ol"><ol><li>ขั้นตอนที่ 1</li><li>ขั้นตอนที่ 2</li><li>ขั้นตอนที่ 3</li></ol></div>`,
     html: () => `<ol>\n  <li>ขั้นตอนที่ 1</li>\n  <li>ขั้นตอนที่ 2</li>\n  <li>ขั้นตอนที่ 3</li>\n</ol>`,
-    tip: "Ordered List เหมาะกับขั้นตอนที่มีลำดับ เช่น วิธีสมัคร สูตรอาหาร การติดตั้ง ตัวเลขจัดให้อัตโนมัติ" },
+    tip: "ตัวเลขจัดให้อัตโนมัติ เหมาะกับ step-by-step" },
   table: { label:"Table", icon:"📊", tag:"<table>",
-    when:"ใช้แสดงข้อมูลแบบตาราง เช่น ราคาสินค้า สถิติ เปรียบเทียบ ควรใช้ thead/tbody/th/td ให้ถูกต้อง",
+    when:"ข้อมูลแบบตาราง ราคา สถิติ เปรียบเทียบ ใช้ thead/tbody/th/td",
     render: () => `<div class="comp-table"><table><thead><tr><th>ชื่อ</th><th>ราคา</th><th>สถานะ</th></tr></thead><tbody><tr><td>สินค้า A</td><td>฿500</td><td>พร้อมส่ง</td></tr><tr><td>สินค้า B</td><td>฿1,200</td><td>หมดแล้ว</td></tr></tbody></table></div>`,
     html: () => `<table>\n  <thead>\n    <tr>\n      <th>ชื่อ</th>\n      <th>ราคา</th>\n      <th>สถานะ</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>สินค้า A</td>\n      <td>฿500</td>\n      <td>พร้อมส่ง</td>\n    </tr>\n    <tr>\n      <td>สินค้า B</td>\n      <td>฿1,200</td>\n      <td>หมดแล้ว</td>\n    </tr>\n  </tbody>\n</table>`,
-    tip: "ตารางควรใช้ thead/th สำหรับหัวคอลัมน์ และ tbody/td สำหรับเนื้อหา เพื่อ Accessibility และ SEO" },
+    tip: "ใช้ thead/th สำหรับหัวคอลัมน์ เพื่อ Accessibility" },
   video: { label:"Video", icon:"🎬", tag:"<video>",
-    when:"ใช้แสดงวิดีโอโดยตรงในหน้าเว็บ ควรมี controls, poster และ fallback text สำหรับเบราว์เซอร์ที่ไม่รองรับ",
+    when:"แสดงวิดีโอในหน้าเว็บ ควรมี controls, poster, fallback",
     render: () => `<div class="comp-video"><span class="play-icon">▶️</span>Video Player<br><small style="color:#64748b;">video.mp4</small></div>`,
     html: () => `<video controls poster="thumbnail.jpg" width="100%">\n  <source src="video.mp4" type="video/mp4">\n  เบราว์เซอร์ไม่รองรับวิดีโอ\n</video>`,
-    tip: "วิดีโอควรมี controls ให้ผู้ใช้เล่น/หยุดได้ และมี poster เพื่อแสดงภาพก่อนเล่น ช่วยประหยัด bandwidth" },
+    tip: "มี controls ให้เล่น/หยุด มี poster ประหยัด bandwidth" },
   footer: { label:"Footer", icon:"⬛", tag:"<footer>",
-    when:"ใช้เพียง 1 ครั้งต่อหน้า วางไว้ล่างสุดเสมอ มักมีข้อมูลติดต่อ ลิขสิทธิ์ ลิงก์สำคัญ",
+    when:"วางล่างสุด 1 ครั้งต่อหน้า มีข้อมูลติดต่อ ลิขสิทธิ์",
     render: () => `<div class="comp-footer">© 2026 บริษัทของคุณ | ติดต่อเรา</div>`,
     html: () => `<footer>\n  <p>© 2026 บริษัทของคุณ</p>\n</footer>`,
-    tip: "Footer ควรมีข้อมูลติดต่อ/ลิงก์สำคัญ เป็นจุดสิ้นสุดที่ทำให้ผู้ใช้รู้ว่าหมดหน้าแล้ว" }
+    tip: "จุดสิ้นสุดของหน้า บอกผู้ใช้ว่าหมดเนื้อหาแล้ว" }
 };
 
-// ========== นิยามกล่อง Layout (container) ==========
+// ========== นิยามกล่อง Layout ==========
 const containerTemplates = {
   section: { label:"Section", icon:"📦", cssClass:"layout-section", tag:"<section>",
-    when:"ใช้แบ่งเนื้อหาออกเป็นส่วน ๆ อย่างมีระเบียบ เช่น ส่วนแนะนำ ส่วนสินค้า ส่วนติดต่อ",
-    html: () => `<section class="layout-section">\n  <!-- เนื้อหาข้างใน Section -->\n</section>`,
-    tip:"Section ใช้แบ่งเนื้อหาเป็นส่วน ๆ ช่วยสร้างระเบียบและ Whitespace ให้หน้าเว็บอ่านง่ายขึ้น" },
-  row: { label:"Row (แนวนอน)", icon:"↔️", cssClass:"layout-row", tag:"<div> display:flex; row",
-    when:"ใช้เมื่อต้องการให้องค์ประกอบเรียงกันแนวนอน เช่น แถบเมนู กลุ่มปุ่ม การ์ดเรียงแถวเดียว",
-    html: () => `<div class="layout-row">\n  <!-- องค์ประกอบเรียงแนวนอน -->\n</div>`,
-    tip:"Row จัดองค์ประกอบเรียงกันแนวนอนด้วย Flexbox (display:flex; flex-direction:row)" },
-  col: { label:"Column (แนวตั้ง)", icon:"↕️", cssClass:"layout-col", tag:"<div> display:flex; column",
-    when:"ใช้เมื่อต้องการให้องค์ประกอบเรียงต่อกันแนวตั้ง เช่น ฟอร์มกรอกข้อมูล ลิสต์ข้อความ",
-    html: () => `<div class="layout-col">\n  <!-- องค์ประกอบเรียงแนวตั้ง -->\n</div>`,
-    tip:"Column จัดองค์ประกอบเรียงต่อกันแนวตั้งด้วย Flexbox column เหมาะกับฟอร์มหรือข้อความ" },
-  grid2: { label:"Grid 2 คอลัมน์", icon:"▦", cssClass:"layout-grid2", tag:"<div> display:grid; 2col",
-    when:"ใช้จัดวางเนื้อหาเป็นตาราง 2 คอลัมน์เท่ากัน เหมาะกับการวาง Card สินค้าให้เป็นระเบียบ",
-    html: () => `<div class="layout-grid2">\n  <!-- องค์ประกอบในตาราง 2 คอลัมน์ -->\n</div>`,
-    tip:"CSS Grid แบ่งพื้นที่เป็น 2 คอลัมน์เท่ากัน เหมาะกับการวาง Card สินค้า" },
-  grid3: { label:"Grid 3 คอลัมน์", icon:"▦", cssClass:"layout-grid3", tag:"<div> display:grid; 3col",
-    when:"ใช้จัดวางเนื้อหาเป็นตาราง 3 คอลัมน์เท่ากัน เหมาะกับหน้ารวมสินค้าหรือแสดง Card จำนวนมาก",
-    html: () => `<div class="layout-grid3">\n  <!-- องค์ประกอบในตาราง 3 คอลัมน์ -->\n</div>`,
-    tip:"CSS Grid 3 คอลัมน์เหมาะกับการแสดง Card จำนวนมากในหน้าเดียว" }
+    when:"แบ่งเนื้อหาเป็นส่วน ๆ เช่น ส่วนแนะนำ ส่วนสินค้า",
+    html: () => `<section class="layout-section">\n  <!-- เนื้อหา -->\n</section>`,
+    tip:"สร้าง Whitespace ให้หน้าเว็บอ่านง่าย" },
+  row: { label:"Row", icon:"↔️", cssClass:"layout-row", tag:"<div> flex-row",
+    when:"เรียงองค์ประกอบแนวนอน เมนู กลุ่มปุ่ม",
+    html: () => `<div class="layout-row">\n  <!-- เรียงแนวนอน -->\n</div>`,
+    tip:"Flexbox display:flex; flex-direction:row" },
+  col: { label:"Column", icon:"↕️", cssClass:"layout-col", tag:"<div> flex-col",
+    when:"เรียงองค์ประกอบแนวตั้ง ฟอร์ม ลิสต์",
+    html: () => `<div class="layout-col">\n  <!-- เรียงแนวตั้ง -->\n</div>`,
+    tip:"Flexbox display:flex; flex-direction:column" },
+  grid2: { label:"Grid 2col", icon:"▦", cssClass:"layout-grid2", tag:"<div> grid-2",
+    when:"ตาราง 2 คอลัมน์ Card สินค้า",
+    html: () => `<div class="layout-grid2">\n  <!-- 2 คอลัมน์ -->\n</div>`,
+    tip:"CSS Grid grid-template-columns:1fr 1fr" },
+  grid3: { label:"Grid 3col", icon:"▦", cssClass:"layout-grid3", tag:"<div> grid-3",
+    when:"ตาราง 3 คอลัมน์ หน้ารวมสินค้า",
+    html: () => `<div class="layout-grid3">\n  <!-- 3 คอลัมน์ -->\n</div>`,
+    tip:"CSS Grid grid-template-columns:1fr 1fr 1fr" }
 };
 
 const containerTypes = Object.keys(containerTemplates);
 const containerDirection = { root:'vertical', section:'vertical', col:'vertical', row:'horizontal', grid2:'horizontal', grid3:'horizontal' };
 function getTemplate(type) { return containerTemplates[type] || contentTemplates[type]; }
 
-// ========== ภารกิจ ==========
-const missions = [
-  { title:"mission[0]: Landing Page เบื้องต้น",
-    desc:"ออกแบบหน้าแรกง่าย ๆ ที่มี Header, Hero Section และ Button อย่างน้อย 1 ปุ่ม",
-    require:{ header:1, hero:1, button:1 }, points:100 },
-  { title:"mission[1]: ฟอร์ม Login ด้วย Column",
-    desc:"ลาก Column มาวางก่อน แล้ววาง Header, ช่องกรอกข้อมูล 2 ช่อง และปุ่มยืนยันไว้ในหน้า",
-    require:{ col:1, header:1, input:2, button:1 }, points:150 },
-  { title:"mission[2]: แสดงสินค้าด้วย Grid 2 คอลัมน์",
-    desc:"ลาก Grid 2 คอลัมน์มาวาง แล้วใส่ Card สินค้าอย่างน้อย 2 ใบไว้ข้างใน",
-    require:{ grid2:1, card:2 }, points:180 },
-  { title:"mission[3]: จัดเมนูด้วย Row",
-    desc:"ลาก Row มาวาง แล้วใส่ปุ่มอย่างน้อย 2 ปุ่มไว้ข้างในให้เรียงกันแนวนอน",
-    require:{ row:1, button:2 }, points:150 },
-  { title:"mission[4]: หน้าเว็บสมบูรณ์แบบมือโปร",
-    desc:"ประกอบหน้าเว็บให้ครบวงจร: Header, Section, Grid 3 คอลัมน์ (มี Card 3 ใบ) และ Footer",
-    require:{ header:1, section:1, grid3:1, card:3, footer:1 }, points:300 },
-  { title:"mission[5]: แกลเลอรีสินค้าขนาดใหญ่",
-    desc:"ลาก Grid 3 คอลัมน์มาวาง แล้วใส่ Card สินค้าอย่างน้อย 4 ใบ (เกินจำนวนคอลัมน์ เพื่อดูการ wrap)",
-    require:{ grid3:1, card:4 }, points:200 },
-  { title:"mission[6]: Layout ซ้อนกัน (Nested)",
-    desc:"ลาก Section มาวางก่อน แล้วลาก Row เข้าไปไว้ข้างใน จากนั้นใส่ปุ่ม 3 ปุ่มไว้ใน Row",
-    require:{ section:1, row:1, button:3 }, points:220 },
-  { title:"mission[7]: ฟอร์มติดต่อเรา (Contact Us)",
-    desc:"ใช้ Column จัดกลุ่มฟอร์ม ต้องมีช่องกรอกข้อมูล 3 ช่อง ข้อความอธิบาย 1 ข้อความ และปุ่มส่ง",
-    require:{ col:1, input:3, text:1, button:1 }, points:220 },
-  { title:"mission[8]: ส่วนหัวเว็บไซต์แบบมาตรฐาน",
-    desc:"ประกอบส่วนหัวหน้าเว็บให้ครบ: Header, Navbar และ Hero Section เรียงต่อกัน",
-    require:{ header:1, nav:1, hero:1 }, points:180 },
-  { title:"mission[9]: หน้าร้านค้าออนไลน์ (E-commerce)",
-    desc:"ประกอบหน้าร้านค้า: Header, Hero, Grid 3 คอลัมน์ (มี Card 3 ใบ) และ Footer",
-    require:{ header:1, hero:1, grid3:1, card:3, footer:1 }, points:280 },
-  { title:"mission[10]: หน้า Dashboard แบบผสม",
-    desc:"ใช้ทั้ง Row และ Column ในหน้าเดียวกัน โดยต้องมี Card 2 ใบ และข้อความ 2 ข้อความ กระจายอยู่ในกล่องทั้งสอง",
-    require:{ row:1, col:1, card:2, text:2 }, points:260 },
-  { title:"mission[11]: หน้าเว็บระดับมือโปร (Capstone)",
-    desc:"ประกอบหน้าเว็บสมบูรณ์: Header, Navbar, Hero, Section 2 ส่วน, Grid 3 (Card 3 ใบ) และ Footer",
-    require:{ header:1, nav:1, hero:1, section:2, grid3:1, card:3, footer:1 }, points:400 },
-  { title:"mission[12]: ตารางข้อมูลสินค้า",
-    desc:"ใช้ Section ครอบตาราง แล้วใส่ Table ไว้ข้างในเพื่อแสดงข้อมูลสินค้า",
-    require:{ section:1, table:1 }, points:200 },
-  { title:"mission[13]: หน้าแนะนำฟีเจอร์",
-    desc:"ใช้ Section ครอบ Unordered List เพื่อแสดงรายการฟีเจอร์ พร้อม Header ด้านบน",
-    require:{ header:1, section:1, ul:1 }, points:180 },
-  { title:"mission[14]: ขั้นตอนการใช้งาน",
-    desc:"ใช้ Column จัดเรียง Header, Ordered List และ Button ต่อกัน",
-    require:{ col:1, header:1, ol:1, button:1 }, points:200 },
-  { title:"mission[15]: หน้ารีวิววิดีโอ",
-    desc:"ใช้ Section ครอบ Header และ Video ไว้ด้วยกัน พร้อม Text อธิบาย",
-    require:{ section:1, header:1, video:1, text:1 }, points:220 },
-  { title:"mission[16]: ฟอร์มรีวิวสินค้า",
-    desc:"ใช้ Column จัดฟอร์ม ต้องมี Input 2 ช่อง, Textarea 1 ช่อง, และ Button ส่ง",
-    require:{ col:1, input:2, textarea:1, button:1 }, points:220 },
-  { title:"mission[17]: หน้าเว็บที่มีลิงก์",
-    desc:"ใช้ Row จัดเรียง Link อย่างน้อย 3 ลิงก์ ไว้แนวนอน พร้อม Header ด้านบน",
-    require:{ header:1, row:1, link:3 }, points:180 },
-  { title:"mission[18]: Ultimate — ทุกแท็กในหน้าเดียว",
-    desc:"สร้างหน้าเว็บที่ครบทุกประเภท: Header, Navbar, Hero, Section (มี Table + UL), Grid 2 (Card 2, Link 1), OL, Textarea, Video, และ Footer",
-    require:{ header:1, nav:1, hero:1, section:1, table:1, ul:1, grid2:1, card:2, link:1, ol:1, textarea:1, video:1, footer:1 }, points:600 }
-];
-
-// ========== สถานะเกม ==========
-let score = 0, level = 1, missionIndex = 0, idCounter = 0;
+// ========== สถานะ ==========
+let idCounter = 0;
 const tree = { id:'root', type:'root', children:[] };
 let draggedId = null;
 
 const canvas = document.getElementById('canvas');
-const scoreVal = document.getElementById('scoreVal');
-const levelVal = document.getElementById('levelVal');
-const missionTitle = document.getElementById('missionTitle');
-const missionDesc = document.getElementById('missionDesc');
-const reqList = document.getElementById('reqList');
-const submitBtn = document.getElementById('submitMission');
 const codeOut = document.getElementById('codeOut');
 const copyBtn = document.getElementById('copyBtn');
 const tipBox = document.getElementById('tipBox');
 const toast = document.getElementById('toast');
-const guideBtn = document.getElementById('guideBtn');
 const guideModal = document.getElementById('guideModal');
 const guideList = document.getElementById('guideList');
-const closeGuide = document.getElementById('closeGuide');
-const clearBtn = document.getElementById('clearBtn');
+const nodeCountEl = document.getElementById('nodeCount');
+const lineCountEl = document.getElementById('lineCount');
+let plainCode = '';
 
-// ========== ปุ่มล้างทั้งหมด ==========
-clearBtn.addEventListener('click', () => {
+// ========== ล้างทั้งหมด ==========
+function clearAll() {
   if (tree.children.length === 0) return;
   tree.children = [];
   renderAll();
-  showToast('ล้างทั้งหมดแล้ว');
-});
+  showToast('cleared');
+}
+document.getElementById('clearBtn').addEventListener('click', clearAll);
+document.getElementById('clearBtn2').addEventListener('click', clearAll);
 
 // ========== Drag จาก palette ==========
 document.querySelectorAll('.palette-item').forEach(item => {
@@ -538,7 +462,7 @@ document.querySelectorAll('.palette-item').forEach(item => {
   });
 });
 
-// ========== helper: tree ==========
+// ========== Tree helpers ==========
 function createNode(type) {
   idCounter++;
   const node = { id:'n'+idCounter, type };
@@ -570,8 +494,13 @@ function removeNodeById(id) {
   const found = findParentAndIndex(id);
   if (found) { found.parent.children.splice(found.index, 1); renderAll(); }
 }
+function countNodes(node = tree) {
+  let c = 0;
+  if (node.children) node.children.forEach(ch => { c++; c += countNodes(ch); });
+  return c;
+}
 
-// ========== render ==========
+// ========== Render ==========
 function renderNode(node) {
   const tpl = getTemplate(node.type);
   if (node.children) {
@@ -590,14 +519,15 @@ function renderNode(node) {
 }
 
 function renderAll() {
+  const count = countNodes();
+  nodeCountEl.textContent = `// ${count} element${count !== 1 ? 's' : ''}`;
   canvas.innerHTML = tree.children.length
     ? tree.children.map(renderNode).join('')
-    : '<div class="placeholder">// drag elements here_</div>';
+    : '<div class="placeholder">// drag elements here_<span class="cursor-blink"></span></div>';
   updateCode();
-  updateMissionProgress();
 }
 
-// ========== Drag & Drop ภายใน canvas ==========
+// ========== Drag & Drop ==========
 canvas.addEventListener('dragstart', e => {
   const el = e.target.closest('.comp-node');
   if (!el) return;
@@ -627,9 +557,8 @@ canvas.addEventListener('drop', e => {
   const parentId = dz.dataset.parentId;
   const parentNode = findNode(parentId);
   if (!parentNode) return;
-
   let data;
-  try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
+  try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch { return; }
 
   const directItems = Array.from(dz.children).filter(c => c.classList.contains('comp-node'));
   const direction = containerDirection[parentNode.type] || 'vertical';
@@ -660,7 +589,7 @@ canvas.addEventListener('drop', e => {
   renderAll();
 });
 
-// ========== คลิก: ลบ / ดูเคล็ดลับ ==========
+// ========== คลิก ==========
 canvas.addEventListener('click', e => {
   const delBtn = e.target.closest('.del-btn');
   if (delBtn) { e.stopPropagation(); removeNodeById(delBtn.dataset.del); return; }
@@ -674,7 +603,7 @@ canvas.addEventListener('click', e => {
 });
 
 function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 function showTip(type) {
@@ -682,144 +611,90 @@ function showTip(type) {
   if (!tpl) return;
   const example = tpl.html ? tpl.html() : '';
   tipBox.innerHTML = `
-    <div>${tpl.icon} <b>${tpl.label}</b> — <code>${escapeHtml(tpl.tag || '')}</code></div>
-    <div style="margin-top:4px;color:var(--cyan);">// เมื่อไหร่ควรใช้:</div>
-    <div>${tpl.when || '-'}</div>
-    <div style="margin-top:4px;color:var(--orange);">// เคล็ดลับ UX:</div>
+    <div>${tpl.icon} <b>${tpl.label}</b> — <code>${escapeHtml(tpl.tag||'')}</code></div>
+    <div style="margin-top:3px;color:var(--cyan);">// เมื่อไหร่ควรใช้</div>
+    <div>${tpl.when||'-'}</div>
+    <div style="margin-top:3px;color:var(--orange);">// tip</div>
     <div>${tpl.tip}</div>
     ${example ? `<pre>${escapeHtml(example)}</pre>` : ''}
   `;
 }
 
-// ========== คู่มือแท็กทั้งหมด ==========
+// ========== คู่มือ ==========
 function buildGuide() {
   const all = { ...containerTemplates, ...contentTemplates };
   guideList.innerHTML = Object.values(all).map(tpl => {
     const example = tpl.html ? tpl.html() : '';
     return `<div class="guide-item">
-      <div>${tpl.icon} <b>${tpl.label}</b> — <code>${escapeHtml(tpl.tag || '')}</code></div>
-      <div style="margin-top:3px;color:var(--cyan);">// เมื่อไหร่ควรใช้: ${tpl.when || '-'}</div>
-      <div style="margin-top:3px;color:var(--orange);">// เคล็ดลับ: ${tpl.tip}</div>
+      <div>${tpl.icon} <b>${tpl.label}</b> <code>${escapeHtml(tpl.tag||'')}</code></div>
+      <div style="color:var(--cyan);margin-top:2px;">${tpl.when||''}</div>
       ${example ? `<pre>${escapeHtml(example)}</pre>` : ''}
     </div>`;
   }).join('');
 }
-guideBtn.addEventListener('click', () => { buildGuide(); guideModal.classList.add('show'); });
-closeGuide.addEventListener('click', () => guideModal.classList.remove('show'));
+document.getElementById('guideBtn').addEventListener('click', () => { buildGuide(); guideModal.classList.add('show'); });
+document.getElementById('guideBtn2').addEventListener('click', () => { buildGuide(); guideModal.classList.add('show'); });
+document.getElementById('closeGuide').addEventListener('click', () => guideModal.classList.remove('show'));
 guideModal.addEventListener('click', e => { if (e.target === guideModal) guideModal.classList.remove('show'); });
 
-// ========== สร้างโค้ด HTML+CSS พร้อม Syntax Highlighting ==========
+// ========== สร้างโค้ด + Syntax Highlight ==========
 function nodeToHtml(node, indent) {
   const tpl = getTemplate(node.type);
   if (node.children) {
     const inner = node.children.length
       ? node.children.map(c => nodeToHtml(c, indent + '  ')).join('\n')
-      : indent + '  <!-- วางองค์ประกอบเพิ่มเติมที่นี่ -->';
+      : indent + '  <!-- content -->';
     return `${indent}<div class="${tpl.cssClass}">\n${inner}\n${indent}</div>`;
   }
   return tpl.html().split('\n').map(l => indent + l).join('\n');
 }
 
 function highlightHtml(code) {
-  let html = escapeHtml(code);
-  // คอมเมนต์
-  html = html.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="hl-cmt">$1</span>');
-  // แท็กปิด
-  html = html.replace(/(&lt;\/)([\w-]+)(&gt;)/g, '<span class="hl-tag">$1$2$3</span>');
-  // แท็กเปิด (พร้อม attribute)
-  html = html.replace(/(&lt;)([\w-]+)((?:\s+[\w-]+(?:="[^"]*")?)*)\s*(&gt;)/g, function(match, open, tag, attrs, close) {
-    let attrHtml = attrs.replace(/([\w-]+)(="([^"]*)")/g,
+  let h = escapeHtml(code);
+  h = h.replace(/(&lt;!--[\s\S]*?--&gt;)/g, '<span class="hl-cmt">$1</span>');
+  h = h.replace(/(&lt;\/)([\w-]+)(&gt;)/g, '<span class="hl-tag">$1$2$3</span>');
+  h = h.replace(/(&lt;)([\w-]+)((?:\s+[\w-]+(?:="[^"]*")?)*)\s*(&gt;)/g, function(m, open, tag, attrs, close) {
+    let ah = attrs.replace(/([\w-]+)(="([^"]*)")/g,
       ' <span class="hl-attr">$1</span><span class="hl-tag">$2</span>');
-    attrHtml = attrHtml.replace(/="([^"]*)"/g, '="<span class="hl-val">$1</span>"');
-    return `<span class="hl-tag">${open}${tag}</span>${attrHtml}<span class="hl-tag">${close}</span>`;
+    ah = ah.replace(/="([^"]*)"/g, '="<span class="hl-val">$1</span>"');
+    return `<span class="hl-tag">${open}${tag}</span>${ah}<span class="hl-tag">${close}</span>`;
   });
-  // CSS selectors
-  html = html.replace(/(\.[\w-]+)\s*\{/g, '<span class="hl-sel">$1</span> {');
-  return html;
+  h = h.replace(/(\.[\w-]+)\s*\{/g, '<span class="hl-sel">$1</span> {');
+  return h;
 }
 
-let plainCode = '';
 function updateCode() {
   if (tree.children.length === 0) {
-    codeOut.innerHTML = '<span class="hl-cmt">// ยังไม่มีองค์ประกอบ</span>';
-    plainCode = '// ยังไม่มีองค์ประกอบ';
+    codeOut.innerHTML = '<span class="hl-cmt">// ลากองค์ประกอบมาวางเพื่อสร้างโค้ด</span>';
+    plainCode = '';
+    lineCountEl.textContent = '0 lines';
     return;
   }
   const body = tree.children.map(c => nodeToHtml(c, '  ')).join('\n\n');
   const css = `.layout-section { padding: 20px; border-radius: 8px; }\n.layout-row { display: flex; flex-direction: row; gap: 16px; flex-wrap: wrap; }\n.layout-col { display: flex; flex-direction: column; gap: 16px; }\n.layout-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }\n.layout-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }`;
   plainCode = `<style>\n${css}\n</style>\n\n<div class="page">\n${body}\n</div>`;
   codeOut.innerHTML = highlightHtml(plainCode);
+  const lines = plainCode.split('\n').length;
+  lineCountEl.textContent = `${lines} lines`;
 }
 
 copyBtn.addEventListener('click', () => {
+  if (!plainCode) { showToast('no code to copy'); return; }
   navigator.clipboard.writeText(plainCode).then(() => {
-    copyBtn.textContent = '✅ copied to clipboard';
+    copyBtn.textContent = '✅ copied';
     copyBtn.classList.add('copied');
-    setTimeout(() => { copyBtn.textContent = 'cp output.html → clipboard'; copyBtn.classList.remove('copied'); }, 1800);
+    showToast('copied to clipboard');
+    setTimeout(() => { copyBtn.textContent = 'cp → clipboard'; copyBtn.classList.remove('copied'); }, 1800);
   });
-});
-
-// ========== ภารกิจ ==========
-function countAll(node = tree, counts = {}) {
-  if (node.children) node.children.forEach(c => { counts[c.type] = (counts[c.type] || 0) + 1; countAll(c, counts); });
-  return counts;
-}
-
-function loadMission() {
-  const m = missions[missionIndex];
-  if (!m) {
-    missionTitle.textContent = '// all missions complete';
-    missionDesc.textContent = 'เก่งมาก! ลองออกแบบหน้าเว็บของตัวเองต่อได้เลย ไม่มีข้อจำกัดแล้ว';
-    reqList.innerHTML = '';
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'exit(0) — จบเกม';
-    return;
-  }
-  missionTitle.textContent = m.title;
-  missionDesc.textContent = m.desc;
-  submitBtn.textContent = 'submit()';
-  updateMissionProgress();
-}
-
-function updateMissionProgress() {
-  const m = missions[missionIndex];
-  if (!m) return;
-  const counts = countAll();
-  reqList.innerHTML = '';
-  let allDone = true;
-  Object.entries(m.require).forEach(([type, need]) => {
-    const have = counts[type] || 0;
-    const done = have >= need;
-    if (!done) allDone = false;
-    const tpl = getTemplate(type);
-    const li = document.createElement('li');
-    li.className = done ? 'done' : 'pending';
-    li.textContent = `${tpl.icon} ${tpl.label} (${have}/${need})`;
-    reqList.appendChild(li);
-  });
-  submitBtn.disabled = !allDone;
-}
-
-submitBtn.addEventListener('click', () => {
-  const m = missions[missionIndex];
-  if (!m) return;
-  score += m.points;
-  scoreVal.textContent = score;
-  level = Math.floor(score / 300) + 1;
-  levelVal.textContent = level;
-  showToast(`mission complete! +${m.points} pts`);
-  missionIndex++;
-  loadMission();
 });
 
 function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2400);
+  setTimeout(() => toast.classList.remove('show'), 1800);
 }
 
-// ========== เริ่มเกม ==========
-loadMission();
+// ========== เริ่ม ==========
 renderAll();
 </script>
 </body>
