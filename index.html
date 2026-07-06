@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UI/UX Design Quest 🎨 - เกมออกแบบหน้าเว็บ</title>
+<title>UI/UX Design Quest 🎨 - เกมออกแบบหน้าเว็บ (Layout ซ้อนได้)</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -26,12 +26,12 @@
 
   .layout {
     display:grid;
-    grid-template-columns: 220px 1fr 340px;
+    grid-template-columns: 230px 1fr 350px;
     gap: 14px;
     padding: 16px;
     align-items:start;
   }
-  @media (max-width: 950px) {
+  @media (max-width: 980px) {
     .layout { grid-template-columns: 1fr; }
   }
 
@@ -42,24 +42,29 @@
     padding: 14px;
   }
   .panel h2 { font-size:1rem; color:#fbbf24; margin-bottom:10px; }
+  .group-label { font-size:0.78rem; color:#94a3b8; margin:10px 0 6px; text-transform:uppercase; letter-spacing:0.5px; }
 
   /* Palette */
   .palette-item {
     background: #1e293b;
     border: 1px solid #475569;
     border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 8px;
+    padding: 9px 10px;
+    margin-bottom: 7px;
     cursor: grab;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     display:flex; align-items:center; gap:8px;
     transition: 0.15s;
   }
   .palette-item:hover { background:#334155; transform: translateX(3px); }
-  .palette-item .ico { font-size:1.2rem; }
+  .palette-item.layout-type { border-left: 4px solid #38bdf8; }
+  .palette-item.content-type { border-left: 4px solid #fbbf24; }
+  .palette-item .ico { font-size:1.1rem; }
 
   /* Canvas */
-  .canvas-wrap { min-height: 480px; }
+  .canvas-hint {
+    font-size:0.78rem; color:#94a3b8; margin-bottom:8px; line-height:1.5;
+  }
   #canvas {
     background: #ffffff;
     color:#111;
@@ -71,39 +76,76 @@
     gap:10px;
     border: 3px dashed #6366f1;
   }
-  #canvas.dragover { border-color:#4ade80; background:#f0fdf4; }
-  #canvas .placeholder { color:#94a3b8; text-align:center; margin-top:180px; font-size:0.9rem; }
+  #canvas.dropzone-hover { border-color:#4ade80; background:#f0fdf4; }
+  .placeholder { color:#94a3b8; text-align:center; margin:180px 0; font-size:0.9rem; }
+  .empty-hint {
+    color:#94a3b8; text-align:center; font-size:0.78rem;
+    border:1px dashed #cbd5e1; border-radius:6px; padding:14px;
+    min-height:30px;
+  }
 
-  .comp {
-    position:relative;
+  .comp-node { position:relative; }
+  .comp-node.dragging { opacity:0.35; }
+
+  /* leaf content components */
+  .comp-node.leaf {
     border:1px dashed #cbd5e1;
     border-radius:6px;
-    padding:10px;
+    padding:10px 30px 10px 10px;
     cursor:grab;
     background:#f8fafc;
   }
-  .comp.dragging { opacity:0.4; }
-  .comp .del-btn {
-    position:absolute; top:4px; right:4px;
-    background:#ef4444; color:#fff; border:none;
-    width:20px; height:20px; border-radius:50%;
-    cursor:pointer; font-size:0.7rem; line-height:1;
-  }
   .comp-header { background:#4f46e5; color:#fff; padding:14px; border-radius:6px; font-weight:bold; }
-  .comp-nav { background:#1e293b; color:#fff; padding:10px; border-radius:6px; display:flex; gap:14px; }
-  .comp-hero { background:linear-gradient(120deg,#818cf8,#c084fc); color:#fff; padding:24px; border-radius:6px; text-align:center; }
-  .comp-hero h2 { margin-bottom:6px; }
+  .comp-nav { background:#1e293b; color:#fff; padding:10px; border-radius:6px; display:flex; gap:14px; flex-wrap:wrap; }
+  .comp-hero { background:linear-gradient(120deg,#818cf8,#c084fc); color:#fff; padding:22px; border-radius:6px; text-align:center; }
+  .comp-hero h2 { margin-bottom:6px; font-size:1.05rem; }
   .comp-button button { background:#f59e0b; color:#111; border:none; padding:8px 18px; border-radius:6px; font-weight:bold; cursor:default; }
   .comp-image img { width:100%; border-radius:6px; display:block; }
   .comp-card { background:#fff; border:1px solid #e2e8f0; border-radius:8px; padding:12px; box-shadow:0 2px 6px #0001; }
   .comp-input input { width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; }
-  .comp-text p { color:#334155; }
+  .comp-text p { color:#334155; font-size:0.92rem; }
   .comp-footer { background:#111827; color:#9ca3af; text-align:center; padding:10px; border-radius:6px; font-size:0.85rem; }
 
-  /* Mission / Code */
-  .mission-box {
-    background:#312e81; border-radius:8px; padding:12px; margin-bottom:12px;
+  /* container (layout) components */
+  .comp-node.container {
+    border-radius:8px;
+    padding:8px;
+    margin-bottom:2px;
   }
+  .node-label {
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:0.75rem; font-weight:bold; padding:4px 8px; border-radius:5px;
+    margin-bottom:8px; color:#fff;
+  }
+  .node-section { border:2px dashed #94a3b8; background:#f1f5f9; }
+  .node-section .node-label { background:#64748b; }
+  .node-row { border:2px dashed #38bdf8; background:#f0f9ff; }
+  .node-row .node-label { background:#0ea5e9; }
+  .node-col { border:2px dashed #a78bfa; background:#faf5ff; }
+  .node-col .node-label { background:#8b5cf6; }
+  .node-grid2 { border:2px dashed #fb923c; background:#fff7ed; }
+  .node-grid2 .node-label { background:#f97316; }
+  .node-grid3 { border:2px dashed #34d399; background:#ecfdf5; }
+  .node-grid3 .node-label { background:#10b981; }
+
+  .dropzone { min-height: 30px; }
+  .dropzone.dropzone-hover { outline: 2px solid #22c55e; outline-offset:2px; border-radius:6px; }
+  .node-row > .dropzone, .node-grid2 > .dropzone, .node-grid3 > .dropzone { display:flex; flex-wrap:wrap; gap:10px; }
+  .node-row > .dropzone > .comp-node { flex:1; min-width:120px; }
+  .node-grid2 > .dropzone { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .node-grid3 > .dropzone { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  .node-col > .dropzone, .node-section > .dropzone { display:flex; flex-direction:column; gap:10px; }
+
+  .del-btn {
+    position:absolute; top:4px; right:4px;
+    background:#ef4444; color:#fff; border:none;
+    width:20px; height:20px; border-radius:50%;
+    cursor:pointer; font-size:0.7rem; line-height:1; z-index:5;
+  }
+  .node-label .del-btn { position:static; }
+
+  /* Mission / Code */
+  .mission-box { background:#312e81; border-radius:8px; padding:12px; margin-bottom:12px; }
   .mission-box h3 { color:#fde68a; font-size:0.95rem; margin-bottom:6px; }
   .req-list { list-style:none; font-size:0.85rem; margin-top:6px; }
   .req-list li { margin:4px 0; }
@@ -118,10 +160,45 @@
   .tip-box {
     background:#082f49; border-left:4px solid #38bdf8; border-radius:6px;
     padding:10px; font-size:0.82rem; margin-bottom:12px; min-height:50px;
+    line-height:1.5;
+  }
+  .tip-box code { color:#7dd3fc; background:#001a2b; padding:1px 5px; border-radius:4px; }
+  .tip-box pre {
+    margin-top:6px; background:#00131f; color:#a5f3fc; padding:6px;
+    border-radius:4px; font-size:0.7rem; white-space:pre-wrap; word-break:break-word;
+  }
+
+  .guide-btn {
+    margin-bottom:12px; width:100%; background:#1e293b; color:#fbbf24;
+    border:1px solid #475569; padding:9px; border-radius:8px; cursor:pointer;
+    font-weight:bold; font-size:0.85rem;
+  }
+  .guide-btn:hover { background:#334155; }
+
+  .modal-overlay {
+    position:fixed; inset:0; background:rgba(0,0,0,0.65);
+    display:none; align-items:center; justify-content:center; z-index:1000; padding:20px;
+  }
+  .modal-overlay.show { display:flex; }
+  .modal-box {
+    background:#0f172a; border:1px solid #334155; border-radius:12px;
+    padding:20px; max-width:720px; max-height:82vh; overflow:auto; width:100%;
+  }
+  .modal-box h2 { color:#fbbf24; margin-bottom:14px; }
+  .guide-item { background:#1e293b; border-radius:8px; padding:12px; margin-bottom:10px; font-size:0.85rem; line-height:1.5; }
+  .guide-item b { color:#fde68a; }
+  .guide-item code { color:#38bdf8; background:#001a2b; padding:1px 5px; border-radius:4px; }
+  .guide-item pre {
+    background:#020617; color:#a5f3fc; padding:8px; border-radius:6px;
+    margin-top:6px; font-size:0.72rem; white-space:pre-wrap; word-break:break-word;
+  }
+  .modal-close {
+    margin-top:6px; width:100%; background:#ef4444; color:#fff; border:none;
+    padding:10px; border-radius:8px; cursor:pointer; font-weight:bold;
   }
 
   pre#codeOut {
-    background:#020617; color:#a5f3fc; font-size:0.72rem;
+    background:#020617; color:#a5f3fc; font-size:0.7rem;
     padding:10px; border-radius:8px; max-height:260px; overflow:auto;
     white-space:pre-wrap; word-break:break-word;
   }
@@ -142,7 +219,7 @@
 <body>
 
 <div class="topbar">
-  <h1>🎮 UI/UX Design Quest</h1>
+  <h1>🎮 UI/UX Design Quest — Layout Edition</h1>
   <div class="stats">
     <span class="score">⭐ คะแนน: <span id="scoreVal">0</span></span>
     <span class="level">🏆 เลเวล: <span id="levelVal">1</span></span>
@@ -153,22 +230,31 @@
 
   <!-- ซ้าย: คลังองค์ประกอบ -->
   <div class="panel">
-    <h2>🧩 คลังองค์ประกอบ<br><small style="color:#94a3b8">(ลากไปวางขวา)</small></h2>
-    <div class="palette-item" draggable="true" data-type="header"><span class="ico">🟪</span> Header</div>
-    <div class="palette-item" draggable="true" data-type="nav"><span class="ico">📑</span> Navbar</div>
-    <div class="palette-item" draggable="true" data-type="hero"><span class="ico">🌈</span> Hero Section</div>
-    <div class="palette-item" draggable="true" data-type="button"><span class="ico">🔘</span> Button</div>
-    <div class="palette-item" draggable="true" data-type="image"><span class="ico">🖼️</span> Image</div>
-    <div class="palette-item" draggable="true" data-type="card"><span class="ico">🃏</span> Card</div>
-    <div class="palette-item" draggable="true" data-type="input"><span class="ico">⌨️</span> Input Field</div>
-    <div class="palette-item" draggable="true" data-type="text"><span class="ico">📝</span> Text</div>
-    <div class="palette-item" draggable="true" data-type="footer"><span class="ico">⬛</span> Footer</div>
+    <h2>🧩 คลังองค์ประกอบ</h2>
+    <div class="group-label">🧱 กล่องจัดวาง Layout</div>
+    <div class="palette-item layout-type" draggable="true" data-type="section"><span class="ico">📦</span> Section</div>
+    <div class="palette-item layout-type" draggable="true" data-type="row"><span class="ico">↔️</span> Row (แนวนอน)</div>
+    <div class="palette-item layout-type" draggable="true" data-type="col"><span class="ico">↕️</span> Column (แนวตั้ง)</div>
+    <div class="palette-item layout-type" draggable="true" data-type="grid2"><span class="ico">▦</span> Grid 2 คอลัมน์</div>
+    <div class="palette-item layout-type" draggable="true" data-type="grid3"><span class="ico">▦</span> Grid 3 คอลัมน์</div>
+
+    <div class="group-label">📝 องค์ประกอบเนื้อหา</div>
+    <div class="palette-item content-type" draggable="true" data-type="header"><span class="ico">🟪</span> Header</div>
+    <div class="palette-item content-type" draggable="true" data-type="nav"><span class="ico">📑</span> Navbar</div>
+    <div class="palette-item content-type" draggable="true" data-type="hero"><span class="ico">🌈</span> Hero Section</div>
+    <div class="palette-item content-type" draggable="true" data-type="button"><span class="ico">🔘</span> Button</div>
+    <div class="palette-item content-type" draggable="true" data-type="image"><span class="ico">🖼️</span> Image</div>
+    <div class="palette-item content-type" draggable="true" data-type="card"><span class="ico">🃏</span> Card</div>
+    <div class="palette-item content-type" draggable="true" data-type="input"><span class="ico">⌨️</span> Input Field</div>
+    <div class="palette-item content-type" draggable="true" data-type="text"><span class="ico">📝</span> Text</div>
+    <div class="palette-item content-type" draggable="true" data-type="footer"><span class="ico">⬛</span> Footer</div>
   </div>
 
   <!-- กลาง: พื้นที่ออกแบบ -->
   <div class="panel canvas-wrap">
     <h2>🖥️ พื้นที่ออกแบบหน้าเว็บ</h2>
-    <div id="canvas">
+    <div class="canvas-hint">💡 ลากกล่อง Layout (Row / Column / Grid) มาวางก่อน แล้วลากองค์ประกอบเนื้อหาไปวาง "ข้างใน" กล่องนั้น เพื่อควบคุมการจัดวางได้ลึกขึ้น — สามารถซ้อนกล่อง Layout เข้าไปในกล่อง Layout อื่นได้ด้วย!</div>
+    <div id="canvas" class="dropzone" data-parent-id="root">
       <div class="placeholder">ลากองค์ประกอบจากด้านซ้ายมาวางที่นี่ ⬅️</div>
     </div>
   </div>
@@ -182,121 +268,152 @@
       <button class="btn-primary" id="submitMission">✅ ส่งภารกิจ</button>
     </div>
 
+    <button class="guide-btn" id="guideBtn">📚 ดูคู่มือแท็กทั้งหมด</button>
+
     <div class="tip-box" id="tipBox">
-      💡 <b>เคล็ดลับ UX:</b> คลิกที่บล็อกในพื้นที่ออกแบบเพื่อดูคำแนะนำเกี่ยวกับองค์ประกอบนั้น
+      💡 <b>เคล็ดลับ UX:</b> คลิกที่องค์ประกอบในพื้นที่ออกแบบเพื่อดูคำอธิบายแท็กและวิธีใช้งาน
     </div>
 
-    <h2>💻 โค้ด HTML ที่สร้างขึ้น</h2>
+    <h2>💻 โค้ด HTML + CSS ที่สร้างขึ้น</h2>
     <pre id="codeOut">&lt;!-- ยังไม่มีองค์ประกอบ --&gt;</pre>
     <button class="copy-btn" id="copyBtn">📋 คัดลอกโค้ด</button>
   </div>
 
 </div>
 
+<div class="modal-overlay" id="guideModal">
+  <div class="modal-box">
+    <h2>📚 คู่มือแท็ก HTML/CSS ทั้งหมด</h2>
+    <div id="guideList"></div>
+    <button class="modal-close" id="closeGuide">ปิดคู่มือ</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ---------- ข้อมูลองค์ประกอบ ----------
-const templates = {
-  header: {
-    label: "Header",
-    icon: "🟪",
+// ---------- นิยามองค์ประกอบเนื้อหา (leaf) ----------
+const contentTemplates = {
+  header: { label:"Header", icon:"🟪", tag:"<header>",
+    when:"ใช้เพียง 1 ครั้งต่อหน้า วางไว้บนสุดของหน้าเว็บเสมอ ไม่ควรซ้อนไว้ในองค์ประกอบอื่น",
     render: () => `<div class="comp-header">โลโก้ / ชื่อเว็บไซต์ของคุณ</div>`,
     html: () => `<header class="site-header">\n  <h1>โลโก้ / ชื่อเว็บไซต์</h1>\n</header>`,
-    tip: "Header ควรอยู่บนสุดของหน้าเสมอ ช่วยสร้าง Visual Hierarchy บอกผู้ใช้ว่ากำลังอยู่เว็บไซต์ไหน"
-  },
-  nav: {
-    label: "Navbar",
-    icon: "📑",
+    tip: "Header ควรอยู่บนสุดของหน้าเสมอ ช่วยสร้าง Visual Hierarchy บอกผู้ใช้ว่ากำลังอยู่เว็บไซต์ไหน" },
+  nav: { label:"Navbar", icon:"📑", tag:"<nav>",
+    when:"ใช้เมื่อมีลิงก์เมนูสำหรับเดินทางไปหน้าอื่น ๆ มากกว่า 1 ลิงก์ มักวางไว้ในหรือใกล้ Header",
     render: () => `<div class="comp-nav"><span>หน้าแรก</span><span>เกี่ยวกับ</span><span>ติดต่อ</span></div>`,
     html: () => `<nav class="site-nav">\n  <a href="#">หน้าแรก</a>\n  <a href="#">เกี่ยวกับ</a>\n  <a href="#">ติดต่อ</a>\n</nav>`,
-    tip: "Navbar ช่วยให้ผู้ใช้เดินทางในเว็บไซต์ได้ง่าย ควรมีความสม่ำเสมอ (Consistency) ทุกหน้า"
-  },
-  hero: {
-    label: "Hero Section",
-    icon: "🌈",
+    tip: "Navbar ช่วยให้ผู้ใช้เดินทางในเว็บไซต์ได้ง่าย ควรมีความสม่ำเสมอ (Consistency) ทุกหน้า" },
+  hero: { label:"Hero Section", icon:"🌈", tag:"<section>",
+    when:"ใช้เป็นพื้นที่นำเสนอข้อความหรือข้อเสนอหลักของหน้า มักวางไว้ถัดจาก Header ทันที",
     render: () => `<div class="comp-hero"><h2>ข้อความหลักที่ดึงดูดใจ</h2><p>คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่คุณนำเสนอ</p></div>`,
     html: () => `<section class="hero">\n  <h2>ข้อความหลักที่ดึงดูดใจ</h2>\n  <p>คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่คุณนำเสนอ</p>\n</section>`,
-    tip: "Hero Section คือจุดแรกที่ดึงดูดความสนใจ ควรใช้ตัวอักษรใหญ่ ชัดเจน และ Contrast สูง"
-  },
-  button: {
-    label: "Button",
-    icon: "🔘",
+    tip: "Hero Section คือจุดแรกที่ดึงดูดความสนใจ ควรใช้ตัวอักษรใหญ่ ชัดเจน และ Contrast สูง" },
+  button: { label:"Button", icon:"🔘", tag:"<button>",
+    when:"ใช้เมื่อต้องการให้ผู้ใช้กดเพื่อทำ action เช่น ส่งฟอร์ม ยืนยัน หรือไปยังหน้าอื่น",
     render: () => `<div class="comp-button"><button>คลิกที่นี่</button></div>`,
     html: () => `<button class="btn">คลิกที่นี่</button>`,
-    tip: "ปุ่ม Call-to-Action ควรมีสีตัดกับพื้นหลัง (Contrast) เพื่อให้สายตาจับได้ทันที"
-  },
-  image: {
-    label: "Image",
-    icon: "🖼️",
-    render: () => `<div class="comp-image"><img src="https://via.placeholder.com/500x220?text=Image" alt="รูปภาพตัวอย่าง"></div>`,
+    tip: "ปุ่ม Call-to-Action ควรมีสีตัดกับพื้นหลัง (Contrast) เพื่อให้สายตาจับได้ทันที" },
+  image: { label:"Image", icon:"🖼️", tag:"<img>",
+    when:"ใช้แสดงรูปภาพ ต้องมี attribute alt เสมอ เพื่อการเข้าถึง (Accessibility) และ SEO",
+    render: () => `<div class="comp-image"><img src="https://via.placeholder.com/400x180?text=Image" alt="รูปภาพตัวอย่าง"></div>`,
     html: () => `<img src="https://via.placeholder.com/600x300" alt="คำอธิบายรูปภาพ">`,
-    tip: "รูปภาพช่วยสื่อสารเร็วกว่าข้อความ แต่ต้องมี alt text เพื่อ Accessibility เสมอ"
-  },
-  card: {
-    label: "Card",
-    icon: "🃏",
+    tip: "รูปภาพช่วยสื่อสารเร็วกว่าข้อความ แต่ต้องมี alt text เพื่อ Accessibility เสมอ" },
+  card: { label:"Card", icon:"🃏", tag:'<div class="card">',
+    when:"ใช้จัดกลุ่มเนื้อหาที่เกี่ยวข้องกันไว้ในกรอบเดียว เช่น การ์ดสินค้า การ์ดโปรไฟล์ นิยมวางหลายใบใน Grid",
     render: () => `<div class="comp-card"><h3>หัวข้อการ์ด</h3><p>รายละเอียดสั้น ๆ ของการ์ดนี้</p></div>`,
     html: () => `<div class="card">\n  <h3>หัวข้อการ์ด</h3>\n  <p>รายละเอียดสั้น ๆ ของการ์ดนี้</p>\n</div>`,
-    tip: "Card ใช้จัดกลุ่มข้อมูลที่เกี่ยวข้องกัน ช่วยให้ผู้ใช้สแกนเนื้อหาได้ง่าย (Chunking)"
-  },
-  input: {
-    label: "Input Field",
-    icon: "⌨️",
+    tip: "Card ใช้จัดกลุ่มข้อมูลที่เกี่ยวข้องกัน ช่วยให้ผู้ใช้สแกนเนื้อหาได้ง่าย (Chunking) — ลองวาง Card หลายใบใน Grid ดูสิ!" },
+  input: { label:"Input Field", icon:"⌨️", tag:"<input>",
+    when:"ใช้รับข้อมูลจากผู้ใช้ เช่น ชื่อผู้ใช้ รหัสผ่าน ควรระบุ type ให้ตรงกับข้อมูล (text, email, password)",
     render: () => `<div class="comp-input"><input type="text" placeholder="กรอกข้อมูล..." disabled></div>`,
     html: () => `<input type="text" placeholder="กรอกข้อมูล">`,
-    tip: "ช่องกรอกข้อมูลควรมี placeholder หรือ label ที่ชัดเจน บอกผู้ใช้ว่าต้องพิมพ์อะไร"
-  },
-  text: {
-    label: "Text",
-    icon: "📝",
+    tip: "ช่องกรอกข้อมูลควรมี placeholder หรือ label ที่ชัดเจน บอกผู้ใช้ว่าต้องพิมพ์อะไร" },
+  text: { label:"Text", icon:"📝", tag:"<p>",
+    when:"ใช้แสดงข้อความบรรยายทั่วไปที่ไม่ใช่หัวข้อหลัก เช่น คำอธิบาย เนื้อหาย่อหน้า",
     render: () => `<div class="comp-text"><p>ข้อความอธิบายทั่วไปที่สามารถแก้ไขได้</p></div>`,
     html: () => `<p>ข้อความอธิบายทั่วไป</p>`,
-    tip: "ข้อความควรมี Line Height และขนาดตัวอักษรที่อ่านง่าย ไม่ต่ำกว่า 16px บนเว็บ"
-  },
-  footer: {
-    label: "Footer",
-    icon: "⬛",
+    tip: "ข้อความควรมี Line Height และขนาดตัวอักษรที่อ่านง่าย ไม่ต่ำกว่า 16px บนเว็บ" },
+  footer: { label:"Footer", icon:"⬛", tag:"<footer>",
+    when:"ใช้เพียง 1 ครั้งต่อหน้า วางไว้ล่างสุดของหน้าเสมอ มักมีข้อมูลติดต่อหรือลิงก์ลิขสิทธิ์",
     render: () => `<div class="comp-footer">© 2026 บริษัทของคุณ | ติดต่อเรา</div>`,
     html: () => `<footer>\n  <p>© 2026 บริษัทของคุณ</p>\n</footer>`,
-    tip: "Footer ควรมีข้อมูลติดต่อ/ลิงก์สำคัญ เป็นจุดสิ้นสุดที่ทำให้ผู้ใช้รู้ว่าหมดหน้าแล้ว"
-  }
+    tip: "Footer ควรมีข้อมูลติดต่อ/ลิงก์สำคัญ เป็นจุดสิ้นสุดที่ทำให้ผู้ใช้รู้ว่าหมดหน้าแล้ว" }
 };
+
+// ---------- นิยามกล่อง Layout (container) ----------
+const containerTemplates = {
+  section: { label:"Section", icon:"📦", cssClass:"layout-section", tag:'<div class="layout-section"> (หรือ <section>)',
+    when:"ใช้แบ่งเนื้อหาของหน้าเว็บออกเป็นส่วน ๆ อย่างมีระเบียบ เช่น ส่วนแนะนำ ส่วนสินค้า ส่วนติดต่อ",
+    html: () => `<div class="layout-section">\n  <!-- เนื้อหาข้างใน Section -->\n</div>`,
+    tip:"Section ใช้แบ่งเนื้อหาเป็นส่วน ๆ ช่วยสร้างระเบียบและ Whitespace ให้หน้าเว็บอ่านง่ายขึ้น" },
+  row: { label:"Row (แนวนอน)", icon:"↔️", cssClass:"layout-row", tag:'<div style="display:flex; flex-direction:row">',
+    when:"ใช้เมื่อต้องการให้องค์ประกอบเรียงกันแนวนอน เช่น แถบเมนู กลุ่มปุ่ม การ์ดเรียงแถวเดียว",
+    html: () => `<div class="layout-row">\n  <!-- องค์ประกอบเรียงแนวนอน -->\n</div>`,
+    tip:"Row จัดองค์ประกอบเรียงกันแนวนอนด้วย Flexbox (display:flex; flex-direction:row) เหมาะกับเมนูหรือกลุ่มปุ่ม" },
+  col: { label:"Column (แนวตั้ง)", icon:"↕️", cssClass:"layout-col", tag:'<div style="display:flex; flex-direction:column">',
+    when:"ใช้เมื่อต้องการให้องค์ประกอบเรียงต่อกันแนวตั้ง เช่น ฟอร์มกรอกข้อมูล ลิสต์ข้อความ",
+    html: () => `<div class="layout-col">\n  <!-- องค์ประกอบเรียงแนวตั้ง -->\n</div>`,
+    tip:"Column จัดองค์ประกอบเรียงต่อกันแนวตั้งด้วย Flexbox column เหมาะกับการจัดกลุ่มฟอร์มหรือข้อความ" },
+  grid2: { label:"Grid 2 คอลัมน์", icon:"▦", cssClass:"layout-grid2", tag:'<div style="display:grid; grid-template-columns:1fr 1fr">',
+    when:"ใช้จัดวางเนื้อหาเป็นตาราง 2 คอลัมน์เท่ากัน เหมาะกับการวาง Card สินค้าให้เป็นระเบียบ",
+    html: () => `<div class="layout-grid2">\n  <!-- Card หรือองค์ประกอบในตาราง 2 คอลัมน์ -->\n</div>`,
+    tip:"CSS Grid แบ่งพื้นที่เป็น 2 คอลัมน์เท่ากัน เหมาะกับการวาง Card สินค้าให้เป็นระเบียบ" },
+  grid3: { label:"Grid 3 คอลัมน์", icon:"▦", cssClass:"layout-grid3", tag:'<div style="display:grid; grid-template-columns:1fr 1fr 1fr">',
+    when:"ใช้จัดวางเนื้อหาเป็นตาราง 3 คอลัมน์เท่ากัน เหมาะกับหน้ารวมสินค้าหรือแสดง Card จำนวนมาก",
+    html: () => `<div class="layout-grid3">\n  <!-- Card หรือองค์ประกอบในตาราง 3 คอลัมน์ -->\n</div>`,
+    tip:"CSS Grid 3 คอลัมน์เหมาะกับการแสดง Card จำนวนมากในหน้าเดียว เช่น หน้ารวมสินค้า" }
+};
+
+const containerTypes = Object.keys(containerTemplates);
+const containerDirection = { root:'vertical', section:'vertical', col:'vertical', row:'horizontal', grid2:'horizontal', grid3:'horizontal' };
+
+function getTemplate(type) { return containerTemplates[type] || contentTemplates[type]; }
 
 // ---------- ภารกิจ ----------
 const missions = [
-  {
-    title: "ภารกิจที่ 1: หน้า Landing Page เบื้องต้น",
-    desc: "ออกแบบหน้าแรกง่าย ๆ ที่มี Header, Hero Section และ Button อย่างน้อย 1 ปุ่ม",
-    require: { header:1, hero:1, button:1 },
-    points: 100
-  },
-  {
-    title: "ภารกิจที่ 2: หน้า Login",
-    desc: "ต้องมี Header, ช่องกรอกข้อมูลอย่างน้อย 2 ช่อง และปุ่มยืนยัน",
-    require: { header:1, input:2, button:1 },
-    points: 150
-  },
-  {
-    title: "ภารกิจที่ 3: หน้าสินค้า (Product Card)",
-    desc: "ต้องมี Image, Text อธิบาย และ Button สั่งซื้อ",
-    require: { image:1, text:1, button:1 },
-    points: 150
-  },
-  {
-    title: "ภารกิจที่ 4: หน้าเว็บสมบูรณ์",
-    desc: "ประกอบหน้าเว็บให้ครบวงจร: Header, Navbar, Hero, Card, Footer",
-    require: { header:1, nav:1, hero:1, card:1, footer:1 },
-    points: 250
-  }
+  { title:"ภารกิจที่ 1: หน้า Landing Page เบื้องต้น",
+    desc:"ออกแบบหน้าแรกง่าย ๆ ที่มี Header, Hero Section และ Button อย่างน้อย 1 ปุ่ม",
+    require:{ header:1, hero:1, button:1 }, points:100 },
+  { title:"ภารกิจที่ 2: ฟอร์ม Login ด้วย Column",
+    desc:"ลาก Column มาวางก่อน แล้ววาง Header, ช่องกรอกข้อมูล 2 ช่อง และปุ่มยืนยันไว้ในหน้า",
+    require:{ col:1, header:1, input:2, button:1 }, points:150 },
+  { title:"ภารกิจที่ 3: แสดงสินค้าด้วย Grid 2 คอลัมน์",
+    desc:"ลาก Grid 2 คอลัมน์มาวาง แล้วใส่ Card สินค้าอย่างน้อย 2 ใบไว้ข้างใน",
+    require:{ grid2:1, card:2 }, points:180 },
+  { title:"ภารกิจที่ 4: จัดเมนูด้วย Row",
+    desc:"ลาก Row มาวาง แล้วใส่ปุ่มอย่างน้อย 2 ปุ่มไว้ข้างในให้เรียงกันแนวนอน",
+    require:{ row:1, button:2 }, points:150 },
+  { title:"ภารกิจที่ 5: หน้าเว็บสมบูรณ์แบบมือโปร",
+    desc:"ประกอบหน้าเว็บให้ครบวงจร: Header, Section, Grid 3 คอลัมน์ (มี Card 3 ใบ) และ Footer",
+    require:{ header:1, section:1, grid3:1, card:3, footer:1 }, points:300 },
+  { title:"ภารกิจที่ 6: แกลเลอรีสินค้าขนาดใหญ่",
+    desc:"ลาก Grid 3 คอลัมน์มาวาง แล้วใส่ Card สินค้าอย่างน้อย 4 ใบ (มากกว่าจำนวนคอลัมน์ เพื่อดูการ wrap บรรทัดใหม่)",
+    require:{ grid3:1, card:4 }, points:200 },
+  { title:"ภารกิจที่ 7: Layout ซ้อนกัน (Nested)",
+    desc:"ลาก Section มาวางก่อน แล้วลาก Row เข้าไปไว้ข้างใน Section นั้น จากนั้นใส่ปุ่ม 3 ปุ่มไว้ใน Row",
+    require:{ section:1, row:1, button:3 }, points:220 },
+  { title:"ภารกิจที่ 8: ฟอร์มติดต่อเรา (Contact Us)",
+    desc:"ใช้ Column จัดกลุ่มฟอร์ม ต้องมีช่องกรอกข้อมูล 3 ช่อง ข้อความอธิบาย 1 ข้อความ และปุ่มส่ง",
+    require:{ col:1, input:3, text:1, button:1 }, points:220 },
+  { title:"ภารกิจที่ 9: ส่วนหัวเว็บไซต์แบบมาตรฐาน",
+    desc:"ประกอบส่วนหัวหน้าเว็บให้ครบ: Header, Navbar และ Hero Section เรียงต่อกัน",
+    require:{ header:1, nav:1, hero:1 }, points:180 },
+  { title:"ภารกิจที่ 10: หน้าร้านค้าออนไลน์ (E-commerce)",
+    desc:"ประกอบหน้าร้านค้า: Header, Hero, Grid 3 คอลัมน์ (มี Card สินค้า 3 ใบ) และ Footer",
+    require:{ header:1, hero:1, grid3:1, card:3, footer:1 }, points:280 },
+  { title:"ภารกิจที่ 11: หน้า Dashboard แบบผสม",
+    desc:"ใช้ทั้ง Row และ Column ในหน้าเดียวกัน โดยต้องมี Card อย่างน้อย 2 ใบ และข้อความอย่างน้อย 2 ข้อความ กระจายอยู่ในกล่องทั้งสองแบบ",
+    require:{ row:1, col:1, card:2, text:2 }, points:260 },
+  { title:"ภารกิจที่ 12: หน้าเว็บระดับมือโปร (Capstone)",
+    desc:"ประกอบหน้าเว็บที่สมบูรณ์ที่สุด: Header, Navbar, Hero, Section 2 ส่วน, Grid 3 คอลัมน์ (มี Card 3 ใบ) และ Footer",
+    require:{ header:1, nav:1, hero:1, section:2, grid3:1, card:3, footer:1 }, points:400 }
 ];
 
 // ---------- สถานะเกม ----------
-let score = 0;
-let level = 1;
-let missionIndex = 0;
-let comps = []; // {id, type}
-let idCounter = 0;
+let score = 0, level = 1, missionIndex = 0, idCounter = 0;
+const tree = { id:'root', type:'root', children:[] };
+let draggedId = null;
 
 const canvas = document.getElementById('canvas');
 const scoreVal = document.getElementById('scoreVal');
@@ -309,118 +426,237 @@ const codeOut = document.getElementById('codeOut');
 const copyBtn = document.getElementById('copyBtn');
 const tipBox = document.getElementById('tipBox');
 const toast = document.getElementById('toast');
+const guideBtn = document.getElementById('guideBtn');
+const guideModal = document.getElementById('guideModal');
+const guideList = document.getElementById('guideList');
+const closeGuide = document.getElementById('closeGuide');
 
 // ---------- Drag จาก palette ----------
 document.querySelectorAll('.palette-item').forEach(item => {
   item.addEventListener('dragstart', e => {
-    e.dataTransfer.setData('text/plain', JSON.stringify({source:'palette', type:item.dataset.type}));
+    e.dataTransfer.setData('text/plain', JSON.stringify({ source:'palette', type:item.dataset.type }));
   });
 });
 
-canvas.addEventListener('dragover', e => {
-  e.preventDefault();
-  canvas.classList.add('dragover');
-});
-canvas.addEventListener('dragleave', () => canvas.classList.remove('dragover'));
-
-canvas.addEventListener('drop', e => {
-  e.preventDefault();
-  canvas.classList.remove('dragover');
-  let data;
-  try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch(err){ return; }
-
-  if (data.source === 'palette') {
-    addComponent(data.type);
-  } else if (data.source === 'canvas') {
-    reorderComponent(data.id, e);
-  }
-});
-
-function addComponent(type) {
+// ---------- helper: tree ----------
+function createNode(type) {
   idCounter++;
-  comps.push({ id: 'c'+idCounter, type });
-  renderCanvas();
+  const node = { id:'n'+idCounter, type };
+  if (containerTypes.includes(type)) node.children = [];
+  return node;
 }
-
-function removeComponent(id) {
-  comps = comps.filter(c => c.id !== id);
-  renderCanvas();
-}
-
-function reorderComponent(draggedId, dropEvent) {
-  const target = dropEvent.target.closest('.comp');
-  if (!target || target.dataset.id === draggedId) return;
-  const fromIdx = comps.findIndex(c => c.id === draggedId);
-  const toIdx = comps.findIndex(c => c.id === target.dataset.id);
-  if (fromIdx === -1 || toIdx === -1) return;
-  const [moved] = comps.splice(fromIdx, 1);
-  comps.splice(toIdx, 0, moved);
-  renderCanvas();
-}
-
-function renderCanvas() {
-  canvas.innerHTML = '';
-  if (comps.length === 0) {
-    canvas.innerHTML = '<div class="placeholder">ลากองค์ประกอบจากด้านซ้ายมาวางที่นี่ ⬅️</div>';
-  } else {
-    comps.forEach(c => {
-      const tpl = templates[c.type];
-      const div = document.createElement('div');
-      div.className = 'comp';
-      div.draggable = true;
-      div.dataset.id = c.id;
-      div.dataset.type = c.type;
-      div.innerHTML = tpl.render() + `<button class="del-btn" title="ลบ">✕</button>`;
-
-      div.addEventListener('dragstart', e => {
-        e.dataTransfer.setData('text/plain', JSON.stringify({source:'canvas', id:c.id}));
-        div.classList.add('dragging');
-      });
-      div.addEventListener('dragend', () => div.classList.remove('dragging'));
-      div.querySelector('.del-btn').addEventListener('click', ev => {
-        ev.stopPropagation();
-        removeComponent(c.id);
-      });
-      div.addEventListener('click', () => showTip(c.type));
-
-      canvas.appendChild(div);
-    });
+function findNode(id, node = tree) {
+  if (node.id === id) return node;
+  if (node.children) {
+    for (const c of node.children) { const r = findNode(id, c); if (r) return r; }
   }
+  return null;
+}
+function findParentAndIndex(id, node = tree) {
+  if (node.children) {
+    for (let i = 0; i < node.children.length; i++) {
+      if (node.children[i].id === id) return { parent: node, index: i };
+      const r = findParentAndIndex(id, node.children[i]);
+      if (r) return r;
+    }
+  }
+  return null;
+}
+function isDescendant(ancestorId, nodeId) {
+  const node = findNode(ancestorId);
+  if (!node || !node.children) return false;
+  for (const c of node.children) {
+    if (c.id === nodeId || isDescendant(c.id, nodeId)) return true;
+  }
+  return false;
+}
+function removeNodeById(id) {
+  const found = findParentAndIndex(id);
+  if (found) { found.parent.children.splice(found.index, 1); renderAll(); }
+}
+
+// ---------- render ----------
+function renderNode(node) {
+  const tpl = getTemplate(node.type);
+  if (node.children) {
+    const childHtml = node.children.length
+      ? node.children.map(renderNode).join('')
+      : `<div class="empty-hint">วางองค์ประกอบที่นี่</div>`;
+    return `<div class="comp-node container node-${node.type}" draggable="true" data-id="${node.id}">
+        <div class="node-label"><span>${tpl.icon} ${tpl.label}</span><button class="del-btn" data-del="${node.id}">✕</button></div>
+        <div class="dropzone" data-parent-id="${node.id}">${childHtml}</div>
+      </div>`;
+  }
+  return `<div class="comp-node leaf" draggable="true" data-id="${node.id}" data-type="${node.type}">
+      ${tpl.render()}
+      <button class="del-btn" data-del="${node.id}">✕</button>
+    </div>`;
+}
+
+function renderAll() {
+  canvas.innerHTML = tree.children.length
+    ? tree.children.map(renderNode).join('')
+    : '<div class="placeholder">ลากองค์ประกอบจากด้านซ้ายมาวางที่นี่ ⬅️</div>';
   updateCode();
   updateMissionProgress();
 }
 
+// ---------- Drag & Drop ภายใน canvas (event delegation) ----------
+canvas.addEventListener('dragstart', e => {
+  const el = e.target.closest('.comp-node');
+  if (!el) return;
+  draggedId = el.dataset.id;
+  e.dataTransfer.setData('text/plain', JSON.stringify({ source:'canvas', id: el.dataset.id }));
+  el.classList.add('dragging');
+});
+canvas.addEventListener('dragend', e => {
+  const el = e.target.closest('.comp-node');
+  if (el) el.classList.remove('dragging');
+  draggedId = null;
+  document.querySelectorAll('.dropzone-hover').forEach(d => d.classList.remove('dropzone-hover'));
+});
+canvas.addEventListener('dragover', e => {
+  e.preventDefault();
+  document.querySelectorAll('.dropzone-hover').forEach(d => d.classList.remove('dropzone-hover'));
+  const dz = e.target.closest('.dropzone');
+  if (dz) dz.classList.add('dropzone-hover');
+});
+canvas.addEventListener('dragleave', () => {
+  // handled on next dragover
+});
+canvas.addEventListener('drop', e => {
+  e.preventDefault();
+  document.querySelectorAll('.dropzone-hover').forEach(d => d.classList.remove('dropzone-hover'));
+  const dz = e.target.closest('.dropzone');
+  if (!dz) return;
+  const parentId = dz.dataset.parentId;
+  const parentNode = findNode(parentId);
+  if (!parentNode) return;
+
+  let data;
+  try { data = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
+
+  // คำนวณตำแหน่งแทรก
+  const directItems = Array.from(dz.children).filter(c => c.classList.contains('comp-node'));
+  const direction = containerDirection[parentNode.type] || 'vertical';
+  let insertIndex = directItems.length;
+  for (let i = 0; i < directItems.length; i++) {
+    const rect = directItems[i].getBoundingClientRect();
+    if (direction === 'horizontal') {
+      if (e.clientX < rect.left + rect.width / 2) { insertIndex = i; break; }
+    } else {
+      if (e.clientY < rect.top + rect.height / 2) { insertIndex = i; break; }
+    }
+  }
+
+  if (data.source === 'palette') {
+    parentNode.children.splice(insertIndex, 0, createNode(data.type));
+  } else if (data.source === 'canvas') {
+    const dId = data.id;
+    if (dId === parentId || isDescendant(dId, parentId)) {
+      showToast('⚠️ ไม่สามารถวางองค์ประกอบไว้ในตัวเองได้');
+      return;
+    }
+    const found = findParentAndIndex(dId);
+    if (!found) return;
+    const [moved] = found.parent.children.splice(found.index, 1);
+    let idx = insertIndex;
+    if (found.parent.id === parentNode.id && found.index < insertIndex) idx -= 1;
+    parentNode.children.splice(idx, 0, moved);
+  }
+  renderAll();
+});
+
+// ---------- คลิก: ลบ / ดูเคล็ดลับ ----------
+canvas.addEventListener('click', e => {
+  const delBtn = e.target.closest('.del-btn');
+  if (delBtn) { e.stopPropagation(); removeNodeById(delBtn.dataset.del); return; }
+  const leaf = e.target.closest('.comp-node.leaf');
+  if (leaf) { showTip(leaf.dataset.type); return; }
+  const container = e.target.closest('.comp-node.container');
+  if (container) { showTip(container.querySelector('.node-label') ? container.className.match(/node-(\w+)/)[1] : ''); }
+});
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function showTip(type) {
-  tipBox.innerHTML = `💡 <b>เคล็ดลับ UX (${templates[type].label}):</b> ${templates[type].tip}`;
+  const tpl = getTemplate(type);
+  if (!tpl) return;
+  const example = tpl.html ? tpl.html() : '';
+  tipBox.innerHTML = `
+    <div>${tpl.icon} <b>${tpl.label}</b> — แท็ก <code>${escapeHtml(tpl.tag || '')}</code></div>
+    <div style="margin-top:5px;">📌 <b>เมื่อไหร่ควรใช้:</b> ${tpl.when || '-'}</div>
+    <div style="margin-top:5px;">💡 <b>เคล็ดลับ UX:</b> ${tpl.tip}</div>
+    ${example ? `<pre>${escapeHtml(example)}</pre>` : ''}
+  `;
+}
+
+// ---------- คู่มือแท็กทั้งหมด ----------
+function buildGuide() {
+  const all = { ...containerTemplates, ...contentTemplates };
+  guideList.innerHTML = Object.values(all).map(tpl => {
+    const example = tpl.html ? tpl.html() : '';
+    return `<div class="guide-item">
+      <div>${tpl.icon} <b>${tpl.label}</b> — แท็ก <code>${escapeHtml(tpl.tag || '')}</code></div>
+      <div style="margin-top:4px;">📌 <b>เมื่อไหร่ควรใช้:</b> ${tpl.when || '-'}</div>
+      <div style="margin-top:4px;">💡 <b>เคล็ดลับ:</b> ${tpl.tip}</div>
+      ${example ? `<pre>${escapeHtml(example)}</pre>` : ''}
+    </div>`;
+  }).join('');
+}
+guideBtn.addEventListener('click', () => { buildGuide(); guideModal.classList.add('show'); });
+closeGuide.addEventListener('click', () => guideModal.classList.remove('show'));
+guideModal.addEventListener('click', e => { if (e.target === guideModal) guideModal.classList.remove('show'); });
+
+// ---------- สร้างโค้ด HTML+CSS ----------
+function nodeToHtml(node, indent) {
+  const tpl = getTemplate(node.type);
+  if (node.children) {
+    const inner = node.children.length
+      ? node.children.map(c => nodeToHtml(c, indent + '  ')).join('\n')
+      : indent + '  <!-- วางองค์ประกอบเพิ่มเติมที่นี่ -->';
+    return `${indent}<div class="${tpl.cssClass}">\n${inner}\n${indent}</div>`;
+  }
+  const raw = tpl.html();
+  return raw.split('\n').map(l => indent + l).join('\n');
 }
 
 function updateCode() {
-  if (comps.length === 0) {
-    codeOut.textContent = '<!-- ยังไม่มีองค์ประกอบ -->';
-    return;
-  }
-  const htmlLines = comps.map(c => templates[c.type].html());
-  const full = `<div class="page">\n${htmlLines.map(l => '  ' + l.replace(/\n/g,'\n  ')).join('\n\n')}\n</div>`;
-  codeOut.textContent = full;
+  if (tree.children.length === 0) { codeOut.textContent = '<!-- ยังไม่มีองค์ประกอบ -->'; return; }
+  const body = tree.children.map(c => nodeToHtml(c, '  ')).join('\n\n');
+  const css = `<style>
+.layout-section { padding: 20px; border-radius: 8px; }
+.layout-row { display: flex; flex-direction: row; gap: 16px; flex-wrap: wrap; }
+.layout-col { display: flex; flex-direction: column; gap: 16px; }
+.layout-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.layout-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+</style>`;
+  codeOut.textContent = `${css}\n\n<div class="page">\n${body}\n</div>`;
 }
 
 copyBtn.addEventListener('click', () => {
   navigator.clipboard.writeText(codeOut.textContent).then(() => {
     copyBtn.textContent = '✅ คัดลอกแล้ว!';
     copyBtn.classList.add('copied');
-    setTimeout(() => {
-      copyBtn.textContent = '📋 คัดลอกโค้ด';
-      copyBtn.classList.remove('copied');
-    }, 1500);
+    setTimeout(() => { copyBtn.textContent = '📋 คัดลอกโค้ด'; copyBtn.classList.remove('copied'); }, 1500);
   });
 });
 
 // ---------- ภารกิจ ----------
+function countAll(node = tree, counts = {}) {
+  if (node.children) {
+    node.children.forEach(c => { counts[c.type] = (counts[c.type] || 0) + 1; countAll(c, counts); });
+  }
+  return counts;
+}
+
 function loadMission() {
   const m = missions[missionIndex];
   if (!m) {
     missionTitle.textContent = '🎉 ผ่านทุกภารกิจแล้ว!';
-    missionDesc.textContent = 'เก่งมาก! ลองออกแบบหน้าเว็บของตัวเองต่อได้เลย';
+    missionDesc.textContent = 'เก่งมาก! ลองออกแบบหน้าเว็บของตัวเองต่อได้เลย ไม่มีข้อจำกัดแล้ว';
     reqList.innerHTML = '';
     submitBtn.disabled = true;
     submitBtn.textContent = 'จบเกมแล้ว 🏆';
@@ -428,30 +664,24 @@ function loadMission() {
   }
   missionTitle.textContent = m.title;
   missionDesc.textContent = m.desc;
-  submitBtn.disabled = false;
   submitBtn.textContent = '✅ ส่งภารกิจ';
   updateMissionProgress();
-}
-
-function countByType() {
-  const counts = {};
-  comps.forEach(c => counts[c.type] = (counts[c.type]||0) + 1);
-  return counts;
 }
 
 function updateMissionProgress() {
   const m = missions[missionIndex];
   if (!m) return;
-  const counts = countByType();
+  const counts = countAll();
   reqList.innerHTML = '';
   let allDone = true;
   Object.entries(m.require).forEach(([type, need]) => {
     const have = counts[type] || 0;
     const done = have >= need;
     if (!done) allDone = false;
+    const tpl = getTemplate(type);
     const li = document.createElement('li');
     li.className = done ? 'done' : 'pending';
-    li.textContent = `${templates[type].icon} ${templates[type].label} (${have}/${need})`;
+    li.textContent = `${tpl.icon} ${tpl.label} (${have}/${need})`;
     reqList.appendChild(li);
   });
   submitBtn.disabled = !allDone;
@@ -462,7 +692,7 @@ submitBtn.addEventListener('click', () => {
   if (!m) return;
   score += m.points;
   scoreVal.textContent = score;
-  level = Math.floor(score / 200) + 1;
+  level = Math.floor(score / 250) + 1;
   levelVal.textContent = level;
   showToast(`🎉 สำเร็จภารกิจ! +${m.points} คะแนน`);
   missionIndex++;
@@ -472,12 +702,12 @@ submitBtn.addEventListener('click', () => {
 function showToast(msg) {
   toast.textContent = msg;
   toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2000);
+  setTimeout(() => toast.classList.remove('show'), 2200);
 }
 
 // ---------- เริ่มเกม ----------
 loadMission();
-renderCanvas();
+renderAll();
 </script>
 </body>
 </html>
