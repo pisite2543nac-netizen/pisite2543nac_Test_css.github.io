@@ -185,6 +185,20 @@
   .comp-select select { width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1; }
   .comp-code pre { background:#0f172a; color:#7dd3fc; padding:10px; border-radius:6px; font-size:0.78rem; overflow:auto; margin:0; }
   .comp-code code { font-family:'Fira Code','JetBrains Mono',monospace; }
+  .fake-input, .fake-textarea, .fake-select {
+    width:100%; padding:8px; border-radius:6px; border:1px solid #cbd5e1;
+    background:#fff; color:#94a3b8; font-size:0.9rem; font-family:inherit;
+  }
+  .fake-textarea { min-height:56px; display:block; }
+  .fake-select { display:flex; align-items:center; justify-content:space-between; color:#334155; }
+
+  /* ---------- Editable text (คลิกเพื่อพิมพ์ข้อความ) ---------- */
+  .editable {
+    outline:none; cursor:text; -webkit-user-drag:none; user-drag:none;
+    border-radius:3px; padding:0 2px;
+  }
+  .editable:hover { background:rgba(99,102,241,0.10); }
+  .editable:focus { background:rgba(99,102,241,0.16); box-shadow:0 0 0 1px #6366f1; }
 
   /* container (layout) components */
   .comp-node.container {
@@ -294,6 +308,19 @@
     transform:translateY(-10px); transition:0.3s; z-index:999; font-size:0.85rem;
   }
   .toast.show { opacity:1; transform:translateY(0); }
+
+  /* ---------- Emoji menu ---------- */
+  .emoji-hint {
+    background:var(--bg-panel-alt); border-left:3px solid var(--pink); border-radius:6px;
+    padding:10px; font-size:0.78rem; margin-bottom:14px; line-height:1.55; color:var(--text);
+  }
+  .emoji-grid { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
+  .emoji-btn {
+    font-size:1.25rem; background:var(--bg-panel-alt); border:1px solid var(--border-soft);
+    border-radius:6px; width:38px; height:38px; display:flex; align-items:center;
+    justify-content:center; cursor:pointer;
+  }
+  .emoji-btn:hover { background:#1c2531; border-color:var(--cyan); transform:scale(1.08); }
 </style>
 </head>
 <body>
@@ -305,6 +332,7 @@
   </div>
   <div class="topbar-right">
     <span class="counter">elements: <b id="elCount">0</b></span>
+    <button class="btn-ghost" id="emojiMenuBtn">😀 แทรกอีโมจิ</button>
     <button class="btn-ghost" id="clearBtn">🗑 ล้างพื้นที่ทำงาน</button>
   </div>
 </div>
@@ -351,7 +379,7 @@
       <div class="url-bar">🔒 localhost:5500/index.html</div>
       <button class="btn-icon" id="refreshBtn" title="รีเฟรชตัวอย่าง">⟳</button>
     </div>
-    <div class="canvas-hint">// ลากกล่อง Layout (Row / Column / Grid) มาวางก่อน แล้วลากองค์ประกอบเนื้อหาไปวาง "ข้างใน" กล่องนั้น — สามารถซ้อนกล่อง Layout เข้าไปในกล่อง Layout อื่นได้ไม่จำกัดชั้น</div>
+    <div class="canvas-hint">// ลากกล่อง Layout (Row / Column / Grid) มาวางก่อน แล้วลากองค์ประกอบเนื้อหาไปวาง "ข้างใน" กล่องนั้น — คลิกที่ข้อความในองค์ประกอบเพื่อพิมพ์แก้ไขได้โดยตรง และใช้ปุ่ม "😀 แทรกอีโมจิ" ด้านบนเพื่อแทรกสัญลักษณ์ลงในข้อความ</div>
     <div id="canvas" class="dropzone" data-parent-id="root">
       <div class="placeholder">// ลากองค์ประกอบจากด้านซ้ายมาวางที่นี่</div>
     </div>
@@ -361,7 +389,7 @@
   <div class="panel">
     <h2>// Inspector</h2>
     <div class="tip-box" id="tipBox">
-      💡 คลิกที่องค์ประกอบในพื้นที่ออกแบบ เพื่อดูคำอธิบายแท็ก HTML/CSS และคำแนะนำการใช้งาน
+      💡 คลิกที่องค์ประกอบในพื้นที่ออกแบบ เพื่อดูคำอธิบายแท็ก HTML/CSS และคำแนะนำการใช้งาน — คลิกที่ตัวข้อความเองเพื่อพิมพ์แก้ไขได้เลย
     </div>
     <button class="guide-btn" id="guideBtn">📖 เปิด Docs แท็กทั้งหมด</button>
 
@@ -380,95 +408,125 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="emojiModal">
+  <div class="modal-box">
+    <h2>😀 เมนูอีโมจิ</h2>
+    <div class="emoji-hint">👉 วิธีใช้: คลิกที่ข้อความในพื้นที่ออกแบบเพื่อวางเคอร์เซอร์ในตำแหน่งที่ต้องการก่อน แล้วเปิดเมนูนี้ขึ้นมาคลิกอีโมจิที่ต้องการ ระบบจะแทรกให้ที่ตำแหน่งเคอร์เซอร์ล่าสุดโดยไม่ต้องปิดเมนู</div>
+    <div id="emojiGroups"></div>
+    <button class="modal-close" id="closeEmoji">ปิด</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 // ---------- นิยามองค์ประกอบเนื้อหา (leaf) ----------
+function editSpan(field, value) {
+  return `<span class="editable" contenteditable="true" draggable="false" spellcheck="false" data-field="${field}">${escapeHtml(value)}</span>`;
+}
+
 const contentTemplates = {
   header: { label:"Header", icon:"🟪", tag:"<header>",
     when:"ใช้เพียง 1 ครั้งต่อหน้า วางไว้บนสุดของหน้าเว็บเสมอ ไม่ควรซ้อนไว้ในองค์ประกอบอื่น",
-    render: () => `<div class="comp-header">โลโก้ / ชื่อเว็บไซต์ของคุณ</div>`,
-    html: () => `<header class="site-header">\n  <h1>โลโก้ / ชื่อเว็บไซต์</h1>\n</header>`,
+    fields:{ title:"โลโก้ / ชื่อเว็บไซต์ของคุณ" },
+    render: (d) => `<div class="comp-header">${editSpan('title', d.title)}</div>`,
+    html: (d) => `<header class="site-header">\n  <h1>${escapeHtml(d.title)}</h1>\n</header>`,
     tip: "Header ควรอยู่บนสุดของหน้าเสมอ ช่วยสร้าง Visual Hierarchy บอกผู้ใช้ว่ากำลังอยู่เว็บไซต์ไหน" },
   nav: { label:"Navbar", icon:"📑", tag:"<nav>",
     when:"ใช้เมื่อมีลิงก์เมนูสำหรับเดินทางไปหน้าอื่น ๆ มากกว่า 1 ลิงก์ มักวางไว้ในหรือใกล้ Header",
-    render: () => `<div class="comp-nav"><span>หน้าแรก</span><span>เกี่ยวกับ</span><span>ติดต่อ</span></div>`,
-    html: () => `<nav class="site-nav">\n  <a href="#">หน้าแรก</a>\n  <a href="#">เกี่ยวกับ</a>\n  <a href="#">ติดต่อ</a>\n</nav>`,
+    fields:{ item1:"หน้าแรก", item2:"เกี่ยวกับ", item3:"ติดต่อ" },
+    render: (d) => `<div class="comp-nav">${editSpan('item1',d.item1)}${editSpan('item2',d.item2)}${editSpan('item3',d.item3)}</div>`,
+    html: (d) => `<nav class="site-nav">\n  <a href="#">${escapeHtml(d.item1)}</a>\n  <a href="#">${escapeHtml(d.item2)}</a>\n  <a href="#">${escapeHtml(d.item3)}</a>\n</nav>`,
     tip: "Navbar ช่วยให้ผู้ใช้เดินทางในเว็บไซต์ได้ง่าย ควรมีความสม่ำเสมอ (Consistency) ทุกหน้า" },
   hero: { label:"Hero Section", icon:"🌈", tag:"<section>",
     when:"ใช้เป็นพื้นที่นำเสนอข้อความหรือข้อเสนอหลักของหน้า มักวางไว้ถัดจาก Header ทันที",
-    render: () => `<div class="comp-hero"><h2>ข้อความหลักที่ดึงดูดใจ</h2><p>คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่คุณนำเสนอ</p></div>`,
-    html: () => `<section class="hero">\n  <h2>ข้อความหลักที่ดึงดูดใจ</h2>\n  <p>คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่คุณนำเสนอ</p>\n</section>`,
+    fields:{ title:"ข้อความหลักที่ดึงดูดใจ", subtitle:"คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่คุณนำเสนอ" },
+    render: (d) => `<div class="comp-hero"><h2>${editSpan('title',d.title)}</h2><p>${editSpan('subtitle',d.subtitle)}</p></div>`,
+    html: (d) => `<section class="hero">\n  <h2>${escapeHtml(d.title)}</h2>\n  <p>${escapeHtml(d.subtitle)}</p>\n</section>`,
     tip: "Hero Section คือจุดแรกที่ดึงดูดความสนใจ ควรใช้ตัวอักษรใหญ่ ชัดเจน และ Contrast สูง" },
   button: { label:"Button", icon:"🔘", tag:"<button>",
     when:"ใช้เมื่อต้องการให้ผู้ใช้กดเพื่อทำ action เช่น ส่งฟอร์ม ยืนยัน หรือไปยังหน้าอื่น",
-    render: () => `<div class="comp-button"><button>คลิกที่นี่</button></div>`,
-    html: () => `<button class="btn">คลิกที่นี่</button>`,
+    fields:{ label:"คลิกที่นี่" },
+    render: (d) => `<div class="comp-button"><button>${editSpan('label',d.label)}</button></div>`,
+    html: (d) => `<button class="btn">${escapeHtml(d.label)}</button>`,
     tip: "ปุ่ม Call-to-Action ควรมีสีตัดกับพื้นหลัง (Contrast) เพื่อให้สายตาจับได้ทันที" },
   image: { label:"Image", icon:"🖼️", tag:"<img>",
     when:"ใช้แสดงรูปภาพ ต้องมี attribute alt เสมอ เพื่อการเข้าถึง (Accessibility) และ SEO",
-    render: () => `<div class="comp-image"><img src="https://via.placeholder.com/400x180?text=Image" alt="รูปภาพตัวอย่าง"></div>`,
-    html: () => `<img src="https://via.placeholder.com/600x300" alt="คำอธิบายรูปภาพ">`,
+    fields:{ alt:"รูปภาพตัวอย่าง" },
+    render: (d) => `<div class="comp-image"><img src="https://via.placeholder.com/400x180?text=Image" alt="${escapeHtml(d.alt)}"><div style="text-align:center;font-size:0.75rem;color:#94a3b8;margin-top:4px;">alt: ${editSpan('alt',d.alt)}</div></div>`,
+    html: (d) => `<img src="https://via.placeholder.com/600x300" alt="${escapeHtml(d.alt)}">`,
     tip: "รูปภาพช่วยสื่อสารเร็วกว่าข้อความ แต่ต้องมี alt text เพื่อ Accessibility เสมอ" },
   card: { label:"Card", icon:"🃏", tag:'<div class="card">',
     when:"ใช้จัดกลุ่มเนื้อหาที่เกี่ยวข้องกันไว้ในกรอบเดียว เช่น การ์ดสินค้า การ์ดโปรไฟล์ นิยมวางหลายใบใน Grid",
-    render: () => `<div class="comp-card"><h3>หัวข้อการ์ด</h3><p>รายละเอียดสั้น ๆ ของการ์ดนี้</p></div>`,
-    html: () => `<div class="card">\n  <h3>หัวข้อการ์ด</h3>\n  <p>รายละเอียดสั้น ๆ ของการ์ดนี้</p>\n</div>`,
+    fields:{ title:"หัวข้อการ์ด", text:"รายละเอียดสั้น ๆ ของการ์ดนี้" },
+    render: (d) => `<div class="comp-card"><h3>${editSpan('title',d.title)}</h3><p>${editSpan('text',d.text)}</p></div>`,
+    html: (d) => `<div class="card">\n  <h3>${escapeHtml(d.title)}</h3>\n  <p>${escapeHtml(d.text)}</p>\n</div>`,
     tip: "Card ใช้จัดกลุ่มข้อมูลที่เกี่ยวข้องกัน ช่วยให้ผู้ใช้สแกนเนื้อหาได้ง่าย (Chunking) — ลองวาง Card หลายใบใน Grid ดูสิ!" },
   input: { label:"Input Field", icon:"⌨️", tag:"<input>",
     when:"ใช้รับข้อมูลจากผู้ใช้ เช่น ชื่อผู้ใช้ รหัสผ่าน ควรระบุ type ให้ตรงกับข้อมูล (text, email, password)",
-    render: () => `<div class="comp-input"><input type="text" placeholder="กรอกข้อมูล..." disabled></div>`,
-    html: () => `<input type="text" placeholder="กรอกข้อมูล">`,
+    fields:{ placeholder:"กรอกข้อมูล..." },
+    render: (d) => `<div class="comp-input"><div class="fake-input">${editSpan('placeholder',d.placeholder)}</div></div>`,
+    html: (d) => `<input type="text" placeholder="${escapeHtml(d.placeholder)}">`,
     tip: "ช่องกรอกข้อมูลควรมี placeholder หรือ label ที่ชัดเจน บอกผู้ใช้ว่าต้องพิมพ์อะไร" },
   textarea: { label:"Textarea", icon:"🗒️", tag:"<textarea>",
     when:"ใช้รับข้อความยาวหลายบรรทัดจากผู้ใช้ เช่น ข้อความรีวิว คอมเมนต์ หรือรายละเอียดเพิ่มเติม ต่างจาก input ที่รับได้บรรทัดเดียว",
-    render: () => `<div class="comp-textarea"><textarea rows="3" placeholder="พิมพ์ข้อความหลายบรรทัด..." disabled></textarea></div>`,
-    html: () => `<textarea rows="4" placeholder="พิมพ์ข้อความที่นี่..."></textarea>`,
+    fields:{ placeholder:"พิมพ์ข้อความหลายบรรทัด..." },
+    render: (d) => `<div class="comp-textarea"><div class="fake-textarea">${editSpan('placeholder',d.placeholder)}</div></div>`,
+    html: (d) => `<textarea rows="4" placeholder="${escapeHtml(d.placeholder)}"></textarea>`,
     tip: "ควรกำหนด rows ให้พอเหมาะกับเนื้อหา และมี placeholder บอกผู้ใช้ว่าต้องกรอกอะไร" },
   select: { label:"Dropdown", icon:"🔽", tag:"<select>",
     when:"ใช้ให้ผู้ใช้เลือกตัวเลือกเดียวจากรายการที่กำหนดไว้ เหมาะกับกรณีที่มีตัวเลือกจำนวนมาก",
-    render: () => `<div class="comp-select"><select disabled><option>เลือกตัวเลือก...</option><option>ตัวเลือกที่ 1</option><option>ตัวเลือกที่ 2</option></select></div>`,
-    html: () => `<select>\n  <option>เลือกตัวเลือก...</option>\n  <option>ตัวเลือกที่ 1</option>\n  <option>ตัวเลือกที่ 2</option>\n</select>`,
+    fields:{ opt1:"เลือกตัวเลือก...", opt2:"ตัวเลือกที่ 1" },
+    render: (d) => `<div class="comp-select"><div class="fake-select">${editSpan('opt1',d.opt1)} <span>▾</span></div></div>`,
+    html: (d) => `<select>\n  <option>${escapeHtml(d.opt1)}</option>\n  <option>${escapeHtml(d.opt2)}</option>\n</select>`,
     tip: "เหมาะกับตัวเลือกมากกว่า 5 รายการขึ้นไป ถ้าน้อยกว่านั้นควรใช้ radio button เพื่อให้เห็นทุกตัวเลือกพร้อมกัน" },
   checkbox: { label:"Checkbox", icon:"☑️", tag:"<input type=\"checkbox\">",
     when:"ใช้ให้ผู้ใช้เลือกได้หลายตัวเลือก หรือกดยอมรับเงื่อนไขการใช้งาน",
-    render: () => `<div class="comp-checkbox"><label><input type="checkbox" disabled> ยอมรับเงื่อนไขการใช้งาน</label></div>`,
-    html: () => `<label>\n  <input type="checkbox">\n  ยอมรับเงื่อนไขการใช้งาน\n</label>`,
+    fields:{ label:"ยอมรับเงื่อนไขการใช้งาน" },
+    render: (d) => `<div class="comp-checkbox"><label><input type="checkbox" disabled> ${editSpan('label',d.label)}</label></div>`,
+    html: (d) => `<label>\n  <input type="checkbox">\n  ${escapeHtml(d.label)}\n</label>`,
     tip: "ควรใส่ label ที่คลิกได้ครอบคู่กับ checkbox เสมอ เพื่อเพิ่มพื้นที่คลิกให้ใหญ่ขึ้น (Touch Target)" },
   text: { label:"Text", icon:"📝", tag:"<p>",
     when:"ใช้แสดงข้อความบรรยายทั่วไปที่ไม่ใช่หัวข้อหลัก เช่น คำอธิบาย เนื้อหาย่อหน้า",
-    render: () => `<div class="comp-text"><p>ข้อความอธิบายทั่วไปที่สามารถแก้ไขได้</p></div>`,
-    html: () => `<p>ข้อความอธิบายทั่วไป</p>`,
+    fields:{ content:"ข้อความอธิบายทั่วไปที่สามารถพิมพ์แก้ไขได้" },
+    render: (d) => `<div class="comp-text"><p>${editSpan('content',d.content)}</p></div>`,
+    html: (d) => `<p>${escapeHtml(d.content)}</p>`,
     tip: "ข้อความควรมี Line Height และขนาดตัวอักษรที่อ่านง่าย ไม่ต่ำกว่า 16px บนเว็บ" },
   link: { label:"Link", icon:"🔗", tag:"<a>",
     when:"ใช้เมื่อต้องการเชื่อมไปยังหน้าอื่น เว็บไซต์อื่น หรือตำแหน่งอื่นในหน้าเดียวกัน ต้องมี attribute href เสมอ",
-    render: () => `<div class="comp-link"><a href="#">ลิงก์ตัวอย่าง คลิกที่นี่</a></div>`,
-    html: () => `<a href="#">ลิงก์ตัวอย่าง</a>`,
+    fields:{ label:"ลิงก์ตัวอย่าง คลิกที่นี่" },
+    render: (d) => `<div class="comp-link"><a href="#">${editSpan('label',d.label)}</a></div>`,
+    html: (d) => `<a href="#">${escapeHtml(d.label)}</a>`,
     tip: "ลิงก์ควรมีสีหรือขีดเส้นใต้ให้แตกต่างจากข้อความทั่วไป เพื่อให้ผู้ใช้รู้ว่าคลิกได้ (Affordance)" },
   list: { label:"List", icon:"📋", tag:"<ul><li>",
     when:"ใช้แสดงข้อมูลที่เป็นรายการ เช่น สรรพคุณสินค้า ขั้นตอนการทำงาน หรือเมนูอาหาร",
-    render: () => `<div class="comp-list"><ul><li>รายการที่ 1</li><li>รายการที่ 2</li><li>รายการที่ 3</li></ul></div>`,
-    html: () => `<ul>\n  <li>รายการที่ 1</li>\n  <li>รายการที่ 2</li>\n  <li>รายการที่ 3</li>\n</ul>`,
+    fields:{ item1:"รายการที่ 1", item2:"รายการที่ 2", item3:"รายการที่ 3" },
+    render: (d) => `<div class="comp-list"><ul><li>${editSpan('item1',d.item1)}</li><li>${editSpan('item2',d.item2)}</li><li>${editSpan('item3',d.item3)}</li></ul></div>`,
+    html: (d) => `<ul>\n  <li>${escapeHtml(d.item1)}</li>\n  <li>${escapeHtml(d.item2)}</li>\n  <li>${escapeHtml(d.item3)}</li>\n</ul>`,
     tip: "List ช่วยแบ่งข้อมูลเป็นก้อนเล็ก ๆ อ่านง่ายกว่าเขียนเป็นพารากราฟยาว ๆ" },
   table: { label:"Table", icon:"📊", tag:"<table>",
     when:"ใช้แสดงข้อมูลที่เป็นแถว-คอลัมน์ เช่น ราคาสินค้า ตารางเปรียบเทียบ ไม่ควรใช้ Table จัด Layout ทั่วไปของหน้าเว็บ",
-    render: () => `<div class="comp-table"><table><tr><th>หัวข้อ 1</th><th>หัวข้อ 2</th></tr><tr><td>ข้อมูล 1</td><td>ข้อมูล 2</td></tr><tr><td>ข้อมูล 3</td><td>ข้อมูล 4</td></tr></table></div>`,
-    html: () => `<table>\n  <tr>\n    <th>หัวข้อ 1</th>\n    <th>หัวข้อ 2</th>\n  </tr>\n  <tr>\n    <td>ข้อมูล 1</td>\n    <td>ข้อมูล 2</td>\n  </tr>\n</table>`,
+    fields:{ h1:"หัวข้อ 1", h2:"หัวข้อ 2", c1:"ข้อมูล 1", c2:"ข้อมูล 2", c3:"ข้อมูล 3", c4:"ข้อมูล 4" },
+    render: (d) => `<div class="comp-table"><table><tr><th>${editSpan('h1',d.h1)}</th><th>${editSpan('h2',d.h2)}</th></tr><tr><td>${editSpan('c1',d.c1)}</td><td>${editSpan('c2',d.c2)}</td></tr><tr><td>${editSpan('c3',d.c3)}</td><td>${editSpan('c4',d.c4)}</td></tr></table></div>`,
+    html: (d) => `<table>\n  <tr>\n    <th>${escapeHtml(d.h1)}</th>\n    <th>${escapeHtml(d.h2)}</th>\n  </tr>\n  <tr>\n    <td>${escapeHtml(d.c1)}</td>\n    <td>${escapeHtml(d.c2)}</td>\n  </tr>\n  <tr>\n    <td>${escapeHtml(d.c3)}</td>\n    <td>${escapeHtml(d.c4)}</td>\n  </tr>\n</table>`,
     tip: "Table เหมาะกับข้อมูลเชิงตารางเท่านั้น อย่าใช้ Table จัดโครงหน้าเว็บทั้งหน้าแบบสมัยก่อน ให้ใช้ Grid/Flexbox แทน" },
   video: { label:"Video", icon:"🎬", tag:"<video>",
     when:"ใช้แสดงวิดีโอ เช่น คลิปสาธิตสินค้าหรือวิดีโอแนะนำ ควรมี attribute controls ให้ผู้ใช้กดเล่น/หยุดเองได้",
-    render: () => `<div class="comp-video"><div class="video-box">▶️<small>วิดีโอตัวอย่าง (คลิกเล่น)</small></div></div>`,
-    html: () => `<video controls width="100%">\n  <source src="video.mp4" type="video/mp4">\n</video>`,
+    fields:{ caption:"วิดีโอตัวอย่าง (คลิกเล่น)" },
+    render: (d) => `<div class="comp-video"><div class="video-box">▶️<small>${editSpan('caption',d.caption)}</small></div></div>`,
+    html: (d) => `<video controls width="100%">\n  <source src="video.mp4" type="video/mp4">\n</video>\n<!-- ${escapeHtml(d.caption)} -->`,
     tip: "วิดีโอควรมีขนาดไฟล์ที่เหมาะสมและปุ่มควบคุม (controls) เสมอ เพื่อให้ผู้ใช้ควบคุมการเล่นเองได้" },
   quote: { label:"Blockquote", icon:"💬", tag:"<blockquote>",
     when:"ใช้แสดงคำพูดอ้างอิง เช่น รีวิวจากลูกค้า หรือคำคมที่ยกมาจากแหล่งอื่น",
-    render: () => `<div class="comp-quote"><blockquote>"ข้อความอ้างอิงหรือคำรีวิวจากลูกค้า"<cite>— ชื่อผู้พูด</cite></blockquote></div>`,
-    html: () => `<blockquote>\n  "ข้อความอ้างอิง"\n  <cite>— ชื่อผู้พูด</cite>\n</blockquote>`,
+    fields:{ quote:"ข้อความอ้างอิงหรือคำรีวิวจากลูกค้า", cite:"ชื่อผู้พูด" },
+    render: (d) => `<div class="comp-quote"><blockquote>"${editSpan('quote',d.quote)}"<cite>— ${editSpan('cite',d.cite)}</cite></blockquote></div>`,
+    html: (d) => `<blockquote>\n  "${escapeHtml(d.quote)}"\n  <cite>— ${escapeHtml(d.cite)}</cite>\n</blockquote>`,
     tip: "ควรใส่ <cite> ระบุที่มาของคำพูดเสมอ เพื่อความน่าเชื่อถือ" },
   badge: { label:"Badge", icon:"🏷️", tag:'<span class="badge">',
     when:"ใช้แสดงสถานะหรือป้ายกำกับสั้น ๆ เช่น 'ใหม่' 'ลดราคา' 'หมด' ติดไว้กับเนื้อหาอื่น",
-    render: () => `<div class="comp-badge"><span class="badge">ใหม่</span><span class="badge badge-alt">แนะนำ</span></div>`,
-    html: () => `<span class="badge">ใหม่</span>`,
+    fields:{ label1:"ใหม่", label2:"แนะนำ" },
+    render: (d) => `<div class="comp-badge"><span class="badge">${editSpan('label1',d.label1)}</span><span class="badge badge-alt">${editSpan('label2',d.label2)}</span></div>`,
+    html: (d) => `<span class="badge">${escapeHtml(d.label1)}</span>\n<span class="badge">${escapeHtml(d.label2)}</span>`,
     tip: "Badge ควรมีสีที่โดดเด่นแต่ไม่รบกวนเนื้อหาหลัก และใช้ข้อความที่สั้นที่สุด" },
   divider: { label:"Divider", icon:"➖", tag:"<hr>",
     when:"ใช้แบ่งเนื้อหาออกเป็นส่วน ๆ ด้วยเส้นแบ่งแนวนอน เหมาะกับการแยกเนื้อหาที่ไม่เกี่ยวข้องกันออกจากกัน",
@@ -477,13 +535,15 @@ const contentTemplates = {
     tip: "เส้นแบ่งช่วยสร้าง Visual Separation แต่ไม่ควรใช้มากเกินไป เพราะจะทำให้หน้าเว็บดูรก" },
   codeblock: { label:"Code Block", icon:"💻", tag:"<pre><code>",
     when:"ใช้แสดงตัวอย่างโค้ดในหน้าเว็บ เช่น เว็บไซต์สอนโปรแกรมมิ่ง หรือ Documentation ประกอบเนื้อหา",
-    render: () => `<div class="comp-code"><pre><code>&lt;div class="hello"&gt;Hello World&lt;/div&gt;</code></pre></div>`,
-    html: () => `<pre><code>&lt;div class="hello"&gt;Hello World&lt;/div&gt;</code></pre>`,
+    fields:{ code:'<div class="hello">Hello World</div>' },
+    render: (d) => `<div class="comp-code"><pre><code class="editable" contenteditable="true" draggable="false" spellcheck="false" data-field="code">${escapeHtml(d.code)}</code></pre></div>`,
+    html: (d) => `<pre><code>${escapeHtml(d.code)}</code></pre>`,
     tip: "ควรใช้ฟอนต์แบบ monospace และมี syntax highlighting เพื่อให้อ่านโค้ดง่ายขึ้น" },
   footer: { label:"Footer", icon:"⬛", tag:"<footer>",
     when:"ใช้เพียง 1 ครั้งต่อหน้า วางไว้ล่างสุดของหน้าเสมอ มักมีข้อมูลติดต่อหรือลิงก์ลิขสิทธิ์",
-    render: () => `<div class="comp-footer">© 2026 บริษัทของคุณ | ติดต่อเรา</div>`,
-    html: () => `<footer>\n  <p>© 2026 บริษัทของคุณ</p>\n</footer>`,
+    fields:{ content:"© 2026 บริษัทของคุณ | ติดต่อเรา" },
+    render: (d) => `<div class="comp-footer">${editSpan('content',d.content)}</div>`,
+    html: (d) => `<footer>\n  <p>${escapeHtml(d.content)}</p>\n</footer>`,
     tip: "Footer ควรมีข้อมูลติดต่อ/ลิงก์สำคัญ เป็นจุดสิ้นสุดที่ทำให้ผู้ใช้รู้ว่าหมดหน้าแล้ว" }
 };
 
@@ -547,7 +607,12 @@ document.querySelectorAll('.palette-item[data-type]').forEach(item => {
 function createNode(type) {
   idCounter++;
   const node = { id:'n'+idCounter, type };
-  if (containerTypes.includes(type)) node.children = [];
+  if (containerTypes.includes(type)) {
+    node.children = [];
+  } else {
+    const tpl = contentTemplates[type];
+    node.data = tpl && tpl.fields ? { ...tpl.fields } : {};
+  }
   return node;
 }
 function findNode(id, node = tree) {
@@ -601,7 +666,7 @@ function renderNode(node) {
       </div>`;
   }
   return `<div class="comp-node leaf" draggable="true" data-id="${node.id}" data-type="${node.type}">
-      ${tpl.render()}
+      ${tpl.render(node.data || {})}
       <button class="del-btn" data-del="${node.id}">✕</button>
     </div>`;
 }
@@ -681,19 +746,50 @@ canvas.addEventListener('click', e => {
   const delBtn = e.target.closest('.del-btn');
   if (delBtn) { e.stopPropagation(); removeNodeById(delBtn.dataset.del); return; }
   const leaf = e.target.closest('.comp-node.leaf');
-  if (leaf) { showTip(leaf.dataset.type); return; }
+  if (leaf) {
+    const node = findNode(leaf.dataset.id);
+    showTip(leaf.dataset.type, node ? node.data : null);
+    return;
+  }
   const container = e.target.closest('.comp-node.container');
   if (container) { showTip(container.className.match(/node-(\w+)/)[1]); }
 });
 
+// ---------- พิมพ์แก้ไขข้อความในองค์ประกอบ (contenteditable) ----------
+let activeEditable = null;
+let savedRange = null;
+
+function saveSelection(e) {
+  const editable = e.target.closest && e.target.closest('.editable');
+  if (!editable) return;
+  activeEditable = editable;
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount > 0) savedRange = sel.getRangeAt(0).cloneRange();
+}
+canvas.addEventListener('focusin', saveSelection);
+canvas.addEventListener('keyup', saveSelection);
+canvas.addEventListener('mouseup', saveSelection);
+
+canvas.addEventListener('input', e => {
+  const editable = e.target.closest('.editable');
+  if (!editable) return;
+  const nodeEl = editable.closest('.comp-node');
+  if (!nodeEl) return;
+  const node = findNode(nodeEl.dataset.id);
+  if (!node) return;
+  if (!node.data) node.data = {};
+  node.data[editable.dataset.field] = editable.textContent;
+  updateCode();
+});
+
 function escapeHtml(str) {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-function showTip(type) {
+function showTip(type, data) {
   const tpl = getTemplate(type);
   if (!tpl) return;
-  const example = tpl.html ? tpl.html() : '';
+  const example = tpl.html ? tpl.html(data || tpl.fields || {}) : '';
   tipBox.innerHTML = `
     <div>${tpl.icon} <b>${tpl.label}</b> — แท็ก <code>${escapeHtml(tpl.tag || '')}</code></div>
     <div style="margin-top:5px;">📌 <b>เมื่อไหร่ควรใช้:</b> ${tpl.when || '-'}</div>
@@ -706,7 +802,7 @@ function showTip(type) {
 function buildGuide() {
   const all = { ...containerTemplates, ...contentTemplates };
   guideList.innerHTML = Object.values(all).map(tpl => {
-    const example = tpl.html ? tpl.html() : '';
+    const example = tpl.html ? tpl.html(tpl.fields || {}) : '';
     return `<div class="guide-item">
       <div>${tpl.icon} <b>${tpl.label}</b> — แท็ก <code>${escapeHtml(tpl.tag || '')}</code></div>
       <div style="margin-top:4px;">📌 <b>เมื่อไหร่ควรใช้:</b> ${tpl.when || '-'}</div>
@@ -718,6 +814,67 @@ function buildGuide() {
 guideBtn.addEventListener('click', () => { buildGuide(); guideModal.classList.add('show'); });
 closeGuide.addEventListener('click', () => guideModal.classList.remove('show'));
 guideModal.addEventListener('click', e => { if (e.target === guideModal) guideModal.classList.remove('show'); });
+
+// ---------- เมนูอีโมจิ ----------
+const emojiMenuBtn = document.getElementById('emojiMenuBtn');
+const emojiModal = document.getElementById('emojiModal');
+const emojiGroups = document.getElementById('emojiGroups');
+const closeEmoji = document.getElementById('closeEmoji');
+
+const emojiCategories = {
+  "😀 หน้ายิ้ม / อารมณ์": ["😀","😃","😄","😁","😆","😅","😂","🙂","😉","😊","😍","🤩","🤔","😎","😴","😭","😡","👍","👎","👏","🙏","💪","✌️","🤝"],
+  "❤️ หัวใจ / สัญลักษณ์": ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","💯","✅","❌","⭐","🌟","✨","🔥","💡","⚡","🎯","📌","🔔"],
+  "➡️ ลูกศร / UI": ["➡️","⬅️","⬆️","⬇️","↔️","↕️","🔄","▶️","⏸️","⏹️","🔍","🔗","📎","📋","📁","📂","🗂️","🧩"],
+  "💻 ธุรกิจ / เทคโนโลยี": ["💻","🖥️","📱","⌨️","🖱️","🛒","💳","📊","📈","📉","🗓️","⏰","🌐","🔒","🔓","📧","✉️","📞"],
+  "🌈 ธรรมชาติ / อื่น ๆ": ["🌈","☀️","🌙","🌸","🍀","🎉","🎁","🏆","🚀","📢","💬","🗨️","👋"]
+};
+
+function buildEmojiMenu() {
+  emojiGroups.innerHTML = Object.entries(emojiCategories).map(([label, list]) => `
+    <div class="group-label">${label}</div>
+    <div class="emoji-grid">${list.map(em => `<button type="button" class="emoji-btn" data-emoji="${em}">${em}</button>`).join('')}</div>
+  `).join('');
+}
+
+function insertEmoji(emoji) {
+  if (activeEditable && document.contains(activeEditable)) {
+    activeEditable.focus();
+    const sel = window.getSelection();
+    if (savedRange && activeEditable.contains(savedRange.startContainer)) {
+      sel.removeAllRanges();
+      sel.addRange(savedRange);
+    } else {
+      const r = document.createRange();
+      r.selectNodeContents(activeEditable);
+      r.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(r);
+    }
+    document.execCommand('insertText', false, emoji);
+    if (sel.rangeCount > 0) savedRange = sel.getRangeAt(0).cloneRange();
+    const nodeEl = activeEditable.closest('.comp-node');
+    if (nodeEl) {
+      const node = findNode(nodeEl.dataset.id);
+      if (node) {
+        if (!node.data) node.data = {};
+        node.data[activeEditable.dataset.field] = activeEditable.textContent;
+        updateCode();
+      }
+    }
+    showToast(`เพิ่ม ${emoji} แล้ว`);
+  } else {
+    navigator.clipboard.writeText(emoji).catch(() => {});
+    showToast('⚠️ กรุณาคลิกที่ข้อความในพื้นที่ออกแบบก่อน (คัดลอกอีโมจิไว้ในคลิปบอร์ดให้แล้ว)');
+  }
+}
+
+emojiMenuBtn.addEventListener('click', () => { buildEmojiMenu(); emojiModal.classList.add('show'); });
+closeEmoji.addEventListener('click', () => emojiModal.classList.remove('show'));
+emojiModal.addEventListener('click', e => {
+  if (e.target === emojiModal) { emojiModal.classList.remove('show'); return; }
+  const btn = e.target.closest('.emoji-btn');
+  if (btn) insertEmoji(btn.dataset.emoji);
+});
 
 // ---------- ล้างพื้นที่ทำงาน / รีเฟรช ----------
 clearBtn.addEventListener('click', () => {
@@ -742,7 +899,7 @@ function nodeToHtml(node, indent) {
       : indent + '  <!-- วางองค์ประกอบเพิ่มเติมที่นี่ -->';
     return `${indent}<div class="${tpl.cssClass}">\n${inner}\n${indent}</div>`;
   }
-  const raw = tpl.html();
+  const raw = tpl.html(node.data || tpl.fields || {});
   return raw.split('\n').map(l => indent + l).join('\n');
 }
 
