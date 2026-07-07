@@ -7,54 +7,66 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --crust:#11111b;--mantle:#181825;--base:#1e1e2e;
-  --surface0:#313244;--surface1:#45475a;--surface2:#585b70;
-  --overlay0:#6c7086;--overlay1:#7f849c;--subtext:#a6adc8;--text:#cdd6f4;
-  --rosewater:#f5e0dc;--flamingo:#f2cdcd;--pink:#f5c2e7;--mauve:#cba6f7;
-  --red:#f38ba8;--maroon:#eba0ac;--peach:#fab387;--yellow:#f9e2af;
-  --green:#a6e3a1;--teal:#94e2d5;--sky:#89dceb;--sapphire:#74c7ec;
-  --blue:#89b4fa;--lavender:#b4befe;
-  --radius:8px;--radius-sm:5px;--radius-xs:3px;
+/* ═══════════════════════════════════════════
+   Catppuccin Mocha — Programmer Theme
+   ═══════════════════════════════════════════ */
+:root {
+  --crust:#11111b; --mantle:#181825; --base:#1e1e2e;
+  --surface0:#313244; --surface1:#45475a; --surface2:#585b70;
+  --overlay0:#6c7086; --overlay1:#7f849c; --subtext:#a6adc8; --text:#cdd6f4;
+  --rosewater:#f5e0dc; --flamingo:#f2cdcd; --pink:#f5c2e7; --mauve:#cba6f7;
+  --red:#f38ba8; --maroon:#eba0ac; --peach:#fab387; --yellow:#f9e2af;
+  --green:#a6e3a1; --teal:#94e2d5; --sky:#89dceb; --sapphire:#74c7ec;
+  --blue:#89b4fa; --lavender:#b4befe;
+  --radius:8px; --radius-sm:5px; --radius-xs:3px;
   --font-mono:'JetBrains Mono',monospace;
   --font-ui:'Inter','JetBrains Mono',sans-serif;
-  --tr:0.2s cubic-bezier(.4,0,.2,1);
+  --transition:0.2s cubic-bezier(.4,0,.2,1);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;}
 body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font-size:13px;}
-::-webkit-scrollbar{width:7px;height:7px;}
+::-webkit-scrollbar{width:8px;height:8px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--surface0);border-radius:4px;}
 ::-webkit-scrollbar-thumb:hover{background:var(--surface1);}
 ::selection{background:var(--surface1);color:var(--text);}
 
-.top-accent{height:2px;background:linear-gradient(90deg,var(--blue),var(--mauve),var(--pink),var(--peach),var(--yellow),var(--green),var(--teal),var(--sapphire),var(--blue));background-size:300% 100%;animation:gf 10s linear infinite;flex-shrink:0;}
-@keyframes gf{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+/* ── 顶部渐变线 ── */
+.top-accent{height:2px;background:linear-gradient(90deg,var(--blue),var(--mauve),var(--pink),var(--peach),var(--yellow),var(--green),var(--teal),var(--sapphire),var(--blue));background-size:300% 100%;animation:gradFlow 10s linear infinite;flex-shrink:0;}
+@keyframes gradFlow{0%{background-position:0% 50%}100%{background-position:300% 50%}}
 
+/* ── 主布局 ── */
 .app{display:flex;height:calc(100% - 2px);overflow:hidden;}
 
-/* ── Activity Bar ── */
+/* ═══════════════════════════
+   Activity Bar (最左)
+   ═══════════════════════════ */
 .activity-bar{width:48px;background:var(--mantle);border-right:1px solid var(--surface0);display:flex;flex-direction:column;align-items:center;padding:6px 0;flex-shrink:0;gap:2px;z-index:10;}
 .ab-logo{width:32px;height:32px;border-radius:var(--radius-sm);background:linear-gradient(135deg,var(--blue),var(--mauve));display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:var(--crust);margin-bottom:10px;cursor:default;letter-spacing:-1px;}
 .ab-sep{width:24px;height:1px;background:var(--surface0);margin:6px 0;}
-.ab-btn{width:40px;height:40px;border:none;background:transparent;color:var(--overlay0);border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--tr);position:relative;}
+.ab-btn{width:40px;height:40px;border:none;background:transparent;color:var(--overlay0);border-radius:var(--radius-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:var(--transition);position:relative;}
 .ab-btn:hover{color:var(--text);background:var(--surface0);}
-.ab-btn.active::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--blue);border-radius:0 2px 2px 0;}
 .ab-btn.active{color:var(--text);}
+.ab-btn.active::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--blue);border-radius:0 2px 2px 0;}
 .ab-btn svg{width:22px;height:22px;stroke-width:1.5;fill:none;stroke:currentColor;}
 .ab-bottom{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:2px;padding-bottom:4px;}
 
-/* ── Sidebar ── */
+/* ═══════════════════════════
+   Sidebar (组件面板)
+   ═══════════════════════════ */
 .sidebar{width:248px;background:var(--base);border-right:1px solid var(--surface0);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width 0.3s ease,opacity 0.2s ease;}
 .sidebar.collapsed{width:0;opacity:0;pointer-events:none;}
 .sidebar-head{padding:12px 14px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .sidebar-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.5px;color:var(--overlay1);font-weight:600;}
-.sidebar-actions button{background:transparent;border:1px solid var(--surface0);color:var(--overlay0);width:24px;height:24px;border-radius:var(--radius-xs);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;transition:var(--tr);}
+.sidebar-actions{display:flex;gap:4px;}
+.sidebar-actions button{background:transparent;border:1px solid var(--surface0);color:var(--overlay0);width:24px;height:24px;border-radius:var(--radius-xs);cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
 .sidebar-actions button:hover{color:var(--red);border-color:var(--red);background:rgba(243,139,168,0.08);}
 .sidebar-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:0 6px 12px;}
+
+/* ── 树形组件列表 ── */
 .tree-cat{margin-bottom:2px;}
-.tree-cat-head{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--radius-xs);cursor:pointer;user-select:none;transition:var(--tr);font-size:0.72rem;font-weight:600;letter-spacing:0.3px;}
+.tree-cat-head{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:var(--radius-xs);cursor:pointer;user-select:none;transition:var(--transition);font-size:0.72rem;font-weight:600;letter-spacing:0.3px;}
 .tree-cat-head:hover{background:var(--surface0);}
 .tree-cat-head .arrow{font-size:0.6rem;color:var(--overlay0);transition:transform 0.25s ease;display:inline-block;width:10px;text-align:center;}
 .tree-cat.collapsed .arrow{transform:rotate(0deg);}
@@ -64,55 +76,70 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
 .tree-items{display:grid;grid-template-rows:1fr;transition:grid-template-rows 0.3s ease;}
 .tree-cat.collapsed .tree-items{grid-template-rows:0fr;}
 .tree-items-inner{overflow:hidden;}
-.tree-item{display:flex;align-items:center;gap:8px;padding:5px 8px 5px 26px;border-radius:var(--radius-xs);cursor:grab;font-size:0.78rem;color:var(--subtext);transition:var(--tr);border:1px solid transparent;position:relative;}
+.tree-item{display:flex;align-items:center;gap:8px;padding:5px 8px 5px 26px;border-radius:var(--radius-xs);cursor:grab;font-size:0.78rem;color:var(--subtext);transition:var(--transition);border:1px solid transparent;position:relative;}
 .tree-item:hover{background:var(--surface0);color:var(--text);border-color:var(--surface0);}
 .tree-item:active{cursor:grabbing;transform:scale(0.97);}
 .tree-item .t-icon{font-size:0.9rem;flex-shrink:0;width:18px;text-align:center;}
 .tree-item.layout-t::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:var(--sapphire);border-radius:2px;opacity:0.6;}
 .tree-item.content-t::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:var(--peach);border-radius:2px;opacity:0.6;}
 
-/* ── Main Area ── */
+/* ═══════════════════════════
+   Main Area (中间画布)
+   ═══════════════════════════ */
 .main-area{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+
+/* ── Tab Bar ── */
 .tab-bar{display:flex;align-items:stretch;background:var(--mantle);border-bottom:1px solid var(--surface0);flex-shrink:0;height:36px;padding:0 8px;}
-.tab{display:flex;align-items:center;gap:6px;padding:0 14px;font-size:0.75rem;color:var(--overlay0);cursor:default;border-bottom:2px solid transparent;transition:var(--tr);}
+.tab{display:flex;align-items:center;gap:6px;padding:0 14px;font-size:0.75rem;color:var(--overlay0);cursor:default;border-bottom:2px solid transparent;transition:var(--transition);position:relative;}
 .tab.active{color:var(--text);border-bottom-color:var(--blue);background:var(--base);margin-bottom:-1px;}
+.tab .tab-icon{font-size:0.8rem;}
+.tab .tab-mod{width:6px;height:6px;border-radius:50%;background:var(--peach);display:none;}
+.tab .tab-close{margin-left:6px;width:16px;height:16px;border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--overlay0);opacity:0;transition:var(--transition);}
+.tab:hover .tab-close{opacity:1;}
+.tab .tab-close:hover{background:var(--surface1);color:var(--text);}
+
+/* ── Browser Chrome ── */
 .browser-chrome{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--base);border-bottom:1px solid var(--surface0);flex-shrink:0;}
 .chrome-dots{display:flex;gap:6px;}
 .chrome-dot{width:10px;height:10px;border-radius:50%;}
 .chrome-dot.r{background:var(--red);}
 .chrome-dot.y{background:var(--yellow);}
 .chrome-dot.g{background:var(--green);}
-.chrome-url{flex:1;background:var(--mantle);border:1px solid var(--surface0);border-radius:20px;padding:5px 14px;font-size:0.72rem;color:var(--overlay0);display:flex;align-items:center;gap:6px;transition:border-color var(--tr);}
+.chrome-url{flex:1;background:var(--mantle);border:1px solid var(--surface0);border-radius:20px;padding:5px 14px;font-size:0.72rem;color:var(--overlay0);display:flex;align-items:center;gap:6px;transition:border-color var(--transition);}
 .chrome-url:hover{border-color:var(--surface1);}
 .chrome-url .lock{color:var(--green);font-size:0.7rem;}
-.chrome-btn{background:transparent;border:1px solid var(--surface0);color:var(--overlay0);width:26px;height:26px;border-radius:var(--radius-sm);cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;transition:var(--tr);}
+.chrome-btn{background:transparent;border:1px solid var(--surface0);color:var(--overlay0);width:26px;height:26px;border-radius:var(--radius-sm);cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;transition:var(--transition);}
 .chrome-btn:hover{color:var(--sky);border-color:var(--sky);background:rgba(137,220,235,0.06);}
-.canvas-wrap{flex:1;overflow:auto;background-color:var(--mantle);background-image:radial-gradient(var(--surface0) 0.8px,transparent 0.8px);background-size:18px 18px;padding:24px;display:flex;justify-content:center;align-items:flex-start;}
-#canvas{background:#ffffff;color:#1e293b;border-radius:var(--radius);min-height:500px;width:100%;max-width:860px;padding:16px;display:flex;flex-direction:column;gap:10px;border:2px dashed var(--surface1);transition:border-color 0.3s,background 0.3s,box-shadow 0.3s;box-shadow:0 4px 24px rgba(0,0,0,0.3);}
-#canvas.dropzone-hover{border-color:var(--green);background:rgba(166,227,161,0.03);box-shadow:0 0 0 4px rgba(166,227,161,0.08),0 4px 24px rgba(0,0,0,0.3);}
-.canvas-placeholder{color:#94a3b8;text-align:center;margin:200px 0;font-size:0.82rem;line-height:1.8;}
-.canvas-placeholder span{color:var(--overlay0);font-size:0.72rem;}
-.empty-hint{color:#94a3b8;text-align:center;font-size:0.72rem;border:1px dashed #cbd5e1;border-radius:6px;padding:14px;min-height:32px;}
 
-/* ── Canvas Components ── */
-.comp-node{position:relative;transition:opacity 0.15s,transform 0.15s;}
+/* ── Canvas Container ── */
+.canvas-wrap{flex:1;overflow:auto;background-color:var(--mantle);background-image:radial-gradient(var(--surface0) 0.8px,transparent 0.8px);background-size:18px 18px;padding:24px;display:flex;justify-content:center;align-items:flex-start;}
+#canvas{background:#ffffff;color:#1e293b;border-radius:var(--radius);min-height:500px;width:100%;max-width:860px;padding:16px;display:flex;flex-direction:column;gap:10px;border:2px dashed var(--surface1);transition:border-color 0.3s ease,background 0.3s ease,box-shadow 0.3s ease;box-shadow:0 4px 24px rgba(0,0,0,0.3);}
+#canvas.dropzone-hover{border-color:var(--green);background:rgba(166,227,161,0.03);box-shadow:0 0 0 4px rgba(166,227,161,0.08),0 4px 24px rgba(0,0,0,0.3);}
+.canvas-placeholder{color:#94a3b8;text-align:center;margin:200px 0;font-size:0.82rem;font-family:var(--font-mono);line-height:1.8;}
+.canvas-placeholder span{color:var(--overlay0);font-size:0.72rem;}
+.empty-hint{color:#94a3b8;text-align:center;font-size:0.72rem;border:1px dashed #cbd5e1;border-radius:6px;padding:14px;min-height:32px;font-family:var(--font-mono);}
+
+/* ── Canvas内组件 ── */
+.comp-node{position:relative;transition:opacity 0.15s ease,transform 0.15s ease;}
 .comp-node.dragging{opacity:0.3;transform:scale(0.97);}
-.comp-node.leaf{border:1px dashed #e2e8f0;border-radius:var(--radius-sm);padding:10px 32px 10px 10px;cursor:grab;background:#fafbfc;transition:box-shadow 0.2s,border-color 0.2s;}
+.comp-node.leaf{border:1px dashed #e2e8f0;border-radius:var(--radius-sm);padding:10px 32px 10px 10px;cursor:grab;background:#fafbfc;transition:box-shadow 0.2s ease,border-color 0.2s ease;}
 .comp-node.leaf:hover{border-color:#cbd5e1;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-.comp-header{background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;padding:16px 20px;border-radius:var(--radius-sm);font-weight:700;font-size:1.05rem;}
+.comp-header{background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;padding:16px 20px;border-radius:var(--radius-sm);font-weight:700;font-size:1.05rem;letter-spacing:-0.3px;}
 .comp-nav{background:#0f172a;color:#e2e8f0;padding:10px 16px;border-radius:var(--radius-sm);display:flex;gap:20px;flex-wrap:wrap;font-size:0.9rem;}
-.comp-nav a{color:#94a3b8;text-decoration:none;}
+.comp-nav a{color:#94a3b8;text-decoration:none;transition:color 0.2s;}
 .comp-hero{background:linear-gradient(135deg,#818cf8 0%,#c084fc 50%,#f472b6 100%);color:#fff;padding:32px 28px;border-radius:var(--radius);text-align:center;}
-.comp-hero h2{margin-bottom:8px;font-size:1.3rem;font-weight:800;}
+.comp-hero h2{margin-bottom:8px;font-size:1.3rem;font-weight:800;letter-spacing:-0.5px;}
 .comp-hero p{opacity:0.9;font-size:0.95rem;}
 .comp-button button{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;border:none;padding:10px 24px;border-radius:var(--radius-sm);font-weight:700;cursor:default;font-size:0.9rem;box-shadow:0 2px 8px rgba(245,158,11,0.3);}
 .comp-image img{width:100%;border-radius:var(--radius-sm);display:block;}
-.comp-card{background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);}
+.comp-card{background:#fff;border:1px solid #e2e8f0;border-radius:var(--radius);padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.04);transition:box-shadow 0.2s;}
+.comp-card:hover{box-shadow:0 4px 12px rgba(0,0,0,0.08);}
 .comp-card h3{margin-bottom:6px;font-size:1rem;color:#1e293b;}
 .comp-card p{color:#64748b;font-size:0.88rem;}
 .comp-text p{color:#334155;font-size:0.92rem;line-height:1.6;}
 .comp-footer{background:#0f172a;color:#64748b;text-align:center;padding:14px;border-radius:var(--radius-sm);font-size:0.82rem;}
-.comp-link a{color:#4f46e5;text-decoration:none;font-weight:600;border-bottom:2px solid rgba(79,70,229,0.2);padding-bottom:1px;}
+.comp-link a{color:#4f46e5;text-decoration:none;font-weight:600;border-bottom:2px solid rgba(79,70,229,0.2);padding-bottom:1px;transition:border-color 0.2s;}
+.comp-link a:hover{border-color:#4f46e5;}
 .comp-list ul{padding-left:20px;color:#334155;font-size:0.9rem;}
 .comp-list li{margin:4px 0;}
 .comp-table table{width:100%;border-collapse:collapse;font-size:0.82rem;}
@@ -132,9 +159,13 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
 .fake-select{display:flex;align-items:center;justify-content:space-between;color:#64748b;}
 .comp-code pre{background:#0f172a;color:#7dd3fc;padding:14px;border-radius:var(--radius-sm);font-size:0.78rem;overflow:auto;margin:0;line-height:1.6;}
 .comp-code code{font-family:var(--font-mono);}
+
+/* ── Editable ── */
 .editable{outline:none;cursor:text;-webkit-user-drag:none;user-drag:none;border-radius:var(--radius-xs);padding:0 3px;transition:background 0.15s,box-shadow 0.15s;}
 .editable:hover{background:rgba(99,102,241,0.06);}
 .editable:focus{background:rgba(99,102,241,0.1);box-shadow:0 0 0 2px rgba(99,102,241,0.2);}
+
+/* ── Layout Containers in Canvas ── */
 .comp-node.container{border-radius:var(--radius);padding:8px;margin-bottom:2px;}
 .node-label{display:flex;align-items:center;justify-content:space-between;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:var(--radius-xs);margin-bottom:8px;color:#fff;font-family:var(--font-mono);letter-spacing:0.3px;text-transform:uppercase;}
 .node-section{border:2px dashed #94a3b8;background:#f8fafc;}
@@ -158,27 +189,29 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
 .comp-node:hover .del-btn{opacity:1;transform:scale(1);}
 .del-btn:hover{background:#e11d48;transform:scale(1.1)!important;}
 .node-label .del-btn{position:static;opacity:1;transform:none;width:18px;height:18px;font-size:0.6rem;}
+.node-label .del-btn:hover{transform:scale(1.1)!important;}
 
-/* ── Right Panel ── */
-.right-panel{width:400px;background:var(--base);border-left:1px solid var(--surface0);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+/* ═══════════════════════════
+   Right Panel (Inspector + Code)
+   ═══════════════════════════ */
+.right-panel{width:380px;background:var(--base);border-left:1px solid var(--surface0);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
 .rp-section{display:flex;flex-direction:column;overflow:hidden;}
-.rp-section.inspector{flex:0 0 auto;max-height:48%;}
+.rp-section.inspector{flex:0 0 auto;max-height:45%;}
 .rp-section.code-output{flex:1;min-height:0;}
-.rp-head{padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface0);flex-shrink:0;cursor:pointer;user-select:none;}
-.rp-head:hover{background:var(--surface0);}
+.rp-head{padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--surface0);flex-shrink:0;}
 .rp-title{font-size:0.68rem;text-transform:uppercase;letter-spacing:1.2px;color:var(--overlay1);font-weight:600;display:flex;align-items:center;gap:6px;}
 .rp-title .dot{width:6px;height:6px;border-radius:50%;}
 .rp-body{overflow-y:auto;padding:10px 12px;}
 .rp-divider{height:1px;background:var(--surface0);flex-shrink:0;}
 
-/* ── Inspector ── */
-.tip-section{background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);padding:12px;font-size:0.73rem;line-height:1.65;color:var(--subtext);margin-bottom:10px;}
-.tip-section b{color:var(--blue);}
-.tip-section code{color:var(--mauve);background:var(--surface0);padding:1px 5px;border-radius:var(--radius-xs);font-size:0.7rem;}
-.tip-section pre{margin-top:6px;background:var(--crust);color:var(--green);padding:8px 10px;border-radius:var(--radius-xs);font-size:0.65rem;white-space:pre-wrap;word-break:break-word;border:1px solid var(--surface0);line-height:1.5;}
-.tip-section .section-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:1px;color:var(--overlay0);margin-bottom:6px;display:flex;align-items:center;gap:5px;}
-.tip-section .section-label .sl-dot{width:4px;height:4px;border-radius:50%;}
-.guide-btn{margin-bottom:10px;width:100%;background:var(--mantle);color:var(--peach);border:1px solid var(--surface0);padding:8px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:0.75rem;font-family:var(--font-mono);transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:6px;}
+/* ── Tip Box ── */
+.tip-box{background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);padding:12px;font-size:0.75rem;line-height:1.6;color:var(--subtext);min-height:48px;}
+.tip-box b{color:var(--blue);}
+.tip-box code{color:var(--mauve);background:var(--surface0);padding:1px 5px;border-radius:var(--radius-xs);font-size:0.72rem;}
+.tip-box pre{margin-top:8px;background:var(--crust);color:var(--green);padding:8px 10px;border-radius:var(--radius-xs);font-size:0.66rem;white-space:pre-wrap;word-break:break-word;border:1px solid var(--surface0);line-height:1.5;}
+
+/* ── Guide Button ── */
+.guide-btn{margin-bottom:10px;width:100%;background:var(--mantle);color:var(--peach);border:1px solid var(--surface0);padding:8px;border-radius:var(--radius-sm);cursor:pointer;font-weight:600;font-size:0.75rem;font-family:var(--font-mono);transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px;}
 .guide-btn:hover{border-color:var(--peach);background:rgba(250,179,135,0.06);}
 
 /* ── Code Editor ── */
@@ -188,110 +221,144 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
 .code-editor .ln{color:var(--surface1);width:32px;text-align:right;margin-right:12px;user-select:none;flex-shrink:0;font-size:0.65rem;}
 .code-editor .code{white-space:pre-wrap;word-break:break-word;color:var(--text);}
 .code-editor .code.muted{color:var(--surface1);}
-.tok-tag{color:var(--blue);}.tok-attr{color:var(--peach);}.tok-string{color:var(--green);}.tok-comment{color:var(--overlay0);font-style:italic;}.tok-doctype{color:var(--mauve);}
+.tok-tag{color:var(--blue);}
+.tok-attr{color:var(--peach);}
+.tok-string{color:var(--green);}
+.tok-comment{color:var(--overlay0);font-style:italic;}
+.tok-doctype{color:var(--mauve);}
 
-.btn-copy{margin-top:8px;width:100%;background:var(--blue);color:var(--crust);border:none;padding:9px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;font-family:var(--font-mono);font-size:0.78rem;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:6px;}
+/* ── Buttons ── */
+.btn-copy{margin-top:8px;width:100%;background:var(--blue);color:var(--crust);border:none;padding:9px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;font-family:var(--font-mono);font-size:0.78rem;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px;}
 .btn-copy:hover{filter:brightness(1.1);transform:translateY(-1px);}
 .btn-copy:active{transform:translateY(0);}
 .btn-copy.copied{background:var(--green);}
-.btn-download{margin-top:6px;width:100%;background:var(--surface0);color:var(--green);border:1px solid var(--surface1);padding:9px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;font-family:var(--font-mono);font-size:0.78rem;transition:var(--tr);display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-download{margin-top:6px;width:100%;background:var(--surface0);color:var(--green);border:1px solid var(--surface1);padding:9px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;font-family:var(--font-mono);font-size:0.78rem;transition:var(--transition);display:flex;align-items:center;justify-content:center;gap:6px;}
 .btn-download:hover{background:var(--surface1);border-color:var(--green);transform:translateY(-1px);}
+.btn-download:active{transform:translateY(0);}
 
-/* ── Status Bar ── */
+/* ═══════════════════════════
+   Status Bar
+   ═══════════════════════════ */
 .status-bar{height:24px;background:var(--surface0);display:flex;align-items:center;justify-content:space-between;padding:0 12px;font-size:0.68rem;color:var(--overlay1);flex-shrink:0;border-top:1px solid var(--surface1);}
 .sb-left,.sb-right{display:flex;align-items:center;gap:2px;}
-.sb-item{padding:0 8px;height:24px;display:flex;align-items:center;gap:5px;cursor:default;transition:var(--tr);}
+.sb-item{padding:0 8px;height:24px;display:flex;align-items:center;gap:5px;cursor:default;transition:var(--transition);border-radius:0;}
 .sb-item:hover{background:var(--surface1);}
 .sb-branch{color:var(--mauve);font-weight:600;}
+.sb-errors{color:var(--red);}
+.sb-warn{color:var(--yellow);}
 .sb-accent{background:var(--blue);color:var(--crust);font-weight:600;}
 .sb-accent:hover{background:var(--sapphire)!important;}
 .sb-count{color:var(--green);font-weight:600;}
 
-/* ── Modals ── */
-.modal-overlay{position:fixed;inset:0;background:rgba(17,17,27,0.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:24px;opacity:0;transition:opacity 0.25s;}
+/* ═══════════════════════════
+   Modals
+   ═══════════════════════════ */
+.modal-overlay{position:fixed;inset:0;background:rgba(17,17,27,0.85);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;z-index:1000;padding:24px;opacity:0;transition:opacity 0.25s ease;}
 .modal-overlay.show{display:flex;opacity:1;}
-.modal-box{background:var(--base);border:1px solid var(--surface0);border-radius:12px;padding:24px;max-width:800px;max-height:85vh;overflow:auto;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:translateY(10px);transition:transform 0.25s;}
+.modal-box{background:var(--base);border:1px solid var(--surface0);border-radius:12px;padding:24px;max-width:760px;max-height:82vh;overflow:auto;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.5);transform:translateY(10px);transition:transform 0.25s ease;}
 .modal-overlay.show .modal-box{transform:translateY(0);}
 .modal-box h2{color:var(--peach);margin-bottom:16px;font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px;}
-.guide-item{background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px;font-size:0.76rem;line-height:1.6;}
+.guide-item{background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px;font-size:0.78rem;line-height:1.6;}
 .guide-item b{color:var(--blue);}
-.guide-item code{color:var(--mauve);background:var(--surface0);padding:1px 5px;border-radius:var(--radius-xs);font-size:0.7rem;}
-.guide-item pre{background:var(--crust);color:var(--green);padding:10px;border-radius:var(--radius-xs);margin-top:8px;font-size:0.66rem;white-space:pre-wrap;word-break:break-word;border:1px solid var(--surface0);line-height:1.5;}
-.modal-close{margin-top:12px;width:100%;background:var(--red);color:var(--crust);border:none;padding:10px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;font-family:var(--font-mono);font-size:0.82rem;transition:var(--tr);}
+.guide-item code{color:var(--mauve);background:var(--surface0);padding:1px 5px;border-radius:var(--radius-xs);font-size:0.72rem;}
+.guide-item pre{background:var(--crust);color:var(--green);padding:10px;border-radius:var(--radius-xs);margin-top:8px;font-size:0.68rem;white-space:pre-wrap;word-break:break-word;border:1px solid var(--surface0);line-height:1.5;}
+.modal-close{margin-top:12px;width:100%;background:var(--red);color:var(--crust);border:none;padding:10px;border-radius:var(--radius-sm);cursor:pointer;font-weight:700;font-family:var(--font-mono);font-size:0.82rem;transition:var(--transition);}
 .modal-close:hover{filter:brightness(1.1);}
 
-/* ── Theme Modal ── */
-.theme-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-.theme-preset-btn{padding:8px 14px;border-radius:var(--radius-sm);border:2px solid var(--surface0);background:var(--mantle);color:var(--subtext);cursor:pointer;font-family:var(--font-mono);font-size:0.75rem;font-weight:600;transition:var(--tr);display:flex;align-items:center;gap:6px;}
-.theme-preset-btn:hover{border-color:var(--surface1);color:var(--text);}
-.theme-preset-btn.active{border-color:var(--blue);color:var(--blue);background:rgba(137,180,250,0.08);}
-.theme-preset-swatch{display:flex;gap:2px;}
-.theme-preset-swatch span{width:12px;height:12px;border-radius:50%;border:1px solid rgba(255,255,255,0.1);}
-.theme-colors-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.theme-color-item{background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);padding:10px 12px;display:flex;align-items:center;gap:10px;transition:border-color var(--tr);}
-.theme-color-item:hover{border-color:var(--surface1);}
-.theme-color-item input[type="color"]{width:32px;height:32px;border:2px solid var(--surface0);border-radius:var(--radius-sm);cursor:pointer;background:none;padding:0;flex-shrink:0;}
-.theme-color-item input[type="color"]::-webkit-color-swatch-wrapper{padding:2px;}
-.theme-color-item input[type="color"]::-webkit-color-swatch{border:none;border-radius:var(--radius-xs);}
-.theme-color-info{flex:1;min-width:0;}
-.theme-color-label{font-size:0.72rem;color:var(--text);font-weight:600;display:block;margin-bottom:2px;}
-.theme-color-hex{font-size:0.65rem;color:var(--overlay0);font-family:var(--font-mono);}
-.theme-color-desc{font-size:0.62rem;color:var(--overlay0);margin-top:2px;line-height:1.4;}
-
+/* ── Emoji Modal ── */
 .emoji-hint{background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);padding:12px;font-size:0.75rem;margin-bottom:14px;line-height:1.6;color:var(--subtext);}
 .emoji-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-.emoji-btn{font-size:1.2rem;background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--tr);}
+.emoji-btn{font-size:1.2rem;background:var(--mantle);border:1px solid var(--surface0);border-radius:var(--radius-sm);width:38px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);}
 .emoji-btn:hover{background:var(--surface0);border-color:var(--sky);transform:scale(1.12);}
+
+/* ── Toast ── */
 .toast{position:fixed;bottom:40px;right:20px;background:var(--surface1);color:var(--text);padding:10px 18px;border-radius:var(--radius-sm);font-weight:600;opacity:0;transform:translateY(8px) scale(0.96);transition:all 0.3s cubic-bezier(.4,0,.2,1);z-index:999;font-size:0.8rem;box-shadow:0 8px 24px rgba(0,0,0,0.3);border:1px solid var(--surface2);display:flex;align-items:center;gap:8px;}
 .toast.show{opacity:1;transform:translateY(0) scale(1);}
 .toast.success{border-left:3px solid var(--green);}
 .toast.warning{border-left:3px solid var(--yellow);}
 
-@media(max-width:1100px){.right-panel{width:340px;}.sidebar{width:200px;}}
-@media(max-width:900px){.app{flex-wrap:wrap;}.activity-bar{width:100%;flex-direction:row;height:40px;padding:0 8px;overflow-x:auto;border-right:none;border-bottom:1px solid var(--surface0);}.ab-logo{margin-bottom:0;margin-right:8px;}.ab-sep{width:1px;height:20px;margin:0 4px;}.ab-bottom{margin-top:0;margin-left:auto;flex-direction:row;}.sidebar,.right-panel{width:100%;max-height:40vh;border:none;border-bottom:1px solid var(--surface0);}.main-area{min-height:300px;}}
+/* ── Responsive ── */
+@media(max-width:1100px){
+  .right-panel{width:320px;}
+  .sidebar{width:200px;}
+}
+@media(max-width:900px){
+  .app{flex-wrap:wrap;}
+  .activity-bar{width:100%;flex-direction:row;height:40px;padding:0 8px;overflow-x:auto;border-right:none;border-bottom:1px solid var(--surface0);}
+  .ab-logo{margin-bottom:0;margin-right:8px;}
+  .ab-sep{width:1px;height:20px;margin:0 4px;}
+  .ab-bottom{margin-top:0;margin-left:auto;flex-direction:row;}
+  .sidebar,.right-panel{width:100%;max-height:40vh;border:none;border-bottom:1px solid var(--surface0);}
+  .main-area{min-height:300px;}
+}
 </style>
 </head>
 <body>
+
+<!-- 顶部渐变线 -->
 <div class="top-accent"></div>
+
 <div class="app">
+
+  <!-- ═══ Activity Bar ═══ -->
   <div class="activity-bar">
     <div class="ab-logo">LB</div>
-    <button class="ab-btn active" id="abPalette" title="Components"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
-    <button class="ab-btn" id="abEmoji" title="Emoji"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5" stroke-linecap="round"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5" stroke-linecap="round"/></svg></button>
-    <button class="ab-btn" id="abGuide" title="Docs"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg></button>
-    <button class="ab-btn" id="abTheme" title="Theme Colors"><svg viewBox="0 0 24 24"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 011.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></button>
+    <button class="ab-btn active" id="abPalette" title="Components">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    </button>
+    <button class="ab-btn" id="abEmoji" title="Insert Emoji">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9" stroke-width="2.5" stroke-linecap="round"/><line x1="15" y1="9" x2="15.01" y2="9" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </button>
+    <button class="ab-btn" id="abGuide" title="Documentation">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/><line x1="8" y1="7" x2="16" y2="7"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+    </button>
     <div class="ab-sep"></div>
     <div class="ab-bottom">
-      <button class="ab-btn" id="abDownload" title="Download"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
+      <button class="ab-btn" id="abDownload" title="Download index.html">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      </button>
     </div>
   </div>
 
+  <!-- ═══ Sidebar ═══ -->
   <div class="sidebar" id="sidebar">
     <div class="sidebar-head">
       <span class="sidebar-title">Explorer</span>
-      <div class="sidebar-actions"><button id="clearBtn" title="ล้างทั้งหมด">🗑</button></div>
+      <div class="sidebar-actions">
+        <button id="clearBtn" title="Clear All">🗑</button>
+      </div>
     </div>
     <div class="sidebar-body">
+
       <div class="tree-cat" id="catLayout">
-        <div class="tree-cat-head"><span class="arrow">▸</span><span class="folder">📁</span><span class="cat-name">layout/</span></div>
+        <div class="tree-cat-head">
+          <span class="arrow">▸</span>
+          <span class="folder">📁</span>
+          <span class="cat-name">layout/</span>
+        </div>
         <div class="tree-items"><div class="tree-items-inner">
           <div class="tree-item layout-t" draggable="true" data-type="section"><span class="t-icon">📦</span>Section</div>
           <div class="tree-item layout-t" draggable="true" data-type="row"><span class="t-icon">↔</span>Row</div>
           <div class="tree-item layout-t" draggable="true" data-type="col"><span class="t-icon">↕</span>Column</div>
           <div class="tree-item layout-t" draggable="true" data-type="grid2"><span class="t-icon">▦</span>Grid 2-col</div>
-          <div class="tree-item layout-t" draggable="true" data-type="grid3"><span class="t-icon">Ħ</span>Grid 3-col</div>
+          <div class="tree-item layout-t" draggable="true" data-type="grid3"><span class="t-icon">▦</span>Grid 3-col</div>
         </div></div>
       </div>
+
       <div class="tree-cat" id="catContent">
-        <div class="tree-cat-head"><span class="arrow">▸</span><span class="folder">📁</span><span class="cat-name">content/</span></div>
+        <div class="tree-cat-head">
+          <span class="arrow">▸</span>
+          <span class="folder">📁</span>
+          <span class="cat-name">content/</span>
+        </div>
         <div class="tree-items"><div class="tree-items-inner">
           <div class="tree-item content-t" draggable="true" data-type="header"><span class="t-icon">H</span>Header</div>
           <div class="tree-item content-t" draggable="true" data-type="nav"><span class="t-icon">N</span>Navbar</div>
           <div class="tree-item content-t" draggable="true" data-type="hero"><span class="t-icon">★</span>Hero Section</div>
-          <div class="tree-item content-t" draggable="true" data-type="button"><span class="t-icon">Btn</span>Button</div>
+          <div class="tree-item content-t" draggable="true" data-type="button"><span class="t-icon"> Btn</span>Button</div>
           <div class="tree-item content-t" draggable="true" data-type="image"><span class="t-icon">IMG</span>Image</div>
           <div class="tree-item content-t" draggable="true" data-type="card"><span class="t-icon">Card</span>Card</div>
-          <div class="tree-item content-t" draggable="true" data-type="input"><span class="t-icon">In</span>Input</div>
+          <div class="tree-item content-t" draggable="true" data-type="input"><span class="t-icon">In</span>Input Field</div>
           <div class="tree-item content-t" draggable="true" data-type="textarea"><span class="t-icon">Ta</span>Textarea</div>
           <div class="tree-item content-t" draggable="true" data-type="select"><span class="t-icon">Sel</span>Dropdown</div>
           <div class="tree-item content-t" draggable="true" data-type="checkbox"><span class="t-icon">☑</span>Checkbox</div>
@@ -307,11 +374,19 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
           <div class="tree-item content-t" draggable="true" data-type="footer"><span class="t-icon">F</span>Footer</div>
         </div></div>
       </div>
+
     </div>
   </div>
 
+  <!-- ═══ Main Area ═══ -->
   <div class="main-area">
-    <div class="tab-bar"><div class="tab active"><span class="tab-icon">🌐</span><span>preview.html</span></div></div>
+    <div class="tab-bar">
+      <div class="tab active">
+        <span class="tab-icon">🌐</span>
+        <span>preview.html</span>
+        <span class="tab-mod"></span>
+      </div>
+    </div>
     <div class="browser-chrome">
       <div class="chrome-dots"><span class="chrome-dot r"></span><span class="chrome-dot y"></span><span class="chrome-dot g"></span></div>
       <div class="chrome-url"><span class="lock">🔒</span> localhost:5500/index.html</div>
@@ -319,34 +394,43 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
     </div>
     <div class="canvas-wrap">
       <div id="canvas" class="dropzone" data-parent-id="root">
-        <div class="canvas-placeholder">// ลากคอมโพเนนต์มาวางที่นี่<br><span>จากแผง Explorer ด้านซ้าย</span></div>
+        <div class="canvas-placeholder">// Drag components here<br><span>from the Explorer panel on the left</span></div>
       </div>
     </div>
   </div>
 
+  <!-- ═══ Right Panel ═══ -->
   <div class="right-panel">
     <div class="rp-section inspector">
-      <div class="rp-head"><span class="rp-title"><span class="dot" style="background:var(--blue)"></span>Inspector</span></div>
+      <div class="rp-head">
+        <span class="rp-title"><span class="dot" style="background:var(--blue)"></span>Inspector</span>
+      </div>
       <div class="rp-body" id="inspectorBody">
-        <div class="tip-section">คลิกที่คอมโพเนนต์บนพื้นที่ออกแบบ เพื่อดูรายละเอียดแท็ก HTML, คำอธิบาย CSS, และเคล็ดลับการใช้งาน — คลิกที่ข้อความเพื่อแก้ไขได้เลย</div>
-        <button class="guide-btn" id="guideBtn">📖 เปิดเอกสารแท็กทั้งหมด</button>
+        <div class="tip-box">Click a component on the canvas to view its HTML tag, usage guide, and UX tips. Click text directly to edit inline.</div>
+        <button class="guide-btn" id="guideBtn">📖 Open Tag Documentation</button>
       </div>
     </div>
     <div class="rp-divider"></div>
     <div class="rp-section code-output">
-      <div class="rp-head"><span class="rp-title"><span class="dot" style="background:var(--green)"></span>Output — index.html</span></div>
-      <div class="rp-body" style="display:flex;flex-direction:column;">
+      <div class="rp-head">
+        <span class="rp-title"><span class="dot" style="background:var(--green)"></span>Output — index.html</span>
+      </div>
+      <div class="rp-body" style="display:flex;flex-direction:column;gap:0;">
         <div class="code-editor" id="codeEditor"></div>
-        <button class="btn-copy" id="copyBtn">📋 คัดลอก HTML เต็ม</button>
-        <button class="btn-download" id="downloadBtn2">💾 ดาวน์โหลด index.html</button>
+        <button class="btn-copy" id="copyBtn">📋 Copy Full HTML</button>
+        <button class="btn-download" id="downloadBtn2">💾 Download index.html</button>
       </div>
     </div>
   </div>
+
 </div>
 
+<!-- Status Bar -->
 <div class="status-bar">
   <div class="sb-left">
     <span class="sb-item sb-branch">⎇ main</span>
+    <span class="sb-item sb-errors">⊘ 0</span>
+    <span class="sb-item sb-warn">⚠ 0</span>
   </div>
   <div class="sb-right">
     <span class="sb-item">Elements: <span class="sb-count" id="elCount">0</span></span>
@@ -355,376 +439,460 @@ body{font-family:var(--font-mono);background:var(--crust);color:var(--text);font
   </div>
 </div>
 
-<div class="modal-overlay" id="guideModal"><div class="modal-box"><h2>📖 เอกสารแท็ก HTML/CSS ทั้งหมด</h2><div id="guideList"></div><button class="modal-close" id="closeGuide">ปิด</button></div></div>
-<div class="modal-overlay" id="emojiModal"><div class="modal-box"><h2>😀 เลือกอีโมจิ</h2><div class="emoji-hint">คลิกที่ข้อความบนพื้นที่ออกแบบก่อนเพื่อกำหนดตำแหน่งเคอร์เซอร์ จากนั้นคลิกอีโมจิที่ต้องการ</div><div id="emojiGroups"></div><button class="modal-close" id="closeEmoji">ปิด</button></div></div>
-<div class="modal-overlay" id="themeModal">
+<!-- Modals -->
+<div class="modal-overlay" id="guideModal">
   <div class="modal-box">
-    <h2>🎨 เลือกธีมสีสำหรับไฟล์ Export</h2>
-    <div style="font-size:0.75rem;color:var(--subtext);margin-bottom:14px;line-height:1.6;">ปรับสีแต่งไฟล์ <code>index.html</code> ที่จะดาวน์โหลด — เลือกพรีเซ็ตหรือปรับสีเองได้ทั้งหมด 10 สี</div>
-    <div class="theme-presets" id="themePresets"></div>
-    <div class="theme-colors-grid" id="themeColorsGrid"></div>
-    <button class="modal-close" id="closeTheme" style="background:var(--green);color:var(--crust);">✅ ปิด (สีถูกบันทึกแล้ว)</button>
+    <h2>📖 Tag Documentation</h2>
+    <div id="guideList"></div>
+    <button class="modal-close" id="closeGuide">Close</button>
+  </div>
+</div>
+<div class="modal-overlay" id="emojiModal">
+  <div class="modal-box">
+    <h2>😀 Emoji Picker</h2>
+    <div class="emoji-hint">Click text on the canvas first to set cursor position, then click an emoji to insert it.</div>
+    <div id="emojiGroups"></div>
+    <button class="modal-close" id="closeEmoji">Close</button>
   </div>
 </div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════════════════════════════════════════
-   ธีมสีสำหรับไฟล์ Export
-   ═══════════════════════════════════════════════════ */
-const defaultThemeColors = {
-  primary:'#4f46e5', primaryLight:'#6366f1',
-  button:'#f59e0b', buttonEnd:'#f97316',
-  heroStart:'#818cf8', heroEnd:'#f472b6',
-  bg:'#f8fafc', cardBg:'#ffffff',
-  navBg:'#0f172a', text:'#1e293b', textSub:'#64748b',
-  border:'#e2e8f0', footerBg:'#0f172a', footerText:'#64748b'
-};
-
-let themeColors = {...defaultThemeColors};
-try { const saved = localStorage.getItem('lb_theme'); if(saved) themeColors = {...defaultThemeColors,...JSON.parse(saved)}; } catch(e){}
-
-const themePresets = {
-  'มาตรฐาน':{primary:'#4f46e5',primaryLight:'#6366f1',button:'#f59e0b',buttonEnd:'#f97316',heroStart:'#818cf8',heroEnd:'#f472b6',bg:'#f8fafc',cardBg:'#ffffff',navBg:'#0f172a',text:'#1e293b',textSub:'#64748b',border:'#e2e8f0',footerBg:'#0f172a',footerText:'#64748b'},
-  'มืดโทน':{primary:'#818cf8',primaryLight:'#a5b4fc',button:'#fbbf24',buttonEnd:'#f59e0b',heroStart:'#6366f1',heroEnd:'#c084fc',bg:'#0f172a',cardBg:'#1e293b',navBg:'#020617',text:'#e2e8f0',textSub:'#94a3b8',border:'#334155',footerBg:'#020617',footerText:'#64748b'},
-  'มินิมอล':{primary:'#111827',primaryLight:'#374151',button:'#111827',buttonEnd:'#374151',heroStart:'#111827',heroEnd:'#374151',bg:'#ffffff',cardBg:'#f9fafb',navBg:'#111827',text:'#111827',textSub:'#6b7280',border:'#e5e7eb',footerBg:'#111827',footerText:'#9ca3af'},
-  'ทะเลสี':{primary:'#0891b2',primaryLight:'#22d3ee',button:'#06b6d4',buttonEnd:'#0891b2',heroStart:'#22d3ee',heroEnd:'#0ea5e9',bg:'#f0fdfa',cardBg:'#ffffff',navBg:'#134e4a',text:'#134e4a',textSub:'#5eead4',border:'#99f6e4',footerBg:'#134e4a',footerText:'#5eead4'},
-  'ป่าเขียว':{primary:'#059669',primaryLight:'#34d399',button:'#10b981',buttonEnd:'#059669',heroStart:'#34d399',heroEnd:'#059669',bg:'#f0fdf4',cardBg:'#ffffff',navBg:'#14532d',text:'#14532d',textSub:'#86efac',border:'#bbf7d0',footerBg:'#14532d',footerText:'#86efac'},
-  'พระอาทิตย์':{primary:'#dc2626',primaryLight:'#f87171',button:'#f97316',buttonEnd:'#ef4444',heroStart:'#fbbf24',heroEnd:'#ef4444',bg:'#fffbeb',cardBg:'#ffffff',navBg:'#451a03',text:'#451a03',textSub:'#fdba74',border:'#fed7aa',footerBg:'#451a03',footerText:'#fdba74'},
-  'ม่วงล้ำ':{primary:'#7c3aed',primaryLight:'#a78bfa',button:'#8b5cf6',buttonEnd:'#7c3aed',heroStart:'#c084fc',heroEnd:'#a78bfa',bg:'#faf5ff',cardBg:'#ffffff',navBg:'#2e1065',text:'#2e1065',textSub:'#c4b5fd',border:'#ddd6fe',footerBg:'#2e1065',footerText:'#c4b5fd'},
-  'ชมพูพาสเทล':{primary:'#db2777',primaryLight:'#f472b6',button:'#ec4899',buttonEnd:'#db2777',heroStart:'#f9a8d4',heroEnd:'#f472b6',bg:'#fdf2f8',cardBg:'#ffffff',navBg:'#500724',text:'#500724',textSub:'#f9a8d4',border:'#fbcfe8',footerBg:'#500724',footerText:'#f9a8d4'}
-};
-
-const themeColorDefs = [
-  {key:'primary',label:'สีหลัก (Primary)',desc:'ใช้กับ Header, ลิงก์, โฟกัสริง, ขอบ Badge'},
-  {key:'button',label:'สีปุ่ม (Button)',desc:'ปุ่ม CTA — ควรตัดกับพื้นหลัง'},
-  {key:'heroStart',label:'สี Hero เริ่ม',desc:'จุดเริ่มของ gradient พื้นที่ Hero'},
-  {key:'heroEnd',label:'สี Hero สิ้นสุด',desc:'จุดสิ้นสุดของ gradient พื้นที่ Hero'},
-  {key:'bg',label:'สีพื้นหลังหน้า',desc:'พื้นหลังทั้งหน้าเว็บ'},
-  {key:'cardBg',label:'สีพื้นหลังการ์ด',desc:'พื้นหลังของ Card, Section, Table'},
-  {key:'navBg',label:'สี Navbar / Footer',desc:'พื้นหลังส่วนที่เข้ม — Navbar, Footer, Code Block'},
-  {key:'text',label:'สีข้อความหลัก',desc:'ข้อความส่วนใหญ่บนหน้า'},
-  {key:'textSub',label:'สีข้อความรอง',desc:'ข้อความเสริม, caption, รายละเอียดเล็กน้อย'},
-  {key:'border',label:'สีเส้นขอบ',desc:'เส้นขอบของการ์ด, ตาราง, input'}
-];
-
-function saveTheme(){try{localStorage.setItem('lb_theme',JSON.stringify(themeColors));}catch(e){}}
-function applyPreset(name){const p=themePresets[name];if(!p)return;Object.assign(themeColors,p);saveTheme();renderThemeModal();updateCode();showToast('ใช้ธีม "'+name+'" แล้ว','success');}
-function renderThemeModal(){
-  const pc=document.getElementById('themePresets');
-  pc.innerHTML=Object.keys(themePresets).map(name=>{
-    const p=themePresets[name];
-    const isActive=JSON.stringify(themeColors)===JSON.stringify(p);
-    return `<button class="theme-preset-btn${isActive?' active':''}" onclick="applyPreset('${name}')"><div class="theme-preset-swatch"><span style="background:${p.primary}"></span><span style="background:${p.button}"></span><span style="background:${p.heroStart}"></span><span style="background:${p.bg}"></span></div>${name}</button>`;
-  }).join('');
-  const cg=document.getElementById('themeColorsGrid');
-  cg.innerHTML=themeColorDefs.map(d=>`<div class="theme-color-item"><input type="color" value="${themeColors[d.key]}" data-tkey="${d.key}"><div class="theme-color-info"><span class="theme-color-label">${d.label}</span><span class="theme-color-hex">${themeColors[d.key]}</span><div class="theme-color-desc">${d.desc}</div></div></div>`).join('');
-  cg.querySelectorAll('input[type="color"]').forEach(inp=>{
-    inp.addEventListener('input',e=>{themeColors[e.target.dataset.tkey]=e.target.value;saveTheme();e.target.closest('.theme-color-item').querySelector('.theme-color-hex').textContent=e.target.value;renderThemeModal();updateCode();});
-  });
+/* ═══════════════════════════════════════════════
+   Content Templates
+   ═══════════════════════════════════════════════ */
+function editSpan(field, value) {
+  return `<span class="editable" contenteditable="true" draggable="false" spellcheck="false" data-field="${field}">${escapeHtml(value)}</span>`;
 }
 
-/* ═══════════════════════════════════════════════════
-   คำอธิบายแท็ก HTML และ CSS แบบละเอียด (ภาษาไทย)
-   ═══════════════════════════════════════════════════ */
-const htmlExplain = {
-  header:`<b>&lt;header&gt;</b> — แท็กหลักส่วนหัวของหน้าเว็บ\n• เป็น <b>Semantic Tag</b> (แท็กที่มีความหมาย) บอกเบราว์เซอร์/SEO ว่านี่คือ "ส่วนหัว"\n• ภายในมักใส่ <b>&lt;h1&gt;</b> สำหรับชื่อเว็บ หรือ <b>&lt;nav&gt;</b> สำหรับเมนู\n• ควรใช้ <b>เพียง 1 ครั้ง</b> ต่อหน้า วางไว้บนสุดเสมอ\n• <b>SEO:</b> Google ให้น้ำหนักเนื้อหาใน header มากกว่าส่วนอื่น\n• ห้ามใช้ &lt;div&gt; แทน — จะทำให้เสียความหมายเชิงความหมาย`,
-  nav:`<b>&lt;nav&gt;</b> — แท็กนำทาง (Navigation)\n• Semantic Tag สำหรับ "เมนูเดินทาง" ของเว็บไซต์\n• ภายในใช้ <b>&lt;a href="..."&gt;</b> สำหรับแต่ละลิงก์\n• Attribute <b>href</b> ระบุ URL ปลายทาง (เช่น href="#about", href="/contact")\n• <b>Accessibility:</b> Screen reader อ่าน nav แยกจากเนื้อหาอื่น\n• สามารถมีได้หลาย &lt;nav&gt; ต่อหน้า (เช่น nav บน + nav ล่าง)\n• ใช้ <b>aria-label</b> แยก nav ซ้ำ เช่น aria-label="Main" กับ aria-label="Footer"`,
-  hero:`<b>&lt;section&gt;</b> — แท็กส่วนย่อยของหน้า\n• &lt;section&gt; คือ "ส่วน" ของหน้า มีความหมายว่าเนื้อหาในนี้เป็นหมวดเดียวกัน\n• ควรมี <b>&lt;h2&gt;~&lt;h3&gt;</b> เป็นหัวข้อของ section\n• Hero Section คือ section แรกที่ดึงดูดสายตา — ใช้ gradient, ข้อความใหญ่\n• Attribute <b>class</b> ใช้เชื่อมกับ CSS เพื่อกำหนดสไตล์\n• ควรใส่ <b>aria-label</b> หาก section ไม่มีหัวข้อชัดเจน`,
-  button:`<b>&lt;button&gt;</b> — แท็กปุ่มกด\n• แท็กนี้มีพฤติกรรม "กดได้" โดยธรรมชาติ — รองรับ Keyboard (Enter/Space)\n• ต่างจาก <b>&lt;a&gt;</b> ที่ใช้ "นำทาง" — button ใช้ "กระทำ" (submit, delete, open)\n• Attribute <b>type</b>: "button" (ทั่วไป), "submit" (ส่งฟอร์ม), "reset" (ล้างฟอร์ม)\n• <b>Accessibility:</b> อย่าใช้ &lt;div onclick&gt; แทน button — screen reader ไม่รู้ว่ากดได้\n• ใช้ <b>aria-label</b> ถ้าปุ่มไม่มีข้อความ (เช่น ปุ่มไอคอน)`,
-  image:`<b>&lt;img&gt;</b> — แท็กแสดงรูปภาพ\n• เป็น <b>Self-closing tag</b> (ไม่มี &lt;/img&gt;) เพราะไม่มีเนื้อหาภายใน\n• Attribute <b>src</b>: URL ของไฟล์รูป (จำเป็นต้องมี)\n• Attribute <b>alt</b>: ข้อความอธิบายรูป (จำเป็นมาก!)\n  - แสดงเมื่อรูปโหลดไม่ได้\n  - Screen reader อ่านให้คนตาบอดฟัง\n  - Google ใช้ทำ SEO Image Search\n• Attribute <b>width/height</b>: กำหนดขนาดล่วงหน้า เพื่อป้องกัน Layout Shift`,
-  card:`<b>&lt;div class="card"&gt;</b> — กล่องจัดกลุ่มเนื้อหา\n• &lt;div&gt; คือ "กล่องเปล่า" ไม่มีความหมาย — ใช้ class เพื่อให้ความหมายทาง CSS\n• ภายในมักใส่ <b>&lt;h3&gt;</b> (หัวข้อ), <b>&lt;p&gt;</b> (รายละเอียด), <b>&lt;img&gt;</b> (รูป)\n• อาจใช้ <b>&lt;article&gt;</b> แทน div ถ้าการ์ดเป็นเนื้อหาสำคัญเดี่ยว (เช่น บทความ)\n• CSS: <b>box-shadow</b> สร้างเงา, <b>border-radius</b> มุมมน, <b>transition</b> เอฟเฟกต์ hover`,
-  input:`<b>&lt;input&gt;</b> — ช่องรับข้อมูลบรรทัดเดียว\n• Self-closing tag — ไม่มี &lt;/input&gt;\n• Attribute <b>type</b>: "text" (ทั่วไป), "email" (ตรวจอีเมล), "password" (ซ่อนตัวอักษร), "number", "tel"\n• Attribute <b>placeholder</b>: ข้อความตัวอย่างในช่อง (หายไปเมื่อพิมพ์)\n• Attribute <b>name</b>: ชื่อตัวแปรที่ส่งไปกับฟอร์ม\n• Attribute <b>required</b>: บังคับกรอก (HTML5 Validation)\n• <b>Accessibility:</b> ควรมี <b>&lt;label for="id"&gt;</b> คู่กับ input เสมอ`,
-  textarea:`<b>&lt;textarea&gt;</b> — ช่องรับข้อมูลหลายบรรทัด\n• ต่างจาก &lt;input&gt; ตรงที่มีแท็กปิด <b>&lt;/textarea&gt;</b> และรับข้อความยาวได้\n• Attribute <b>rows</b>: กำหนดความสูงเริ่มต้น (จำนวนบรรทัด)\n• Attribute <b>cols</b>: กำหนดความกว้าง (แต่มักใช้ CSS width:100% แทน)\n• Attribute <b>placeholder</b>, <b>name</b>, <b>required</b> — ใช้เหมือน input\n• CSS <b>resize: vertical</b> ให้ย่อ-ขยายเฉพาะแนวตั้ง\n• ควรใส่ <b>&lt;label&gt;</b> คู่เสมอ เพื่อ Accessibility`,
-  select:`<b>&lt;select&gt;</b> — เมนูเลือกตัวเลือก (Dropdown)\n• ภายในใช้ <b>&lt;option&gt;</b> สำหรับแต่ละตัวเลือก\n• Attribute <b>name</b>: ชื่อตัวแปรที่ส่งไปกับฟอร์ม\n• &lt;option&gt; แรกมักเป็นตัวเลือก "กรุณาเลือก..." โดยเพิ่ม <b>disabled selected</b>\n• Attribute <b>multiple</b>: เลือกได้หลายตัว (แสดงเป็น list ไม่ใช่ dropdown)\n• เหมาะกับตัวเลือก <b>5 ขึ้นไป</b> — น้อยกว่านั้นใช้ radio button\n• ควรมี <b>&lt;label&gt;</b> คู่เสมอ`,
-  checkbox:`<b>&lt;input type="checkbox"&gt;</b> — กล่องเลือก (เลือกได้หลายอัน)\n• ต่างจาก radio ที่เลือกได้เพียง 1 — checkbox เลือก <b>หลายอัน</b> ได้\n• Attribute <b>checked</b>: กำหนดให้ถูกเลือกไว้ล่วงหน้า\n• Attribute <b>value</b>: ค่าที่ส่งไปกับฟอร์มเมื่อถูกเลือก\n• <b>สำคัญ:</b> ต้องห่อด้วย <b>&lt;label&gt;</b> เพื่อให้คลิกที่ข้อความได้\n• เพิ่มพื้นที่คลิก (Touch Target) ให้ใหญ่ขึ้น — สำคัญสำหรับมือถือ\n• สามารถใช้เดี่ยวๆ ได้ (เช่น "ยอมรับเงื่อนไข")`,
-  text:`<b>&lt;p&gt;</b> — ย่อหน้าข้อความ\n• แท็กพื้นฐานสำหรับข้อความบรรยายทั่วไป\n• เบราว์เซอร์เพิ่ม <b>margin</b> ด้านบน-ล่างอัตโนมัติ\n• ภายในสามารถใส่ <b>&lt;strong&gt;</b> (ตัวหนา), <b>&lt;em&gt;</b> (ตัวเอียง), <b>&lt;a&gt;</b> (ลิงก์)\n• อย่าใช้ &lt;br&gt;&lt;br&gt; สร้างย่อหน้า — ใช้ &lt;p&gt; แยกแทน\n• <b>SEO:</b> Google อ่าน &lt;p&gt; เพื่อเข้าใจเนื้อหาหน้า`,
-  link:`<b>&lt;a&gt;</b> — แท็กลิงก์/ hyperlink\n• ย่อมาจาก <b>Anchor</b> — "จุดยึด" ที่เชื่อมไปยังที่อื่น\n• Attribute <b>href</b>: URL ปลายทาง (จำเป็นต้องมี)\n  - href="#section1" → เลื่อนไปยัง id="section1" บนหน้าเดียวกัน\n  - href="/about" → ไปหน้า about\n  - href="https://..." → ไปเว็บภายนอก\n• Attribute <b>target="_blank"</b>: เปิดในแท็บใหม่\n• Attribute <b>rel="noopener noreferrer"</b>: ควรใส่คู่กับ target="_blank" เพื่อความปลอดภัย`,
-  list:`<b>&lt;ul&gt; &lt;li&gt;</b> — รายการไม่เรียงลำดับ\n• <b>&lt;ul&gt;</b> = Unordered List (รายการไม่มีลำดับ — ใช้จุด •)\n• <b>&lt;ol&gt;</b> = Ordered List (รายการมีลำดับ — ใช้ตัวเลข 1. 2. 3.)\n• <b>&lt;li&gt;</b> = List Item แต่ละรายการ\n• สามารถซ้อนกันได้ (Nested List) — &lt;li&gt; ภายในมี &lt;ul&gt; อีกชั้น\n• CSS <b>padding-left</b> ควบคุมย่อหน้าเยื้อง\n• เหมาะสำหรับ: สรรพคุณสินค้า, ขั้นตอน, เมนู`,
-  table:`<b>&lt;table&gt; &lt;tr&gt; &lt;th&gt; &lt;td&gt;</b> — ตารางข้อมูล\n• <b>&lt;table&gt;</b> ครอบตารางทั้งหมด\n• <b>&lt;tr&gt;</b> (Table Row) = แถว\n• <b>&lt;th&gt;</b> (Table Header) = หัวคอลัมน์ (ตัวหนาโดยอัตโนมัติ)\n• <b>&lt;td&gt;</b> (Table Data) = ช่องข้อมูล\n• ควรใส่ <b>&lt;thead&gt;</b> + <b>&lt;tbody&gt;</b> แยกส่วนหัว/เนื้อหา\n• <b>สำคัญ:</b> อย่าใช้ table จัด Layout หน้าเว็บ! ให้ใช้ Grid/Flexbox\n• CSS <b>border-collapse: collapse</b> รวมเส้นขอบ`,
-  video:`<b>&lt;video&gt;</b> — แท็กแสดงวิดีโอ\n• Self-closing ไม่ได้ — ต้องมี <b>&lt;/video&gt;</b>\n• ภายในใช้ <b>&lt;source src="..." type="..."&gt;</b> ระบุไฟล์\n• Attribute <b>controls</b>: แสดงปุ่มเล่น/หยุด/เสียง (ควรใส่เสมอ!)\n• Attribute <b>autoplay</b>: เล่นอัตโนมัติ (ระวัง! อาจรบกวนผู้ใช้)\n• Attribute <b>loop</b>: เล่นวนซ้ำ\n• Attribute <b>poster</b>: รูปภาพปกก่อนกดเล่น\n• type ที่นิยม: "video/mp4", "video/webm"`,
-  quote:`<b>&lt;blockquote&gt;</b> — ข้อความอ้างอิง\n• Semantic Tag สำหรับ "ยกมาจากแหล่งอื่น"\n• ภายในมักใส่ <b>&lt;cite&gt;</b> ระบุผู้พูด/ที่มา\n• เบราว์เซอร์เพิ่มเยื้องซ้ายอัตโนมัติ\n• CSS <b>border-left</b> เส้นแนวตั้งด้านซ้าย — สัญลักษณ์ของ blockquote\n• <b>SEO:</b> Google อาจแสดง blockquote ใน Search Result\n• ใช้สำหรับ: รีวิวลูกค้า, คำพูด, อ้างอิงบทความ`,
-  badge:`<b>&lt;span class="badge"&gt;</b> — ป้ายกำกับสั้น\n• &lt;span&gt; เป็น inline element — ไม่ขึ้นบรรทัดใหม่\n• ใช้ class="badge" + CSS ทำให้ดูเป็นป้ายกำกับ (กลม, มีสี)\n• CSS <b>display: inline-block</b> ให้กำหนด padding ได้\n• CSS <b>border-radius: 20px</b> ทำให้เป็นรูปหมอน\n• CSS <b>font-size: 0.8rem</b> ให้เล็กกว่าข้อความปกติ\n• ใช้กับ: "ใหม่", "ลดราคา", "หมดแล้ว", "แนะนำ"`,
-  divider:`<b>&lt;hr&gt;</b> — เส้นแบ่งแนวนอน\n• Self-closing tag — ไม่มี &lt;/hr&gt;\n• ชื่อย่อมาจาก <b>Horizontal Rule</b>\n• เบราว์เซอร์วาดเส้นแนวนอนอัตโนมัติ\n• CSS <b>border: none; border-top: 2px solid #e2e8f0</b> ปรับแต่งเส้น\n• CSS <b>margin</b> ควบคุมระยะห่างด้านบน-ล่าง\n• ใช้แบ่งเนื้อหาที่ไม่เกี่ยวข้องกัน — แต่อย่าใช้มากเกินไป`,
-  codeblock:`<b>&lt;pre&gt;&lt;code&gt;</b> — บล็อกโค้ด\n• <b>&lt;pre&gt;</b> (Preformatted) — รักษาช่องว่างและการขึ้นบรรทัดใหม่ตามต้นฉบับ\n• <b>&lt;code&gt;</b> — แท็กระบุว่าเป็น "โค้ด"\n• ใช้ร่วมกัน: &lt;pre&gt;&lt;code&gt;...&lt;/code&gt;&lt;/pre&gt;\n• CSS <b>font-family: monospace</b> ใช้ฟอนต์ความกว้างคงที่\n• CSS <b>overflow-x: auto</b> ให้เลื่อนแนวนอนถ้าโค้ดยาว\n• ควรใส่ <b>การ highlight สี</b> (Syntax Highlighting) เพื่ออ่านง่าย`,
-  footer:`<b>&lt;footer&gt;</b> — ส่วนท้ายของหน้า\n• Semantic Tag สำหรับ "ส่วนท้าย" — มักมีลิขสิทธิ์, ลิงก์สำคัญ\n• ควรใช้ <b>เพียง 1 ครั้ง</b> ต่อหน้า วางล่างสุด\n• ภายในมักใส่ <b>&lt;p&gt;</b> ข้อความ, <b>&lt;nav&gt;</b> ลิงก์เมนู, <b>&lt;a&gt;</b> ลิงก์ Social\n• <b>SEO:</b> Google ใช้ footer ตรวจสอบลิงก์สำคัญของเว็บ\n• สัญลักษณ์ว่า "จบหน้าแล้ว" — ช่วย UX`,
-  section:`<b>&lt;section&gt;</b> / <b>&lt;div class="layout-section"&gt;</b>\n• แท็กแบ่งหน้าเว็บออกเป็น "ส่วน" ตามหัวข้อ\n• ควรมี <b>&lt;h2&gt;~&lt;h3&gt;</b> เป็นหัวข้อของ section\n• CSS <b>padding</b> ระยะห่างภายใน, <b>margin-bottom</b> ห่างจาก section ถัดไป\n• CSS <b>border-radius</b> มุมมน, <b>background</b> พื้นหลัง\n• ใช้แทน &lt;div&gt; ทุกครั้งที่เนื้อหาเป็นหมวดเดียวกัน`,
-  row:`<b>&lt;div style="display:flex; flex-direction:row"&gt;</b>\n• <b>Flexbox</b> — ระบบจัดเลย์เอาต์ 1 มิติ\n• <b>display: flex</b> เปิดใช้ flex container\n• <b>flex-direction: row</b> เรียงแนวนอน (ค่า default)\n• <b>gap: 16px</b> ระยะห่างระหว่าง item\n• <b>flex-wrap: wrap</b> ให้ขึ้นบรรทัดใหม่เมื่อพื้นที่ไม่พอ\n• ลูกทุกตัวเป็น <b>flex item</b> — ใช้ <b>flex: 1</b> ให้กว้างเท่ากัน`,
-  col:`<b>&lt;div style="display:flex; flex-direction:column"&gt;</b>\n• Flexbox แนวตั้ง — ซ้อนกันจากบนลงล่าง\n• <b>flex-direction: column</b> เปลี่ยนทิศทางจากแนวนอนเป็นแนวตั้ง\n• <b>gap</b> ควบคุมระยะห่างแนวตั้ง\n• เหมาะกับ: ฟอร์ม, ข้อความเรียงกัน, sidebar`,
-  grid2:`<b>&lt;div style="display:grid; grid-template-columns:1fr 1fr"&gt;</b>\n• <b>CSS Grid</b> — ระบบจัดเลย์เอาต์ 2 มิติ (แถว + คอลัมน์)\n• <b>grid-template-columns: 1fr 1fr</b> สร้าง 2 คอลัมน์เท่ากัน\n• <b>1fr</b> = "1 fraction" — แบ่งพื้นที่เท่า ๆ กัน\n• <b>gap: 16px</b> ระยะห่างทั้งแนวนอนและแนวตั้ง\n• เหมาะกับ: การ์ด 2 ใบ, ตาราง 2 คอลัมน์`,
-  grid3:`<b>&lt;div style="display:grid; grid-template-columns:1fr 1fr 1fr"&gt;</b>\n• CSS Grid 3 คอลัมน์ — เหมือน grid2 แต่ 3 ช่อง\n• สามารถเขียนย่อเป็น <b>repeat(3, 1fr)</b>\n• เหมาะกับ: หน้ารวมสินค้า, แสดงการ์ด 3 ใบ\n• <b>Responsive:</b> ใช้ Media Query เปลี่ยนเป็น 1fr เมื่อหน้าจอเล็ก`
+const contentTemplates = {
+  header:{label:"Header",icon:"H",tag:"<header>",when:"Use once per page, placed at the very top. Contains logo or site name.",fields:{title:"Your Website Name"},render:d=>`<div class="comp-header">${editSpan('title',d.title)}</div>`,html:d=>`  <header class="site-header">\n    <h1>${escapeHtml(d.title)}</h1>\n  </header>`,tip:"Header establishes visual hierarchy — tells users which site they're on."},
+  nav:{label:"Navbar",icon:"N",tag:"<nav>",when:"Use when you have 2+ navigation links. Usually placed inside or near the header.",fields:{item1:"Home",item2:"About",item3:"Contact"},render:d=>`<div class="comp-nav"><a href="#">${editSpan('item1',d.item1)}</a><a href="#">${editSpan('item2',d.item2)}</a><a href="#">${editSpan('item3',d.item3)}</a></div>`,html:d=>`  <nav class="site-nav">\n    <a href="#">${escapeHtml(d.item1)}</a>\n    <a href="#">${escapeHtml(d.item2)}</a>\n    <a href="#">${escapeHtml(d.item3)}</a>\n  </nav>`,tip:"Keep nav consistent across all pages for wayfinding."},
+  hero:{label:"Hero Section",icon:"★",tag:"<section>",when:"Primary message area, placed right after the header. First thing users see.",fields:{title:"Main Headline Here",subtitle:"A short description of what you offer"},render:d=>`<div class="comp-hero"><h2>${editSpan('title',d.title)}</h2><p>${editSpan('subtitle',d.subtitle)}</p></div>`,html:d=>`  <section class="hero">\n    <h2>${escapeHtml(d.title)}</h2>\n    <p>${escapeHtml(d.subtitle)}</p>\n  </section>`,tip:"Use large bold text with high contrast. This is your conversion moment."},
+  button:{label:"Button",icon:"Btn",tag:"<button>",when:"Triggers an action: submit form, confirm, navigate.",fields:{label:"Click Here"},render:d=>`<div class="comp-button"><button>${editSpan('label',d.label)}</button></div>`,html:d=>`  <button class="btn">${escapeHtml(d.label)}</button>`,tip:"CTA buttons should contrast with background. Make them impossible to miss."},
+  image:{label:"Image",icon:"IMG",tag:"<img>",when:"Displays an image. Always include alt text for accessibility and SEO.",fields:{alt:"Example image"},render:d=>`<div class="comp-image"><img src="https://picsum.photos/seed/layout42/600/280" alt="${escapeHtml(d.alt)}"><div style="text-align:center;font-size:0.7rem;color:#94a3b8;margin-top:4px;">alt: ${editSpan('alt',d.alt)}</div></div>`,html:d=>`  <img src="https://picsum.photos/seed/layout42/800/400" alt="${escapeHtml(d.alt)}" style="max-width:100%;border-radius:8px;">`,tip:"Images communicate faster than text. Always add alt text."},
+  card:{label:"Card",icon:"Card",tag:"<div class=\"card\">",when:"Groups related content in a bordered box. Ideal for product cards, profiles.",fields:{title:"Card Title",text:"Short description of this card."},render:d=>`<div class="comp-card"><h3>${editSpan('title',d.title)}</h3><p>${editSpan('text',d.text)}</p></div>`,html:d=>`  <div class="card">\n    <h3>${escapeHtml(d.title)}</h3>\n    <p>${escapeHtml(d.text)}</p>\n  </div>`,tip:"Cards enable chunking — place multiple cards in a Grid for scanning."},
+  input:{label:"Input Field",icon:"In",tag:"<input>",when:"Receives single-line user input: name, email, password.",fields:{placeholder:"Enter text..."},render:d=>`<div style="padding:4px 0;"><div class="fake-input">${editSpan('placeholder',d.placeholder)}</div></div>`,html:d=>`  <input type="text" placeholder="${escapeHtml(d.placeholder)}">`,tip:"Always pair with a visible label or clear placeholder."},
+  textarea:{label:"Textarea",icon:"Ta",tag:"<textarea>",when:"Multi-line input: reviews, comments, descriptions.",fields:{placeholder:"Type multiple lines..."},render:d=>`<div style="padding:4px 0;"><div class="fake-textarea">${editSpan('placeholder',d.placeholder)}</div></div>`,html:d=>`  <textarea rows="4" placeholder="${escapeHtml(d.placeholder)}"></textarea>`,tip:"Set appropriate rows. Provide placeholder guidance."},
+  select:{label:"Dropdown",icon:"Sel",tag:"<select>",when:"Single selection from predefined options. Best for 5+ choices.",fields:{opt1:"Choose...",opt2:"Option 1"},render:d=>`<div style="padding:4px 0;"><div class="fake-select">${editSpan('opt1',d.opt1)} <span>▾</span></div></div>`,html:d=>`  <select>\n    <option>${escapeHtml(d.opt1)}</option>\n    <option>${escapeHtml(d.opt2)}</option>\n  </select>`,tip:"For fewer than 5 options, consider radio buttons instead."},
+  checkbox:{label:"Checkbox",icon:"☑",tag:"<input type=\"checkbox\">",when:"Multi-select or terms acceptance.",fields:{label:"Accept terms and conditions"},render:d=>`<div class="comp-checkbox"><label><input type="checkbox" disabled> ${editSpan('label',d.label)}</label></div>`,html:d=>`  <label>\n    <input type="checkbox">\n    ${escapeHtml(d.label)}\n  </label>`,tip:"Wrap in a clickable label to increase touch target size."},
+  text:{label:"Text",icon:"T",tag:"<p>",when:"General paragraph text, descriptions, explanations.",fields:{content:"Editable paragraph text goes here."},render:d=>`<div class="comp-text"><p>${editSpan('content',d.content)}</p></div>`,html:d=>`  <p>${escapeHtml(d.content)}</p>`,tip:"Keep line-height at 1.6+ and font-size ≥ 16px for readability."},
+  link:{label:"Link",icon:"A",tag:"<a>",when:"Navigates to another page, site, or anchor. Requires href.",fields:{label:"Example link — click here"},render:d=>`<div class="comp-link"><a href="#">${editSpan('label',d.label)}</a></div>`,html:d=>`  <a href="#">${escapeHtml(d.label)}</a>`,tip:"Links should look different from plain text — use color or underline (affordance)."},
+  list:{label:"List",icon:"Li",tag:"<ul><li>",when:"Enumerated information: features, steps, menu items.",fields:{item1:"Item 1",item2:"Item 2",item3:"Item 3"},render:d=>`<div class="comp-list"><ul><li>${editSpan('item1',d.item1)}</li><li>${editSpan('item2',d.item2)}</li><li>${editSpan('item3',d.item3)}</li></ul></div>`,html:d=>`  <ul>\n    <li>${escapeHtml(d.item1)}</li>\n    <li>${escapeHtml(d.item2)}</li>\n    <li>${escapeHtml(d.item3)}</li>\n  </ul>`,tip:"Lists chunk information into scannable pieces."},
+  table:{label:"Table",icon:"Tbl",tag:"<table>",when:"Tabular data: pricing, comparisons. Never use for page layout.",fields:{h1:"Column 1",h2:"Column 2",c1:"Data 1",c2:"Data 2",c3:"Data 3",c4:"Data 4"},render:d=>`<div class="comp-table"><table><tr><th>${editSpan('h1',d.h1)}</th><th>${editSpan('h2',d.h2)}</th></tr><tr><td>${editSpan('c1',d.c1)}</td><td>${editSpan('c2',d.c2)}</td></tr><tr><td>${editSpan('c3',d.c3)}</td><td>${editSpan('c4',d.c4)}</td></tr></table></div>`,html:d=>`  <table>\n    <tr>\n      <th>${escapeHtml(d.h1)}</th>\n      <th>${escapeHtml(d.h2)}</th>\n    </tr>\n    <tr>\n      <td>${escapeHtml(d.c1)}</td>\n      <td>${escapeHtml(d.c2)}</td>\n    </tr>\n    <tr>\n      <td>${escapeHtml(d.c3)}</td>\n      <td>${escapeHtml(d.c4)}</td>\n    </tr>\n  </table>`,tip:"Tables are for data only. Use Grid/Flexbox for layout."},
+  video:{label:"Video",icon:"Vid",tag:"<video>",when:"Embedded video. Always include controls attribute.",fields:{caption:"Video placeholder"},render:d=>`<div class="comp-video"><div class="video-box">▶<small>${editSpan('caption',d.caption)}</small></div></div>`,html:d=>`  <video controls width="100%" style="border-radius:8px;">\n    <source src="video.mp4" type="video/mp4">\n    ${escapeHtml(d.caption)}\n  </video>`,tip:"Always provide controls. Optimize file size for web."},
+  quote:{label:"Blockquote",icon:"\"",tag:"<blockquote>",when:"Quoted text: testimonials, citations, reviews.",fields:{quote:"Quoted text from a customer or source",cite:"Author name"},render:d=>`<div class="comp-quote"><blockquote>"${editSpan('quote',d.quote)}"<cite>— ${editSpan('cite',d.cite)}</cite></blockquote></div>`,html:d=>`  <blockquote>\n    "${escapeHtml(d.quote)}"\n    <cite>— ${escapeHtml(d.cite)}</cite>\n  </blockquote>`,tip:"Always include <cite> for credibility."},
+  badge:{label:"Badge",icon:"Tag",tag:"<span class=\"badge\">",when:"Short status labels: 'New', 'Sale', 'Sold out'.",fields:{label1:"New",label2:"Recommended"},render:d=>`<div class="comp-badge"><span class="badge">${editSpan('label1',d.label1)}</span><span class="badge">${editSpan('label2',d.label2)}</span></div>`,html:d=>`  <span class="badge">${escapeHtml(d.label1)}</span>\n  <span class="badge badge-alt">${escapeHtml(d.label2)}</span>`,tip:"Keep badge text extremely short. Use contrasting colors."},
+  divider:{label:"Divider",icon:"—",tag:"<hr>",when:"Visual separator between unrelated content sections.",render:()=>`<div class="comp-divider"><hr></div>`,html:()=>`  <hr>`,tip:"Use sparingly — too many dividers create visual noise."},
+  codeblock:{label:"Code Block",icon:"</>",tag:"<pre><code>",when:"Displays code snippets. Use monospace font + syntax highlighting.",fields:{code:'<div class="hello">Hello World</div>'},render:d=>`<div class="comp-code"><pre><code class="editable" contenteditable="true" draggable="false" spellcheck="false" data-field="code">${escapeHtml(d.code)}</code></pre></div>`,html:d=>`  <pre><code>${escapeHtml(d.code)}</code></pre>`,tip:"Monospace font + syntax highlighting dramatically improve readability."},
+  footer:{label:"Footer",icon:"F",tag:"<footer>",when:"Once per page, at the very bottom. Contact info, copyright.",fields:{content:"© 2026 Your Company | Contact Us"},render:d=>`<div class="comp-footer">${editSpan('content',d.content)}</div>`,html:d=>`  <footer>\n    <p>${escapeHtml(d.content)}</p>\n  </footer>`,tip:"Signals end-of-page. Include essential links and legal info."}
 };
 
-const cssExplain = {
-  header:`<b>background: linear-gradient(135deg, A, B)</b>\n  → ไล่สีจากมุมซ้ายบนไปขวาล่าง ทำให้ดูมีมิติ\n<b>color: #fff</b>\n  → ตัวอักษรสีขาว ตัดกับพื้นหลังเข้ม (Contrast สูง)\n<b>padding: 20px 24px</b>\n  → ระยะห่างภายใน: บน-ล่าง 20px, ซ้าย-ขวา 24px\n<b>border-radius: 8px</b>\n  → มุมมนรัศมี 8px — ทำให้ดูนุ่มขึ้น ไม่แหลมคม\n<b>font-weight: 700</b>\n  → ความหนาของตัวอักษร (Bold)`,
-  nav:`<b>display: flex; gap: 24px</b>\n  → จัดเมนูเรียงแนวนอน ห่างกัน 24px\n<b>flex-wrap: wrap</b>\n  → ถ้าหน้าจอแคบ เมนูขึ้นบรรทัดใหม่อัตโนมัติ\n<b>padding: 12px 20px</b>\n  → ระยะห่างภายในแถบเมนู`,
-  hero:`<b>background: linear-gradient(135deg, ...)</b>\n  → ไล่ 3 สี — ให้ลองเปลี่ยนสีใน "ธีมสี" ดูผล\n<b>text-align: center</b>\n  → ข้อความอยู่กลาง — เหมาะกับ Hero\n<b>font-size: 1.8rem</b>\n  → ขนาดตัวอักษรใหญ่ — 1rem = 16px\n<b>max-width: 540px; margin: 0 auto</b>\n  → จำกัดความกว้างข้อความไม่เกิน 540px`,
-  button:`<b>background: linear-gradient(...)</b>\n  → ไล่สีปุ่ม — เปลี่ยนได้ในธีม "สีปุ่ม"\n<b>padding: 12px 28px</b>\n  → ขนาดปุ่ม — บน-ล่าง 12px, ซ้าย-ขวา 28px\n<b>border-radius: 8px</b>\n  → มุมมน\n<b>box-shadow: 0 4px 12px rgba(...)</b>\n  → เงาใต้ปุ่ม — ให้ดู "ลอย" ออกมาจากพื้น\n<b>transition</b>\n  → เอฟเฟกต์เลื่อนนุ่มเมื่อ hover`,
-  image:`<b>max-width: 100%</b>\n  → รูปไม่ล้นออกจาก container\n<b>height: auto</b>\n  → รักษาสัดส่วนกว้าง-ยาวเดิม\n<b>border-radius: 8px</b>\n  → มุมมนรูป\n<b>display: block</b>\n  → ลบช่องว่างใต้รูป (inline element มีช่องว่าง)`,
-  card:`<b>border: 1px solid #e2e8f0</b>\n  → เส้นขอบบาง ๆ — เปลี่ยนได้ในธีม "สีเส้นขอบ"\n<b>box-shadow: 0 1px 3px rgba(0,0,0,0.04)</b>\n  → เงาเล็กน้อย — ให้การ์ดดู "ยก" ขึ้น\n<b>transition: box-shadow 0.2s</b>\n  → เงาโตขึ้นเมื่อ hover — ให้สัมผัส " Interactive"\n<b>พื้นหลัง</b> → เปลี่ยนได้ในธีม "สีพื้นหลังการ์ด"`,
-  input:`<b>border: 1px solid #e2e8f0</b>\n  → เส้นขอบเล็ก — เปลี่ยนได้ในธีม "สีเส้นขอบ"\n<b>:focus { border-color: ...; box-shadow: 0 0 0 3px }</b>\n  → เมื่อคลิกช่อง → เปลี่ยนสีขอบ + วงแหวนนอก\n  → ใช้สีหลักจากธีม — บอกผู้ใช้ "ช่องนี้กำลังทำงาน"\n<b>border-radius: 8px</b>\n  → มุมมน`,
-  textarea:`เหมือน input ทุกประการ +\n<b>resize: vertical</b>\n  → ให้ย่อ-ขยายเฉพาะแนวตั้ง (ป้องกันย่อ-ขยายแนวนอน)\n<b>min-height: 90px</b>\n  → ความสูงต่ำสุด — ให้พอเห็นหลายบรรทัด`,
-  select:`เหมือน input +\n<b>appearance: none</b> (ถ้าใช้)\n  → ลบลูกศร default ของเบราว์เซอร์ เพื่อออกแบบเอง`,
-  checkbox:`<b>label { display: flex; gap: 8px }</b>\n  → จัด checkbox และข้อความเรียงแนวนอน ห่าง 8px\n<b>cursor: pointer</b>\n  → เปลี่ยนเคอร์เซอร์เป็นมือเมื่อชี้ — บอกว่าคลิกได้`,
-  text:`<b>color: #334155</b>\n  → สีข้อความ — เปลี่ยนได้ในธีม "สีข้อความหลัก"\n<b>line-height: 1.6</b>\n  → ระยะห่างบรรทัด 1.6 เท่าของขนาดตัวอักษร\n  → ค่าที่แนะนำ: 1.5~1.8 อ่านสบายตา\n<b>font-size: 1rem</b>\n  → 16px — ขนาดต่ำสุดที่แนะนำสำหรับข้อความบนเว็บ`,
-  link:`<b>color: #4f46e5</b>\n  → สีลิงก์ — เปลี่ยนได้ในธีม "สีหลัก"\n<b>border-bottom: 2px solid</b>\n  → เส้นใต้ลิงก์ — บอกผู้ใช้ว่า "นี่คลิกได้" (Affordance)\n<b>transition: border-color 0.2s</b>\n  → เส้นใต้หนาขึ้นเมื่อ hover`,
-  list:`<b>padding-left: 24px</b>\n  → ย่อหน้าเยื้องซ้าย 24px — จุด • อยู่ในระยะนี้\n<b>margin: 5px 0</b>\n  → ระยะห่างแต่ละรายการ 5px`,
-  table:`<b>border-collapse: collapse</b>\n  → รวมเส้นขอบซ้ำเป็นเส้นเดียว\n<b>th { background: #f1f5f9 }</b>\n  → พื้นหลังหัวตาราง — เปลี่ยนได้ในธีม "สีพื้นหลังการ์ด"\n<b>tr:nth-child(even) td { background }</b>\n  → สลับสีแถว — อ่านตารางง่ายขึ้น (Zebra Striping)`,
-  video:`<b>border-radius: 8px</b>\n  → มุมมนวิดีโอ\n<b>max-width: 100%</b>\n  → ไม่ล้นออกจาก container`,
-  quote:`<b>border-left: 4px solid #818cf8</b>\n  → เส้นแนวตั้งด้านซ้าย — สัญลักษณ์ของ blockquote\n  → สีตรงนี้ใช้สีหลักจากธีม\n<b>background: #f8fafc</b>\n  → พื้นหลังอ่อน ๆ\n<b>font-style: italic</b>\n  → ตัวเอียง — สื่อว่าเป็น "การยกมา"`,
-  badge:`<b>display: inline-block</b>\n  → ให้ span กำหนด padding ได้ (inline เดี่ยวๆ ไม่ได้)\n<b>border-radius: 20px</b>\n  → รัศมีมาก = รูปหมอน (Pill shape)\n<b>padding: 4px 12px</b>\n  → ขนาดป้ายเล็ก ๆ\n<b>font-weight: 700</b>\n  → ตัวหนา — ให้เด่นแม้ตัวอักษรเล็ก`,
-  divider:`<b>border: none</b>\n  → ลบเส้น default ของ &lt;hr&gt;\n<b>border-top: 2px solid #e2e8f0</b>\n  → วาดเส้นใหม่ — เปลี่ยนได้ในธีม "สีเส้นขอบ"\n<b>margin: 20px 0</b>\n  → ระยะห่างบน-ล่าง`,
-  codeblock:`<b>background: #0f172a</b>\n  → พื้นหลังเข้ม — เปลี่ยนได้ในธีม "สี Navbar/Footer"\n<b>color: #7dd3fc</b>\n  → ตัวอักษรสีฟ้าอ่อน — ตัดกับพื้นเข้ม\n<b>font-family: monospace</b>\n  → ฟอนต์ความกว้างคงที่ — เหมาะกับโค้ด\n<b>overflow-x: auto</b>\n  → เลื่อนแนวนอนถ้าโค้ดยาวเกิน container`,
-  footer:`<b>background: #0f172a</b>\n  → พื้นหลังเข้ม — เปลี่ยนได้ในธีม "สี Navbar/Footer"\n<b>text-align: center</b>\n  → ข้อความอยู่กลาง\n<b>border-radius: 8px</b>\n  → มุมมน`,
-  section:`<b>padding: 28px</b>\n  → ระยะห่างภายใน section\n<b>background: #fff</b>\n  → พื้นหลัง — เปลี่ยนได้ในธีม "สีพื้นหลังการ์ด"\n<b>border: 1px solid #e2e8f0</b>\n  → เส้นขอบ — เปลี่ยนได้ในธีม "สีเส้นขอบ"`,
-  row:`<b>display: flex</b> → เปิด Flexbox\n<b>flex-direction: row</b> → เรียงแนวนอน\n<b>gap: 16px</b> → ระยะห่างระหว่าง item\n<b>flex-wrap: wrap</b> → ขึ้นบรรทัดใหม่เมื่อแคบ`,
-  col:`<b>display: flex</b>\n<b>flex-direction: column</b> → เรียงแนวตั้ง\n<b>gap: 16px</b> → ระยะห่างแนวตั้ง`,
-  grid2:`<b>display: grid</b> → เปิด CSS Grid\n<b>grid-template-columns: 1fr 1fr</b> → 2 คอลัมน์เท่ากัน\n<b>gap: 16px</b> → ระยะห่าง`,
-  grid3:`เหมือน grid2 แต่ <b>1fr 1fr 1fr</b> → 3 คอลัมน์\n<b>Responsive:</b> Media Query เปลี่ยนเป็น 1fr เมื่อ <640px`
-};
-
-/* ═══════════════════════════════════════════════════
-   Content Templates
-   ═══════════════════════════════════════════════════ */
-function editSpan(f,v){return `<span class="editable" contenteditable="true" draggable="false" spellcheck="false" data-field="${f}">${escapeHtml(v)}</span>`;}
-const CT={
-  header:{label:"Header",icon:"H",tag:"<header>",when:"ใช้เพียง 1 ครั้งต่อหน้า วางบนสุดเสมอ",fields:{title:"ชื่อเว็บไซต์ของคุณ"},render:d=>`<div class="comp-header">${editSpan('title',d.title)}</div>`,html:d=>`  <header class="site-header">\n    <h1>${escapeHtml(d.title)}</h1>\n  </header>`,tip:"Header สร้าง Visual Hierarchy — บอกผู้ใช้ว่าอยู่เว็บไหน"},
-  nav:{label:"Navbar",icon:"N",tag:"<nav>",when:"มีลิงก์เมนู 2 ตัวขึ้นไป มักวางใกล้ Header",fields:{item1:"หน้าแรก",item2:"เกี่ยวกับ",item3:"ติดต่อ"},render:d=>`<div class="comp-nav"><a href="#">${editSpan('item1',d.item1)}</a><a href="#">${editSpan('item2',d.item2)}</a><a href="#">${editSpan('item3',d.item3)}</a></div>`,html:d=>`  <nav class="site-nav">\n    <a href="#">${escapeHtml(d.item1)}</a>\n    <a href="#">${escapeHtml(d.item2)}</a>\n    <a href="#">${escapeHtml(d.item3)}</a>\n  </nav>`,tip:"Navbar ควรสม่ำเสมอทุกหน้า — ช่วย Wayfinding"},
-  hero:{label:"Hero Section",icon:"★",tag:"<section>",when:"พื้นที่นำเสนอข้อความหลัก วางถัดจาก Header",fields:{title:"ข้อความหลักที่ดึงดูดใจ",subtitle:"คำอธิบายสั้น ๆ เกี่ยวกับสิ่งที่นำเสนอ"},render:d=>`<div class="comp-hero"><h2>${editSpan('title',d.title)}</h2><p>${editSpan('subtitle',d.subtitle)}</p></div>`,html:d=>`  <section class="hero">\n    <h2>${escapeHtml(d.title)}</h2>\n    <p>${escapeHtml(d.subtitle)}</p>\n  </section>`,tip:"จุดแรกที่ดึงดูดสายตา — ใช้ตัวอักษรใหญ่ + Contrast สูง"},
-  button:{label:"Button",icon:"Btn",tag:"<button>",when:"ผู้ใช้กดเพื่อทำ Action: ส่งฟอร์ม, ยืนยัน, นำทาง",fields:{label:"คลิกที่นี่"},render:d=>`<div class="comp-button"><button>${editSpan('label',d.label)}</button></div>`,html:d=>`  <button class="btn">${escapeHtml(d.label)}</button>`,tip:"ปุ่ม CTA ควรตัดกับพื้นหลัง — ให้สายตาจับได้ทันที"},
-  image:{label:"Image",icon:"IMG",tag:"<img>",when:"แสดงรูปภาพ ต้องมี alt เสมอ",fields:{alt:"รูปภาพตัวอย่าง"},render:d=>`<div class="comp-image"><img src="https://picsum.photos/seed/lb42/600/280" alt="${escapeHtml(d.alt)}"><div style="text-align:center;font-size:0.7rem;color:#94a3b8;margin-top:4px;">alt: ${editSpan('alt',d.alt)}</div></div>`,html:d=>`  <img src="https://picsum.photos/seed/lb42/800/400" alt="${escapeHtml(d.alt)}" style="max-width:100%;border-radius:8px;">`,tip:"รูปสื่อสารเร็วกว่าข้อความ — แต่ต้องมี alt เสมอ"},
-  card:{label:"Card",icon:"Card",tag:"<div class=\"card\">",when:"จัดกลุ่มเนื้อหาที่เกี่ยวข้อง — นิยมวางหลายใบใน Grid",fields:{title:"หัวข้อการ์ด",text:"รายละเอียดสั้น ๆ ของการ์ดนี้"},render:d=>`<div class="comp-card"><h3>${editSpan('title',d.title)}</h3><p>${editSpan('text',d.text)}</p></div>`,html:d=>`  <div class="card">\n    <h3>${escapeHtml(d.title)}</h3>\n    <p>${escapeHtml(d.text)}</p>\n  </div>`,tip:"Card ช่วย Chunking — ลองวางหลายใบใน Grid ดู!"},
-  input:{label:"Input",icon:"In",tag:"<input>",when:"รับข้อมูลบรรทัดเดียว: ชื่อ, อีเมล, รหัสผ่าน",fields:{placeholder:"กรอกข้อมูล..."},render:d=>`<div style="padding:4px 0;"><div class="fake-input">${editSpan('placeholder',d.placeholder)}</div></div>`,html:d=>`  <input type="text" placeholder="${escapeHtml(d.placeholder)}">`,tip:"ควรมี placeholder หรือ label ที่ชัดเจน"},
-  textarea:{label:"Textarea",icon:"Ta",tag:"<textarea>",when:"รับข้อความหลายบรรทัด: รีวิว, คอมเมนต์",fields:{placeholder:"พิมพ์ข้อความหลายบรรทัด..."},render:d=>`<div style="padding:4px 0;"><div class="fake-textarea">${editSpan('placeholder',d.placeholder)}</div></div>`,html:d=>`  <textarea rows="4" placeholder="${escapeHtml(d.placeholder)}"></textarea>`,tip:"กำหนด rows ให้พอเหมาะ + มี placeholder"},
-  select:{label:"Dropdown",icon:"Sel",tag:"<select>",when:"เลือก 1 ตัวเลือกจาก列表 — เหมาะกับ 5+ ตัวเลือก",fields:{opt1:"เลือก...",opt2:"ตัวเลือกที่ 1"},render:d=>`<div style="padding:4px 0;"><div class="fake-select">${editSpan('opt1',d.opt1)} <span>▾</span></div></div>`,html:d=>`  <select>\n    <option>${escapeHtml(d.opt1)}</option>\n    <option>${escapeHtml(d.opt2)}</option>\n  </select>`,tip:"น้อยกว่า 5 ตัวเลือก → ใช้ radio แทน"},
-  checkbox:{label:"Checkbox",icon:"☑",tag:"<input type=\"checkbox\">",when:"เลือกหลายตัวเลือก หรือยอมรับเงื่อนไข",fields:{label:"ยอมรับเงื่อนไขการใช้งาน"},render:d=>`<div class="comp-checkbox"><label><input type="checkbox" disabled> ${editSpan('label',d.label)}</label></div>`,html:d=>`  <label>\n    <input type="checkbox">\n    ${escapeHtml(d.label)}\n  </label>`,tip:"ห่อด้วย label เพื่อเพิ่มพื้นที่คลิก"},
-  text:{label:"Text",icon:"T",tag:"<p>",when:"ข้อความบรรยายทั่วไป",fields:{content:"ข้อความอธิบายที่แก้ไขได้"},render:d=>`<div class="comp-text"><p>${editSpan('content',d.content)}</p></div>`,html:d=>`  <p>${escapeHtml(d.content)}</p>`,tip:"line-height 1.6+ และ font-size ≥ 16px"},
-  link:{label:"Link",icon:"A",tag:"<a>",when:"เชื่อมไปหน้าอื่น — ต้องมี href",fields:{label:"ลิงก์ตัวอย่าง"},render:d=>`<div class="comp-link"><a href="#">${editSpan('label',d.label)}</a></div>`,html:d=>`  <a href="#">${escapeHtml(d.label)}</a>`,tip:"ลิงก์ควรดูต่างจากข้อความปกติ (Affordance)"},
-  list:{label:"List",icon:"Li",tag:"<ul><li>",when:"ข้อมูลเป็นรายการ: สรรพคุณ, ขั้นตอน",fields:{item1:"รายการที่ 1",item2:"รายการที่ 2",item3:"รายการที่ 3"},render:d=>`<div class="comp-list"><ul><li>${editSpan('item1',d.item1)}</li><li>${editSpan('item2',d.item2)}</li><li>${editSpan('item3',d.item3)}</li></ul></div>`,html:d=>`  <ul>\n    <li>${escapeHtml(d.item1)}</li>\n    <li>${escapeHtml(d.item2)}</li>\n    <li>${escapeHtml(d.item3)}</li>\n  </ul>`,tip:"List ช่วย Chunking — อ่านง่ายกว่าย่อหน้ายาว"},
-  table:{label:"Table",icon:"Tbl",tag:"<table>",when:"ข้อมูลแถว-คอลัมน์ — อย่าใช้จัด Layout",fields:{h1:"หัวข้อ 1",h2:"หัวข้อ 2",c1:"ข้อมูล 1",c2:"ข้อมูล 2",c3:"ข้อมูล 3",c4:"ข้อมูล 4"},render:d=>`<div class="comp-table"><table><tr><th>${editSpan('h1',d.h1)}</th><th>${editSpan('h2',d.h2)}</th></tr><tr><td>${editSpan('c1',d.c1)}</td><td>${editSpan('c2',d.c2)}</td></tr><tr><td>${editSpan('c3',d.c3)}</td><td>${editSpan('c4',d.c4)}</td></tr></table></div>`,html:d=>`  <table>\n    <tr><th>${escapeHtml(d.h1)}</th><th>${escapeHtml(d.h2)}</th></tr>\n    <tr><td>${escapeHtml(d.c1)}</td><td>${escapeHtml(d.c2)}</td></tr>\n    <tr><td>${escapeHtml(d.c3)}</td><td>${escapeHtml(d.c4)}</td></tr>\n  </table>`,tip:"Table สำหรับข้อมูลเชิงตารางเท่านั้น"},
-  video:{label:"Video",icon:"Vid",tag:"<video>",when:"แสดงวิดีโอ — ควรมี controls",fields:{caption:"วิดีโอตัวอย่าง"},render:d=>`<div class="comp-video"><div class="video-box">▶<small>${editSpan('caption',d.caption)}</small></div></div>`,html:d=>`  <video controls width="100%" style="border-radius:8px;">\n    <source src="video.mp4" type="video/mp4">\n    ${escapeHtml(d.caption)}\n  </video>`,tip:"ใส่ controls เสมอ — ให้ผู้ใช้ควบคุมเอง"},
-  quote:{label:"Blockquote",icon:"\"",tag:"<blockquote>",when:"คำพูดอ้างอิง: รีวิว, คำคม",fields:{quote:"ข้อความอ้างอิง",cite:"ชื่อผู้พูด"},render:d=>`<div class="comp-quote"><blockquote>"${editSpan('quote',d.quote)}"<cite>— ${editSpan('cite',d.cite)}</cite></blockquote></div>`,html:d=>`  <blockquote>\n    "${escapeHtml(d.quote)}"\n    <cite>— ${escapeHtml(d.cite)}</cite>\n  </blockquote>`,tip:"ใส่ <cite> ระบุที่มาเสมอ — เพิ่มความน่าเชื่อถือ"},
-  badge:{label:"Badge",icon:"Tag",tag:"<span class=\"badge\">",when:"ป้ายสั้น ๆ: "ใหม่", "ลดราคา"",fields:{label1:"ใหม่",label2:"แนะนำ"},render:d=>`<div class="comp-badge"><span class="badge">${editSpan('label1',d.label1)}</span><span class="badge">${editSpan('label2',d.label2)}</span></div>`,html:d=>`  <span class="badge">${escapeHtml(d.label1)}</span>\n  <span class="badge badge-alt">${escapeHtml(d.label2)}</span>`,tip:"ใช้ข้อความสั้นที่สุด + สีโดดเด่น"},
-  divider:{label:"Divider",icon:"—",tag:"<hr>",when:"แบ่งเนื้อหาด้วยเส้นแนวนอน",render:()=>`<div class="comp-divider"><hr></div>`,html:()=>'  <hr>',tip:"ใช้ปานกลาง — มากไปทำให้หน้ารก"},
-  codeblock:{label:"Code Block",icon:"</>",tag:"<pre><code>",when:"แสดงโค้ด — ใช้ฟอนต์ monospace",fields:{code:'<div class="hello">Hello</div>'},render:d=>`<div class="comp-code"><pre><code class="editable" contenteditable="true" draggable="false" spellcheck="false" data-field="code">${escapeHtml(d.code)}</code></pre></div>`,html:d=>`  <pre><code>${escapeHtml(d.code)}</code></pre>`,tip:"Monospace + Syntax Highlighting อ่านโค้ดง่ายขึ้นมาก"},
-  footer:{label:"Footer",icon:"F",tag:"<footer>",when:"1 ครั้งต่อหน้า ล่างสุด — ลิขสิทธิ์, ติดต่อ",fields:{content:"© 2026 บริษัทของคุณ | ติดต่อเรา"},render:d=>`<div class="comp-footer">${editSpan('content',d.content)}</div>`,html:d=>`  <footer>\n    <p>${escapeHtml(d.content)}</p>\n  </footer>`,tip:"สัญลักษณ์ "จบหน้า" — ใส่ลิงก์สำคัญ"}
-};
+/* ═══════════════════════════════════════════════
+   Container Templates
+   ═══════════════════════════════════════════════ */
 const containerTemplates={
-  section:{label:"Section",icon:"📦",cssClass:"layout-section",tag:"<section>",when:"แบ่งหน้าเป็นส่วน ๆ อย่างมีระเบียบ",html:()=>'  <section class="layout-section">\n    <!-- เนื้อหา -->\n  </section>',tip:"Section สร้าง Whitespace + ระเบียบ"},
-  row:{label:"Row",icon:"↔",cssClass:"layout-row",tag:"<div class=\"layout-row\">",when:"เรียงแนวนอน: เมนู, กลุ่มปุ่ม",html:()=>'  <div class="layout-row">\n    <!-- แนวนอน -->\n  </div>',tip:"Flexbox row — เหมาะกับเมนู/ปุ่ม"},
-  col:{label:"Column",icon:"↕",cssClass:"layout-col",tag:"<div class=\"layout-col\">",when:"เรียงแนวตั้ง: ฟอร์ม, ข้อความ",html:()=>'  <div class="layout-col">\n    <!-- แนวตั้ง -->\n  </div>',tip:"Flexbox column — ลำดับธรรมชาติ"},
-  grid2:{label:"Grid 2-col",icon:"▦",cssClass:"layout-grid2",tag:"<div class=\"layout-grid2\">",when:"ตาราง 2 คอลัมน์: การ์ดคู่",html:()=>'  <div class="layout-grid2">\n    <!-- 2 คอลัมน์ -->\n  </div>',tip:"CSS Grid 2-col — การ์ดเป็นระเบียบ"},
-  grid3:{label:"Grid 3-col",icon:"Ħ",cssClass:"layout-grid3",tag:"<div class=\"layout-grid3\">",when:"ตาราง 3 คอลัมน์: หน้ารวมสินค้า",html:()=>'  <div class="layout-grid3">\n    <!-- 3 คอลัมน์ -->\n  </div>',tip:"CSS Grid 3-col — แสดง Card จำนวนมาก"}
+  section:{label:"Section",icon:"📦",cssClass:"layout-section",tag:"<section>",when:"Divides page into logical sections with padding and border.",html:()=>'  <section class="layout-section">\n    <!-- content -->\n  </section>',tip:"Sections create whitespace and visual rhythm."},
+  row:{label:"Row",icon:"↔",cssClass:"layout-row",tag:"<div class=\"layout-row\">",when:"Horizontal arrangement: menus, button groups, card rows.",html:()=>'  <div class="layout-row">\n    <!-- horizontal items -->\n  </div>',tip:"Flexbox row — ideal for side-by-side layouts."},
+  col:{label:"Column",icon:"↕",cssClass:"layout-col",tag:"<div class=\"layout-col\">",when:"Vertical stacking: forms, text blocks, step sequences.",html:()=>'  <div class="layout-col">\n    <!-- stacked items -->\n  </div>',tip:"Flexbox column — natural vertical flow."},
+  grid2:{label:"Grid 2-col",icon:"▦",cssClass:"layout-grid2",tag:"<div class=\"layout-grid2\">",when:"2-column grid: product pairs, feature comparisons.",html:()=>'  <div class="layout-grid2">\n    <!-- 2-column content -->\n  </div>',tip:"CSS Grid 2-col — perfect for card layouts."},
+  grid3:{label:"Grid 3-col",icon:"Ħ",cssClass:"layout-grid3",tag:"<div class=\"layout-grid3\">",when:"3-column grid: product catalogs, feature grids.",html:()=>'  <div class="layout-grid3">\n    <!-- 3-column content -->\n  </div>',tip:"CSS Grid 3-col — great for showcasing many items."}
 };
+
 const containerTypes=Object.keys(containerTemplates);
 const containerDirection={root:'vertical',section:'vertical',col:'vertical',row:'horizontal',grid2:'horizontal',grid3:'horizontal'};
-function getTemplate(t){return containerTemplates[t]||CT[t];}
+function getTemplate(type){return containerTemplates[type]||contentTemplates[type];}
 
-/* ═══════════════════════════════════════════════════
-   State & Tree
-   ═══════════════════════════════════════════════════ */
-let idCounter=0;const tree={id:'root',type:'root',children:[]};let draggedId=null;let rawCodeText='';
-const canvas=document.getElementById('canvas');const elCount=document.getElementById('elCount');const codeEditor=document.getElementById('codeEditor');const copyBtn=document.getElementById('copyBtn');const downloadBtn2=document.getElementById('downloadBtn2');const toast=document.getElementById('toast');const guideBtn=document.getElementById('guideBtn');const guideModal=document.getElementById('guideModal');const guideList=document.getElementById('guideList');const closeGuide=document.getElementById('closeGuide');const clearBtn=document.getElementById('clearBtn');const refreshBtn=document.getElementById('refreshBtn');const inspectorBody=document.getElementById('inspectorBody');
+/* ═══════════════════════════════════════════════
+   State
+   ═══════════════════════════════════════════════ */
+let idCounter=0;
+const tree={id:'root',type:'root',children:[]};
+let draggedId=null;
+let rawCodeText='';
 
-function createNode(t){idCounter++;const n={id:'n'+idCounter,type:t};if(containerTypes.includes(t))n.children=[];else{const tp=CT[t];n.data=tp&&tp.fields?{...tp.fields}:{};}return n;}
-function findNode(id,n=tree){if(n.id===id)return n;if(n.children)for(const c of n.children){const r=findNode(id,c);if(r)return r;}return null;}
-function findPI(id,n=tree){if(n.children)for(let i=0;i<n.children.length;i++){if(n.children[i].id===id)return{parent:n,index:i};const r=findPI(id,n.children[i]);if(r)return r;}return null;}
-function isDesc(a,id){const n=findNode(a);if(!n||!n.children)return false;for(const c of n.children)if(c.id===id||isDesc(c.id,id))return true;return false;}
-function removeNode(id){const f=findPI(id);if(f){f.parent.children.splice(f.index,1);renderAll();}}
+const canvas=document.getElementById('canvas');
+const elCount=document.getElementById('elCount');
+const codeEditor=document.getElementById('codeEditor');
+const copyBtn=document.getElementById('copyBtn');
+const downloadBtn2=document.getElementById('downloadBtn2');
+const tipBox=document.querySelector('.tip-box');
+const toast=document.getElementById('toast');
+const guideBtn=document.getElementById('guideBtn');
+const guideModal=document.getElementById('guideModal');
+const guideList=document.getElementById('guideList');
+const closeGuide=document.getElementById('closeGuide');
+const clearBtn=document.getElementById('clearBtn');
+const refreshBtn=document.getElementById('refreshBtn');
+
+/* ═══════════════════════════════════════════════
+   Tree Operations
+   ═══════════════════════════════════════════════ */
+function createNode(type){idCounter++;const n={id:'n'+idCounter,type};if(containerTypes.includes(type))n.children=[];else{const t=contentTemplates[type];n.data=t&&t.fields?{...t.fields}:{};}return n;}
+function findNode(id,node=tree){if(node.id===id)return node;if(node.children)for(const c of node.children){const r=findNode(id,c);if(r)return r;}return null;}
+function findParentAndIndex(id,node=tree){if(node.children)for(let i=0;i<node.children.length;i++){if(node.children[i].id===id)return{parent:node,index:i};const r=findParentAndIndex(id,node.children[i]);if(r)return r;}return null;}
+function isDescendant(ancestorId,nodeId){const n=findNode(ancestorId);if(!n||!n.children)return false;for(const c of n.children)if(c.id===nodeId||isDescendant(c.id,nodeId))return true;return false;}
+function removeNodeById(id){const f=findParentAndIndex(id);if(f){f.parent.children.splice(f.index,1);renderAll();}}
 function countAll(n=tree){let c=0;if(n.children){c+=n.children.length;n.children.forEach(ch=>{c+=countAll(ch);});}return c;}
 
-/* ═══════════════════════════════════════════════════
-   Render
-   ═══════════════════════════════════════════════════ */
-function renderNode(n){
-  const t=getTemplate(n.type);
-  if(n.children){const inner=n.children.length?n.children.map(renderNode).join(''):`<div class="empty-hint">วางคอมโพเนนต์ที่นี่</div>`;return `<div class="comp-node container node-${n.type}" draggable="true" data-id="${n.id}"><div class="node-label"><span>${t.icon} ${t.label}</span><button class="del-btn" data-del="${n.id}">✕</button></div><div class="dropzone" data-parent-id="${n.id}">${inner}</div></div>`;}
-  return `<div class="comp-node leaf" draggable="true" data-id="${n.id}" data-type="${n.type}">${t.render(n.data||{})}<button class="del-btn" data-del="${n.id}">✕</button></div>`;
-}
-function renderAll(){
-  canvas.innerHTML=tree.children.length?tree.children.map(renderNode).join(''):'<div class="canvas-placeholder">// ลากคอมโพเนนต์มาวางที่นี่<br><span>จากแผง Explorer ด้านซ้าย</span></div>';
-  elCount.textContent=countAll();updateCode();
+/* ═══════════════════════════════════════════════
+   Render Canvas
+   ═══════════════════════════════════════════════ */
+function renderNode(node){
+  const tpl=getTemplate(node.type);
+  if(node.children){
+    const inner=node.children.length?node.children.map(renderNode).join(''):`<div class="empty-hint">Drop components here</div>`;
+    return `<div class="comp-node container node-${node.type}" draggable="true" data-id="${node.id}"><div class="node-label"><span>${tpl.icon} ${tpl.label}</span><button class="del-btn" data-del="${node.id}">✕</button></div><div class="dropzone" data-parent-id="${node.id}">${inner}</div></div>`;
+  }
+  return `<div class="comp-node leaf" draggable="true" data-id="${node.id}" data-type="${node.type}">${tpl.render(node.data||{})}<button class="del-btn" data-del="${node.id}">✕</button></div>`;
 }
 
-/* ═══════════════════════════════════════════════════
+function renderAll(){
+  canvas.innerHTML=tree.children.length?tree.children.map(renderNode).join(''):'<div class="canvas-placeholder">// Drag components here<br><span>from the Explorer panel on the left</span></div>';
+  elCount.textContent=countAll();
+  updateCode();
+}
+
+/* ═══════════════════════════════════════════════
    Drag & Drop
-   ═══════════════════════════════════════════════════ */
-document.querySelectorAll('.tree-item[data-type]').forEach(i=>{i.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',JSON.stringify({source:'palette',type:i.dataset.type}));});});
+   ═══════════════════════════════════════════════ */
+document.querySelectorAll('.tree-item[data-type]').forEach(item=>{
+  item.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',JSON.stringify({source:'palette',type:item.dataset.type}));});
+});
 canvas.addEventListener('dragstart',e=>{const el=e.target.closest('.comp-node');if(!el)return;draggedId=el.dataset.id;e.dataTransfer.setData('text/plain',JSON.stringify({source:'canvas',id:el.dataset.id}));el.classList.add('dragging');});
 canvas.addEventListener('dragend',e=>{const el=e.target.closest('.comp-node');if(el)el.classList.remove('dragging');draggedId=null;document.querySelectorAll('.dropzone-hover').forEach(d=>d.classList.remove('dropzone-hover'));});
 canvas.addEventListener('dragover',e=>{e.preventDefault();document.querySelectorAll('.dropzone-hover').forEach(d=>d.classList.remove('dropzone-hover'));const dz=e.target.closest('.dropzone');if(dz)dz.classList.add('dropzone-hover');});
 canvas.addEventListener('drop',e=>{
   e.preventDefault();document.querySelectorAll('.dropzone-hover').forEach(d=>d.classList.remove('dropzone-hover'));
-  const dz=e.target.closest('.dropzone');if(!dz)return;const pid=dz.dataset.parentId;const pn=findNode(pid);if(!pn)return;
-  let data;try{data=JSON.parse(e.dataTransfer.getData('text/plain'));}catch(er){return;}
-  const di=Array.from(dz.children).filter(c=>c.classList.contains('comp-node'));const dir=containerDirection[pn.type]||'vertical';let ii=di.length;
-  for(let i=0;i<di.length;i++){const r=di[i].getBoundingClientRect();if(dir==='horizontal'){if(e.clientX<r.left+r.width/2){ii=i;break;}}else{if(e.clientY<r.top+r.height/2){ii=i;break;}}}
-  if(data.source==='palette'){pn.children.splice(ii,0,createNode(data.type));}
-  else if(data.source==='canvas'){const dId=data.id;if(dId===pid||isDesc(dId,pid)){showToast('ไม่สามารถวางในตัวเองได้','warning');return;}const f=findPI(dId);if(!f)return;const[mv]=f.parent.children.splice(f.index,1);let idx=ii;if(f.parent.id===pn.id&&f.index<ii)idx-=1;pn.children.splice(idx,0,mv);}
+  const dz=e.target.closest('.dropzone');if(!dz)return;
+  const parentId=dz.dataset.parentId;const parentNode=findNode(parentId);if(!parentNode)return;
+  let data;try{data=JSON.parse(e.dataTransfer.getData('text/plain'));}catch(err){return;}
+  const directItems=Array.from(dz.children).filter(c=>c.classList.contains('comp-node'));
+  const dir=containerDirection[parentNode.type]||'vertical';
+  let insertIndex=directItems.length;
+  for(let i=0;i<directItems.length;i++){const r=directItems[i].getBoundingClientRect();if(dir==='horizontal'){if(e.clientX<r.left+r.width/2){insertIndex=i;break;}}else{if(e.clientY<r.top+r.height/2){insertIndex=i;break;}}}
+  if(data.source==='palette'){parentNode.children.splice(insertIndex,0,createNode(data.type));}
+  else if(data.source==='canvas'){
+    const dId=data.id;if(dId===parentId||isDescendant(dId,parentId)){showToast('Cannot nest inside itself','warning');return;}
+    const found=findParentAndIndex(dId);if(!found)return;const[moved]=found.parent.children.splice(found.index,1);
+    let idx=insertIndex;if(found.parent.id===parentNode.id&&found.index<insertIndex)idx-=1;parentNode.children.splice(idx,0,moved);
+  }
   renderAll();
 });
 
-/* ═══════════════════════════════════════════════════
-   Inspector — คำอธิบาย HTML + CSS แบบละเอียด
-   ═══════════════════════════════════════════════════ */
-function showTip(type,data){
-  const t=getTemplate(type);if(!t)return;
-  const ex=t.html?t.html(data||t.fields||{}):'';
-  const hExp=htmlExplain[type]||'';
-  const cExp=cssExplain[type]||'';
-  inspectorBody.innerHTML=`
-    <div class="tip-section">
-      <div class="section-label"><span class="sl-dot" style="background:var(--blue)"></span>ภาพรวม</div>
-      <div style="margin-bottom:4px;">${t.icon} <b>${t.label}</b> — แท็ก <code>${escapeHtml(t.tag||'')}</code></div>
-      <div>📌 <b>เมื่อไหร่ควรใช้:</b> ${t.when||'-'}</div>
-      <div style="margin-top:4px;">💡 <b>เคล็ดลับ UX:</b> ${t.tip}</div>
-    </div>
-    ${hExp?`<div class="tip-section">
-      <div class="section-label"><span class="sl-dot" style="background:var(--mauve)"></span>อธิบายแท็ก HTML</div>
-      <div style="white-space:pre-wrap;">${hExp}</div>
-    </div>`:''}
-    ${cExp?`<div class="tip-section">
-      <div class="section-label"><span class="sl-dot" style="background:var(--peach)"></span>อธิบาย CSS ที่ใช้</div>
-      <div style="white-space:pre-wrap;">${cExp}</div>
-      <div style="margin-top:8px;padding:8px;background:var(--crust);border:1px solid var(--surface0);border-radius:var(--radius-xs);font-size:0.65rem;color:var(--sky);line-height:1.5;">🎨 ปรับสีเหล่านี้ได้ผ่านปุ่ม <b style="color:var(--yellow)">พาเลตสี</b> ที่ Activity Bar ด้านซ้าย</div>
-    </div>`:''}
-    ${ex?`<div class="tip-section">
-      <div class="section-label"><span class="sl-dot" style="background:var(--green)"></span>ตัวอย่างโค้ด</div>
-      <pre>${escapeHtml(ex)}</pre>
-    </div>`:''}
-    <button class="guide-btn" onclick="buildGuide();document.getElementById('guideModal').classList.add('show');">📖 เปิดเอกสารแท็กทั้งหมด</button>
-  `;
-}
-
+/* ═══════════════════════════════════════════════
+   Click: Delete / Inspect
+   ═══════════════════════════════════════════════ */
 canvas.addEventListener('click',e=>{
-  const del=e.target.closest('.del-btn');if(del){e.stopPropagation();removeNode(del.dataset.del);return;}
+  const del=e.target.closest('.del-btn');if(del){e.stopPropagation();removeNodeById(del.dataset.del);return;}
   const leaf=e.target.closest('.comp-node.leaf');if(leaf){const n=findNode(leaf.dataset.id);showTip(leaf.dataset.type,n?n.data:null);return;}
   const cont=e.target.closest('.comp-node.container');if(cont){const m=cont.className.match(/node-(\w+)/);if(m)showTip(m[1]);}
 });
 
-/* ═══════════════════════════════════════════════════
-   Editable
-   ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   Editable Text
+   ═══════════════════════════════════════════════ */
 let activeEditable=null,savedRange=null;
 function saveSel(e){const ed=e.target.closest&&e.target.closest('.editable');if(!ed)return;activeEditable=ed;const s=window.getSelection();if(s&&s.rangeCount>0)savedRange=s.getRangeAt(0).cloneRange();}
 canvas.addEventListener('focusin',saveSel);canvas.addEventListener('keyup',saveSel);canvas.addEventListener('mouseup',saveSel);
-canvas.addEventListener('input',e=>{const ed=e.target.closest('.editable');if(!ed)return;const nel=ed.closest('.comp-node');if(!nel)return;const n=findNode(nel.dataset.id);if(!n)return;if(!n.data)n.data={};n.data[ed.dataset.field]=ed.textContent;updateCode();});
+canvas.addEventListener('input',e=>{
+  const ed=e.target.closest('.editable');if(!ed)return;const nel=ed.closest('.comp-node');if(!nel)return;const n=findNode(nel.dataset.id);if(!n)return;if(!n.data)n.data={};n.data[ed.dataset.field]=ed.textContent;updateCode();
+});
+
 function escapeHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
-/* ═══════════════════════════════════════════════════
+function showTip(type,data){
+  const tpl=getTemplate(type);if(!tpl)return;
+  const ex=tpl.html?tpl.html(data||tpl.fields||{}):'';
+  tipBox.innerHTML=`<div style="margin-bottom:6px;">${tpl.icon} <b>${tpl.label}</b> — <code>${escapeHtml(tpl.tag||'')}</code></div><div style="margin-bottom:4px;">📌 <b>When to use:</b> ${tpl.when||'-'}</div><div>💡 <b>UX Tip:</b> ${tpl.tip}</div>${ex?`<pre>${escapeHtml(ex)}</pre>`:''}`;
+}
+
+/* ═══════════════════════════════════════════════
    Guide Modal
-   ═══════════════════════════════════════════════════ */
-function buildGuide(){const all={...containerTemplates,...CT};guideList.innerHTML=Object.values(all).map(t=>{const ex=t.html?t.html(t.fields||{}):'';const hE=htmlExplain[Object.keys(CT).includes(Object.keys(all).reduce((r,k)=>all[k]===t?k:r,''))?'':''];return `<div class="guide-item"><div>${t.icon} <b>${t.label}</b> — <code>${escapeHtml(t.tag||'')}</code></div><div style="margin-top:4px;">📌 ${t.when||'-'}</div><div style="margin-top:4px;">💡 ${t.tip}</div>${ex?`<pre>${escapeHtml(ex)}</pre>`:''}</div>`;}).join('');}
+   ═══════════════════════════════════════════════ */
+function buildGuide(){const all={...containerTemplates,...contentTemplates};guideList.innerHTML=Object.values(all).map(t=>{const ex=t.html?t.html(t.fields||{}):'';return `<div class="guide-item"><div>${t.icon} <b>${t.label}</b> — <code>${escapeHtml(t.tag||'')}</code></div><div style="margin-top:4px;">📌 <b>When:</b> ${t.when||'-'}</div><div style="margin-top:4px;">💡 ${t.tip}</div>${ex?`<pre>${escapeHtml(ex)}</pre>`:''}</div>`;}).join('');}
 guideBtn.addEventListener('click',()=>{buildGuide();guideModal.classList.add('show');});
 document.getElementById('abGuide').addEventListener('click',()=>{buildGuide();guideModal.classList.add('show');});
 closeGuide.addEventListener('click',()=>guideModal.classList.remove('show'));
 guideModal.addEventListener('click',e=>{if(e.target===guideModal)guideModal.classList.remove('show');});
 
-/* ═══════════════════════════════════════════════════
-   Emoji
-   ═══════════════════════════════════════════════════ */
-const emojiModal=document.getElementById('emojiModal');const emojiGroups=document.getElementById('emojiGroups');const closeEmoji=document.getElementById('closeEmoji');
-const emojiCats={"อารมณ์":["😀","😃","😄","😁","😆","😅","😂","🙂","😉","😊","😍","🤩","🤔","😎","😴","😭","😡","👍","👎","👏","🙏","💪","✌️","🤝","🫡"],"สัญลักษณ์":["❤️","🧡","💛","💚","💙","💜","🖤","🤍","💯","✅","❌","⭐","🌟","✨","🔥","💡","⚡","🎯","📌","🔔","⚠️"],"ลูกศร/UI":["➡️","⬅️","⬆️","⬇️","↔️","↕️","🔄","▶️","⏸️","🔍","🔗","📎","📋","📁","📂","🗂️","🧩","📊","📈","📉"],"เทคโนโลยี":["💻","🖥️","📱","⌨️","🖱️","🛒","💳","🗓️","⏰","🌐","🔒","🔓","📧","✉️","📞","🚀","🎮"],"อื่น ๆ":["🌈","☀️","🌙","🌸","🍀","🎉","🎁","🏆","📢","💬","👋","🤖","🎯","🧠","🎨"]};
+/* ═══════════════════════════════════════════════
+   Emoji Modal
+   ═══════════════════════════════════════════════ */
+const emojiModal=document.getElementById('emojiModal');
+const emojiGroups=document.getElementById('emojiGroups');
+const closeEmoji=document.getElementById('closeEmoji');
+const emojiCats={
+  "Smileys":["😀","😃","😄","😁","😆","😅","😂","🙂","😉","😊","😍","🤩","🤔","😎","😴","😭","😡","👍","👎","👏","🙏","💪","✌️","🤝","🫡"],
+  "Symbols":["❤️","🧡","💛","💚","💙","💜","🖤","🤍","💯","✅","❌","⭐","🌟","✨","🔥","💡","⚡","🎯","📌","🔔","⚠️"],
+  "Arrows / UI":["➡️","⬅️","⬆️","⬇️","↔️","↕️","🔄","▶️","⏸️","🔍","🔗","📎","📋","📁","📂","🗂️","🧩","📊","📈","📉"],
+  "Tech":["💻","🖥️","📱","⌨️","🖱️","🛒","💳","📊","📈","📉","🗓️","⏰","🌐","🔒","🔓","📧","✉️","📞","🚀","🎮"],
+  "Nature":["🌈","☀️","🌙","🌸","🍀","🎉","🎁","🏆","📢","💬","👋","🤖","🎯","🧠","🎨"]
+};
 function buildEmoji(){emojiGroups.innerHTML=Object.entries(emojiCats).map(([l,list])=>`<div style="font-size:0.7rem;color:var(--overlay0);margin:10px 0 6px;text-transform:uppercase;letter-spacing:1px;">${l}</div><div class="emoji-grid">${list.map(em=>`<button type="button" class="emoji-btn" data-emoji="${em}">${em}</button>`).join('')}</div>`).join('');}
-function insertEmoji(em){if(activeEditable&&document.contains(activeEditable)){activeEditable.focus();const sel=window.getSelection();if(savedRange&&activeEditable.contains(savedRange.startContainer)){sel.removeAllRanges();sel.addRange(savedRange);}else{const r=document.createRange();r.selectNodeContents(activeEditable);r.collapse(false);sel.removeAllRanges();sel.addRange(r);}document.execCommand('insertText',false,em);if(sel.rangeCount>0)savedRange=sel.getRangeAt(0).cloneRange();const nel=activeEditable.closest('.comp-node');if(nel){const n=findNode(nel.dataset.id);if(n){if(!n.data)n.data={};n.data[activeEditable.dataset.field]=activeEditable.textContent;updateCode();}}showToast(`เพิ่ม ${em} แล้ว`,'success');}else{navigator.clipboard.writeText(em).catch(()=>{});showToast('คลิกข้อความบน Canvas ก่อน (คัดลอกอีโมจิไว้แล้ว)','warning');}}
+function insertEmoji(em){
+  if(activeEditable&&document.contains(activeEditable)){
+    activeEditable.focus();const sel=window.getSelection();
+    if(savedRange&&activeEditable.contains(savedRange.startContainer)){sel.removeAllRanges();sel.addRange(savedRange);}
+    else{const r=document.createRange();r.selectNodeContents(activeEditable);r.collapse(false);sel.removeAllRanges();sel.addRange(r);}
+    document.execCommand('insertText',false,em);if(sel.rangeCount>0)savedRange=sel.getRangeAt(0).cloneRange();
+    const nel=activeEditable.closest('.comp-node');if(nel){const n=findNode(nel.dataset.id);if(n){if(!n.data)n.data={};n.data[activeEditable.dataset.field]=activeEditable.textContent;updateCode();}}
+    showToast(`Inserted ${em}`,'success');
+  }else{navigator.clipboard.writeText(em).catch(()=>{});showToast('Click text on canvas first (emoji copied to clipboard)','warning');}
+}
 document.getElementById('abEmoji').addEventListener('click',()=>{buildEmoji();emojiModal.classList.add('show');});
 closeEmoji.addEventListener('click',()=>emojiModal.classList.remove('show'));
 emojiModal.addEventListener('click',e=>{if(e.target===emojiModal){emojiModal.classList.remove('show');return;}const b=e.target.closest('.emoji-btn');if(b)insertEmoji(b.dataset.emoji);});
 
-/* ═══════════════════════════════════════════════════
-   Theme Modal
-   ═══════════════════════════════════════════════════ */
-const themeModal=document.getElementById('themeModal');
-document.getElementById('abTheme').addEventListener('click',()=>{renderThemeModal();themeModal.classList.add('show');});
-document.getElementById('closeTheme').addEventListener('click',()=>themeModal.classList.remove('show'));
-themeModal.addEventListener('click',e=>{if(e.target===themeModal)themeModal.classList.remove('show');});
+/* ═══════════════════════════════════════════════
+   Tree Category Toggle
+   ═══════════════════════════════════════════════ */
 document.querySelectorAll('.tree-cat-head').forEach(h=>{h.addEventListener('click',()=>h.parentElement.classList.toggle('collapsed'));});
+
+/* ═══════════════════════════════════════════════
+   Activity Bar
+   ═══════════════════════════════════════════════ */
+const sidebar=document.getElementById('sidebar');
 document.getElementById('abPalette').addEventListener('click',function(){sidebar.classList.toggle('collapsed');this.classList.toggle('active');});
 
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    Clear / Refresh
-   ═══════════════════════════════════════════════════ */
-clearBtn.addEventListener('click',()=>{if(!tree.children.length)return;if(confirm('ล้างพื้นที่ทำงานทั้งหมด?')){tree.children=[];renderAll();showToast('ล้างแล้ว','success');}});
-refreshBtn.addEventListener('click',()=>{renderAll();showToast('รีเฟรชแล้ว','success');});
+   ═══════════════════════════════════════════════ */
+clearBtn.addEventListener('click',()=>{if(!tree.children.length)return;if(confirm('Clear all components? This cannot be undone.')){tree.children=[];renderAll();showToast('Workspace cleared','success');}});
+refreshBtn.addEventListener('click',()=>{renderAll();showToast('Preview refreshed','success');});
 
-/* ═══════════════════════════════════════════════════
-   Generate Full index.html (ใช้สีจากธีม)
-   ═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   Generate Full index.html
+   ═══════════════════════════════════════════════ */
 function nodeToHtml(node,indent){
-  const t=getTemplate(node.type);
-  if(node.children){const inner=node.children.length?node.children.map(c=>nodeToHtml(c,indent+'    ')).join('\n\n'):indent+'    <!-- วางเนื้อหาที่นี่ -->';const tag=t.cssClass==='layout-section'?'section':'div';return `${indent}<${tag} class="${t.cssClass}">\n${inner}\n${indent}</${tag}>`;}
-  return t.html(node.data||t.fields||{}).split('\n').map(l=>indent+l.trimStart()).join('\n');
+  const tpl=getTemplate(node.type);
+  if(node.children){
+    const inner=node.children.length?node.children.map(c=>nodeToHtml(c,indent+'    ')).join('\n\n'):indent+'    <!-- place content here -->';
+    const tag=tpl.cssClass.startsWith('layout-section')?'section':'div';
+    return `${indent}<${tag} class="${tpl.cssClass}">\n${inner}\n${indent}</${tag}>`;
+  }
+  return tpl.html(node.data||tpl.fields||{}).split('\n').map(l=>indent+l.trimStart()).join('\n');
 }
 
-function getExportCss(){
-  const c=themeColors;
-  return `    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', system-ui, sans-serif; color: ${c.text}; line-height: 1.6; background: ${c.bg}; }
-    .page { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
-    .layout-section { padding: 28px; margin-bottom: 16px; background: ${c.cardBg}; border-radius: 10px; border: 1px solid ${c.border}; }
-    .layout-row { display: flex; flex-direction: row; gap: 16px; flex-wrap: wrap; }
-    .layout-col { display: flex; flex-direction: column; gap: 16px; }
-    .layout-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .layout-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    @media (max-width: 640px) { .layout-grid2, .layout-grid3 { grid-template-columns: 1fr; } .layout-row { flex-direction: column; } }
-    .site-header { background: linear-gradient(135deg, ${c.primary}, ${c.primaryLight}); color: #fff; padding: 20px 24px; border-radius: 8px; }
+function getExportCss(){return `    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background: #f8fafc;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .layout-section {
+      padding: 28px;
+      margin-bottom: 16px;
+      background: #ffffff;
+      border-radius: 10px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .layout-row {
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .layout-col {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .layout-grid2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .layout-grid3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+
+    @media (max-width: 640px) {
+      .layout-grid2, .layout-grid3 { grid-template-columns: 1fr; }
+      .layout-row { flex-direction: column; }
+    }
+
+    .site-header {
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
+      color: #fff;
+      padding: 20px 24px;
+      border-radius: 8px;
+    }
     .site-header h1 { font-size: 1.5rem; font-weight: 700; }
-    .site-nav { background: ${c.navBg}; color: #e2e8f0; padding: 12px 20px; border-radius: 8px; display: flex; gap: 24px; flex-wrap: wrap; }
+
+    .site-nav {
+      background: #0f172a;
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 8px;
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
     .site-nav a { color: #cbd5e1; text-decoration: none; transition: color 0.2s; }
     .site-nav a:hover { color: #fff; }
-    .hero { background: linear-gradient(135deg, ${c.heroStart}, ${c.heroEnd}); color: #fff; padding: 48px 28px; border-radius: 12px; text-align: center; }
+
+    .hero {
+      background: linear-gradient(135deg, #818cf8, #c084fc, #f472b6);
+      color: #fff;
+      padding: 48px 28px;
+      border-radius: 12px;
+      text-align: center;
+    }
     .hero h2 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 800; }
     .hero p { font-size: 1.05rem; opacity: 0.92; max-width: 540px; margin: 0 auto; }
-    .btn { display: inline-block; background: linear-gradient(135deg, ${c.button}, ${c.buttonEnd}); color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
-    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px ${c.button}44; }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #f59e0b, #f97316);
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(245,158,11,0.3); }
+
     img { max-width: 100%; height: auto; border-radius: 8px; display: block; }
-    .card { background: ${c.cardBg}; border: 1px solid ${c.border}; border-radius: 10px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: box-shadow 0.2s; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: box-shadow 0.2s;
+    }
     .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    .card h3 { margin-bottom: 8px; color: ${c.text}; }
-    .card p { color: ${c.textSub}; font-size: 0.93rem; }
-    input[type="text"], input[type="email"], textarea, select { width: 100%; padding: 10px 14px; border: 1px solid ${c.border}; border-radius: 8px; font-size: 0.95rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; background: ${c.cardBg}; color: ${c.text}; }
-    input:focus, textarea:focus, select:focus { outline: none; border-color: ${c.primary}; box-shadow: 0 0 0 3px ${c.primary}22; }
+    .card h3 { margin-bottom: 8px; color: #1e293b; }
+    .card p { color: #64748b; font-size: 0.93rem; }
+
+    input[type="text"], input[type="email"], textarea, select {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background: #fff;
+      color: #1e293b;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.12);
+    }
     textarea { resize: vertical; min-height: 90px; }
-    label { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: ${c.text}; cursor: pointer; }
-    p { margin-bottom: 8px; color: ${c.text}; }
-    a { color: ${c.primary}; text-decoration: none; font-weight: 600; border-bottom: 2px solid ${c.primary}22; padding-bottom: 1px; transition: border-color 0.2s; }
-    a:hover { border-color: ${c.primary}; }
+
+    label { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; color: #334155; cursor: pointer; }
+
+    p { margin-bottom: 8px; color: #334155; }
+
+    a { color: #4f46e5; text-decoration: none; font-weight: 600; border-bottom: 2px solid rgba(79,70,229,0.15); padding-bottom: 1px; transition: border-color 0.2s; }
+    a:hover { border-color: #4f46e5; }
+
     ul { padding-left: 24px; margin-bottom: 8px; }
-    li { margin: 5px 0; color: ${c.text}; }
+    li { margin: 5px 0; color: #334155; }
+
     table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-    th, td { border: 1px solid ${c.border}; padding: 10px 14px; text-align: left; }
-    th { background: ${c.bg}; color: ${c.text}; font-weight: 600; }
-    tr:nth-child(even) td { background: ${c.bg}; }
+    th, td { border: 1px solid #e2e8f0; padding: 10px 14px; text-align: left; }
+    th { background: #f1f5f9; color: #1e293b; font-weight: 600; }
+    tr:nth-child(even) td { background: #f8fafc; }
+
     video { border-radius: 8px; max-width: 100%; }
-    blockquote { border-left: 4px solid ${c.primary}; padding: 16px 20px; font-style: italic; color: ${c.text}; background: ${c.bg}; border-radius: 0 8px 8px 0; margin-bottom: 8px; }
-    blockquote cite { display: block; margin-top: 10px; font-size: 0.85rem; color: ${c.textSub}; font-style: normal; }
-    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-right: 6px; margin-bottom: 4px; background: ${c.primary}18; color: ${c.primary}; }
-    .badge-alt { background: ${c.button}18; color: ${c.button}; }
-    hr { border: none; border-top: 2px solid ${c.border}; margin: 20px 0; }
-    pre { background: ${c.navBg}; color: #7dd3fc; padding: 18px; border-radius: 8px; font-size: 0.85rem; overflow-x: auto; margin-bottom: 8px; }
+
+    blockquote {
+      border-left: 4px solid #818cf8;
+      padding: 16px 20px;
+      font-style: italic;
+      color: #334155;
+      background: #f8fafc;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 8px;
+    }
+    blockquote cite { display: block; margin-top: 10px; font-size: 0.85rem; color: #64748b; font-style: normal; }
+
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-right: 6px; margin-bottom: 4px; background: #e0e7ff; color: #4338ca; }
+    .badge-alt { background: #dcfce7; color: #15803d; }
+
+    hr { border: none; border-top: 2px solid #e2e8f0; margin: 20px 0; }
+
+    pre { background: #0f172a; color: #7dd3fc; padding: 18px; border-radius: 8px; font-size: 0.85rem; overflow-x: auto; margin-bottom: 8px; }
     pre code { font-family: 'Courier New', monospace; }
-    footer { background: ${c.footerBg}; color: ${c.footerText}; text-align: center; padding: 20px; border-radius: 8px; }
-    footer p { color: ${c.footerText}; margin: 0; }`;
+
+    footer { background: #0f172a; color: #64748b; text-align: center; padding: 20px; border-radius: 8px; }
+    footer p { color: #64748b; margin: 0; }`;}
+
+function highlightLine(line){
+  let e=escapeHtml(line);
+  if(/^\s*&lt;!--/.test(e))return`<span class="tok-comment">${e}</span>`;
+  if(/^&lt;!DOCTYPE/i.test(e))return`<span class="tok-doctype">${e}</span>`;
+  e=e.replace(/(&lt;\/?)([a-zA-Z][a-zA-Z0-9]*)/g,(m,p1,p2)=>`${p1}<span class="tok-tag">${p2}</span>`);
+  e=e.replace(/([a-zA-Z-]+)(=)("[^"]*")/g,(m,p1,p2,p3)=>`<span class="tok-attr">${p1}</span>${p2}<span class="tok-string">${p3}</span>`);
+  e=e.replace(/(&gt;)/g,`<span class="tok-tag">$1</span>`);
+  return e;
+}
+function renderCodeEditor(code){
+  const lines=code.split('\n');
+  codeEditor.innerHTML=lines.map((line,i)=>`<div class="line"><span class="ln">${i+1}</span><span class="code${line.trim()===''?' muted':''}">${highlightLine(line)||'&nbsp;'}</span></div>`).join('');
 }
 
-function highlightLine(line){let e=escapeHtml(line);if(/^\s*&lt;!--/.test(e))return`<span class="tok-comment">${e}</span>`;if(/^&lt;!DOCTYPE/i.test(e))return`<span class="tok-doctype">${e}</span>`;e=e.replace(/(&lt;\/?)([a-zA-Z][a-zA-Z0-9]*)/g,(m,p1,p2)=>`${p1}<span class="tok-tag">${p2}</span>`);e=e.replace(/([a-zA-Z-]+)(=)("[^"]*")/g,(m,p1,p2,p3)=>`<span class="tok-attr">${p1}</span>${p2}<span class="tok-string">${p3}</span>`);e=e.replace(/(&gt;)/g,`<span class="tok-tag">$1</span>`);return e;}
-function renderCodeEditor(code){const lines=code.split('\n');codeEditor.innerHTML=lines.map((line,i)=>`<div class="line"><span class="ln">${i+1}</span><span class="code${line.trim()===''?' muted':''}">${highlightLine(line)||'&nbsp;'}</span></div>`).join('');}
-
 function updateCode(){
-  if(!tree.children.length){rawCodeText=`<!DOCTYPE html>\n<html lang="th">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My Page</title>\n</head>\n<body>\n  <!-- ยังไม่มีคอมโพเนนต์ -->\n</body>\n</html>`;renderCodeEditor(rawCodeText);return;}
-  const body=tree.children.map(c=>nodeToHtml(c,'    ')).join('\n\n');const css=getExportCss();
+  if(!tree.children.length){
+    rawCodeText=`<!DOCTYPE html>\n<html lang="th">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My Page</title>\n</head>\n<body>\n  <!-- No components yet -->\n</body>\n</html>`;
+    renderCodeEditor(rawCodeText);return;
+  }
+  const body=tree.children.map(c=>nodeToHtml(c,'    ')).join('\n\n');
+  const css=getExportCss();
   rawCodeText=`<!DOCTYPE html>\n<html lang="th">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>My Page</title>\n  <style>\n${css}\n  </style>\n</head>\n<body>\n  <div class="page">\n${body}\n  </div>\n</body>\n</html>`;
   renderCodeEditor(rawCodeText);
 }
 
-/* ═══════════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    Copy / Download
-   ═══════════════════════════════════════════════════ */
-copyBtn.addEventListener('click',()=>{navigator.clipboard.writeText(rawCodeText).then(()=>{copyBtn.innerHTML='✅ คัดลอกแล้ว!';copyBtn.classList.add('copied');setTimeout(()=>{copyBtn.innerHTML='📋 คัดลอก HTML เต็ม';copyBtn.classList.remove('copied');},2000});});});
-function doDownload(){if(!tree.children.length){showToast('ยังไม่มีคอมโพเนนต์','warning');return;}const blob=new Blob([rawCodeText],{type:'text/html;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='index.html';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('ดาวน์โหลด index.html สำเร็จ','success');}
+   ═══════════════════════════════════════════════ */
+copyBtn.addEventListener('click',()=>{
+  navigator.clipboard.writeText(rawCodeText).then(()=>{
+    copyBtn.innerHTML='✅ Copied!';copyBtn.classList.add('copied');
+    setTimeout(()=>{copyBtn.innerHTML='📋 Copy Full HTML';copyBtn.classList.remove('copied');},2000);
+  });
+});
+function doDownload(){
+  if(!tree.children.length){showToast('No components to download','warning');return;}
+  const blob=new Blob([rawCodeText],{type:'text/html;charset=utf-8'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='index.html';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);showToast('Downloaded index.html','success');
+}
 downloadBtn2.addEventListener('click',doDownload);
 document.getElementById('abDownload').addEventListener('click',doDownload);
-function showToast(msg,type='success'){toast.textContent=msg;toast.className='toast '+type;requestAnimationFrame(()=>{toast.classList.add('show');});setTimeout(()=>toast.classList.remove('show'),2500);}
+
+function showToast(msg,type='success'){
+  toast.textContent=msg;toast.className='toast '+type;
+  requestAnimationFrame(()=>{toast.classList.add('show');});
+  setTimeout(()=>toast.classList.remove('show'),2500);
+}
+
+/* ═══════════════════════════════════════════════
+   Init
+   ═══════════════════════════════════════════════ */
 renderAll();
 </script>
 </body>
